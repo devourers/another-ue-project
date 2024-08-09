@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "NavigationSystem.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "ProtagClass.generated.h"
 
@@ -29,17 +30,23 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCameraComponent* ProtagCameraComponent;
-
-UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USkeletalMeshComponent* ProtagMeshComponent;
-
-UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UPathFollowingComponent* PathFinderComponent;
-
 UFUNCTION()
 	void CustomMoveToLocation(const FVector& target_location);
+
+private:
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* ProtagCameraComponent;
+
+UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (AllowPrivateAccess = "true"))
+	UPathFollowingComponent* PathFinderComponent;
+
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (AllowPrivateAccess = "true"))
+	UNavigationSystemV1* NavSystem;
+
+
 
 	//glossary
 	//inventory

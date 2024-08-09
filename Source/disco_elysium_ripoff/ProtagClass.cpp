@@ -2,28 +2,75 @@
 
 
 #include "ProtagClass.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "DrawDebugHelpers.h"
+#include "NavigationPath.h"
+
 
 // Sets default values
 AProtagClass::AProtagClass()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
+	// Don't rotate character to camera direction
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate character to moving direction
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+
+	// Create a camera boom...
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
+	CameraBoom->TargetArmLength = 800.f;
+	CameraBoom->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
+	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
 	ProtagCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("ProtagCamera"));
 	check(ProtagCameraComponent != nullptr);
-	ProtagCameraComponent->SetupAttachment(CastChecked<USceneComponent, UCapsuleComponent>(GetCapsuleComponent()));
-	ProtagCameraComponent->SetRelativeLocation(FVector(10.0f, 10.0f, 10.0f));
-	
-	ProtagMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
-	check(ProtagMeshComponent != nullptr);
+	ProtagCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	ProtagCameraComponent->bUsePawnControlRotation = false;
 
 	PathFinderComponent = CreateDefaultSubobject<UPathFollowingComponent>(TEXT("Pathfinder"));
+	PathFinderComponent->Initialize();
+	NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
 }
 
+
 void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
-	FAIMoveRequest request;
-	request.SetUsePathfinding(true);
-	request.SetGoalLocation(target_location);
+	if (NavSystem && PathFinderComponent) {
+		DrawDebugSphere(GetWorld(), target_location, 10, 10, FColor::Red, false, 10);
+		UNavigationPath* u_path = NavSystem->FindPathToLocationSynchronously(this, this->GetActorLocation(), target_location);
+		if (u_path->IsUnreachable()) {
+			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unreachable"));
+			return;
+		}
+		if (u_path && u_path->IsValid()) {
+			FAIMoveRequest request;
+			request.SetAcceptanceRadius(10);
+			request.SetUsePathfinding(true);
+			request.SetGoalLocation(target_location);
+			FAIRequestID path_id =  PathFinderComponent->RequestMove(request, u_path->GetPath());
+			TArray<FVector> pts = u_path->PathPoints;
+			for (size_t i = 0; i < pts.Num(); ++i) {
+				DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 10);
+				if (i + 1 != pts.Num()) {
+					DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 10);
+				}
+			}
+
+		}
+	}
 }
 
 // Called when the game starts or when spawned
