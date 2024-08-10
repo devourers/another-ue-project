@@ -70,6 +70,8 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	APawn* ControlledPawn = GetPawn();
 	if (ControlledPawn != nullptr)
 	{
+		AProtagClass * protag = Cast<AProtagClass>(ControlledPawn);
+		protag->StopPathfinderMovement();
 		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
 	}

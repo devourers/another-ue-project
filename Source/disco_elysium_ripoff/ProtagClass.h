@@ -33,6 +33,9 @@ public:
 UFUNCTION()
 	void CustomMoveToLocation(const FVector& target_location);
 
+UFUNCTION()
+	void StopPathfinderMovement();
+
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* ProtagCameraComponent;
@@ -46,6 +49,8 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (Allo
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (AllowPrivateAccess = "true"))
 	UNavigationSystemV1* NavSystem;
 
+private:
+	bool isMovingAlongPath = false;
 
 
 	//glossary

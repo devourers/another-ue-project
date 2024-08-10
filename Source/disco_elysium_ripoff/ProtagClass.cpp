@@ -4,7 +4,9 @@
 #include "ProtagClass.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "NavMesh/RecastNavMesh.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 #include "NavigationPath.h"
 
 
@@ -49,13 +51,20 @@ AProtagClass::AProtagClass()
 
 void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 	if (NavSystem && PathFinderComponent) {
+		TArray<AActor*> nav_mesh;
+		ARecastNavMesh* vol = nullptr;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARecastNavMesh::StaticClass(), nav_mesh);
+		if (nav_mesh.Num() == 1) {
+			vol = Cast<ARecastNavMesh>(nav_mesh[0]);
+		}
 		DrawDebugSphere(GetWorld(), target_location, 10, 10, FColor::Red, false, 10);
-		UNavigationPath* u_path = NavSystem->FindPathToLocationSynchronously(this, this->GetActorLocation(), target_location);
-		if (u_path->IsUnreachable()) {
+		UNavigationPath* u_path = NavSystem->FindPathToLocationSynchronously(this, this->GetActorLocation(), target_location, vol);
+		if (!u_path->IsValid()) {
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unreachable"));
 			return;
 		}
 		if (u_path && u_path->IsValid()) {
+			isMovingAlongPath = true;
 			FAIMoveRequest request;
 			request.SetAcceptanceRadius(10);
 			request.SetUsePathfinding(true);
@@ -68,9 +77,16 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 					DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 10);
 				}
 			}
-
 		}
 	}
+}
+
+void AProtagClass::StopPathfinderMovement() {
+	if (isMovingAlongPath) {
+		PathFinderComponent->RequestMoveWithImmediateFinish(EPathFollowingResult::Aborted);
+		isMovingAlongPath = false;
+	}
+
 }
 
 // Called when the game starts or when spawned
