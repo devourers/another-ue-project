@@ -49,5 +49,6 @@ protected:
 private:
 	FVector CachedDestination;
 	AActor* CachedActor;
+	bool isCachedActorInteractible;
 	float FollowTime; // For how long it has been pressed
 };

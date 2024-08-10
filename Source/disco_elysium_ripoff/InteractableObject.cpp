@@ -19,13 +19,11 @@ AInteractableObject::AInteractableObject()
 
 
 void AInteractableObject::OnCursorOver(UPrimitiveComponent* Component) {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("OnCursorOver"));
 	Mesh->SetMaterial(0, SelectedMaterial);
 
 }
 
 
 void AInteractableObject::OnCursorEnd(UPrimitiveComponent* Component) {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("OnCursorEnd"));
 	Mesh->SetMaterial(0, UnselectedMaterial);
 }

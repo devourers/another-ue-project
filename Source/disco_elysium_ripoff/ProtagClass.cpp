@@ -45,9 +45,47 @@ AProtagClass::AProtagClass()
 
 	PathFinderComponent = CreateDefaultSubobject<UPathFollowingComponent>(TEXT("Pathfinder"));
 	PathFinderComponent->Initialize();
+	PathFinderComponent->SetStopMovementOnFinish(true);
+	PathFinderComponent->OnRequestFinished.AddUFunction(this,FName("OnReachedPathDestinaton"));
 	NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
+
+	
 }
 
+void AProtagClass::CustomMoveToInteractableActor(AActor* actor) {
+	if (NavSystem && PathFinderComponent) {
+		TArray<AActor*> nav_mesh;
+		ARecastNavMesh* vol = nullptr;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARecastNavMesh::StaticClass(), nav_mesh);
+		if (nav_mesh.Num() == 1) {
+			vol = Cast<ARecastNavMesh>(nav_mesh[0]);
+		}
+		UNavigationPath* u_path = NavSystem->FindPathToActorSynchronously(this, this->GetActorLocation(), actor, 100, vol);
+
+		if (u_path && !u_path->IsValid()) {
+			//TODO: custom override if path is blocked by something
+			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unreachable"));
+			return;
+		}
+
+		if (u_path && u_path->IsValid()) {
+			isMovingAlongPath = true;
+			FAIMoveRequest request;
+			request.SetAcceptanceRadius(10);
+			request.SetUsePathfinding(true);
+			request.SetGoalActor(actor);
+			cached_path = u_path;
+			FAIRequestID path_id = PathFinderComponent->RequestMove(request, u_path->GetPath());
+			TArray<FVector> pts = u_path->PathPoints;
+			for (size_t i = 0; i < pts.Num(); ++i) {
+				DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
+				if (i + 1 != pts.Num()) {
+					DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
+				}
+			}
+		}
+	}
+}
 
 void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 	if (NavSystem && PathFinderComponent) {
@@ -57,8 +95,9 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 		if (nav_mesh.Num() == 1) {
 			vol = Cast<ARecastNavMesh>(nav_mesh[0]);
 		}
-		DrawDebugSphere(GetWorld(), target_location, 10, 10, FColor::Red, false, 10);
+		DrawDebugSphere(GetWorld(), target_location, 10, 10, FColor::Red, false, 5);
 		UNavigationPath* u_path = NavSystem->FindPathToLocationSynchronously(this, this->GetActorLocation(), target_location, vol);
+		
 		if (!u_path->IsValid()) {
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unreachable"));
 			return;
@@ -69,15 +108,17 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 			request.SetAcceptanceRadius(10);
 			request.SetUsePathfinding(true);
 			request.SetGoalLocation(target_location);
+			request.SetRequireNavigableEndLocation(true);
 			FAIRequestID path_id =  PathFinderComponent->RequestMove(request, u_path->GetPath());
 			TArray<FVector> pts = u_path->PathPoints;
 			for (size_t i = 0; i < pts.Num(); ++i) {
-				DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 10);
+				DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
 				if (i + 1 != pts.Num()) {
-					DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 10);
+					DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
 				}
 			}
 		}
+		
 	}
 }
 
@@ -86,7 +127,12 @@ void AProtagClass::StopPathfinderMovement() {
 		PathFinderComponent->RequestMoveWithImmediateFinish(EPathFollowingResult::Aborted);
 		isMovingAlongPath = false;
 	}
+	
+}
 
+void AProtagClass::OnReachedPathDestinaton() {
+	isMovingAlongPath = false;
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Request finished"));
 }
 
 // Called when the game starts or when spawned

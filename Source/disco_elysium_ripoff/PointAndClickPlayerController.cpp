@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "Engine/World.h"
 #include "Engine/LocalPlayer.h"
+#include "InteractableActor.h"
 #include "ProtagClass.h"
 
 APointAndClickPlayerController::APointAndClickPlayerController() {
@@ -64,6 +65,12 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	if (bHitSuccessful)
 	{
 		CachedDestination = Hit.Location;
+		AInteractableActor* casted_actor = Cast<AInteractableActor>(Hit.GetActor());
+		CachedActor = casted_actor;
+		if (casted_actor)
+			isCachedActorInteractible = true;
+		else
+			isCachedActorInteractible = false;
 	}
 
 	// Move towards mouse pointer or touch
@@ -82,10 +89,15 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 	// If it was a short press
 	if (FollowTime <= ShortPressThreshold)
 	{
-		// We move there and spawn some particles
 		APawn* ControlledPawn = GetPawn();
 		AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
-		protag->CustomMoveToLocation(CachedDestination);
+		// We move there and spawn some particles
+		if (isCachedActorInteractible) {
+			protag->CustomMoveToInteractableActor(CachedActor);
+		}
+		else {
+			protag->CustomMoveToLocation(CachedDestination);
+		}
 	}
 
 	FollowTime = 0.f;

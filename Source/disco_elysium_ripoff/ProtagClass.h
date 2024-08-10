@@ -30,11 +30,19 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+
+UFUNCTION()
+	void CustomMoveToInteractableActor(AActor* Actor);
+
 UFUNCTION()
 	void CustomMoveToLocation(const FVector& target_location);
 
 UFUNCTION()
 	void StopPathfinderMovement();
+
+UFUNCTION()
+	void OnReachedPathDestinaton();
 
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -51,6 +59,7 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (Allo
 
 private:
 	bool isMovingAlongPath = false;
+	UNavigationPath* cached_path = nullptr;
 
 
 	//glossary
