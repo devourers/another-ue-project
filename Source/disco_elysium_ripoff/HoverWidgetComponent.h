@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/WidgetComponent.h"
+#include "HoverUserWidget.h"
 #include "HoverWidgetComponent.generated.h"
 
 /**
@@ -16,15 +17,11 @@ class DISCO_ELYSIUM_RIPOFF_API UHoverWidgetComponent : public UWidgetComponent
 	
 	UHoverWidgetComponent();
 
-
+public:
 UFUNCTION()
 	void SetHeader(const FString& header);
 
 UFUNCTION()
-	void SetText(const FString& text);
-
-private:
-	FString Header;
-	FString Text;
+	void SetDescription(const FString& text);
 
 };

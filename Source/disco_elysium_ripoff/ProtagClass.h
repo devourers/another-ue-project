@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
+#include "InteractableActor.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "ProtagClass.generated.h"
 
@@ -59,7 +60,7 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (Allo
 
 private:
 	bool isMovingAlongPath = false;
-	UNavigationPath* cached_path = nullptr;
+	AInteractableActor* cached_actor = nullptr;
 
 
 	//glossary

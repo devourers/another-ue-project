@@ -74,7 +74,8 @@ void AProtagClass::CustomMoveToInteractableActor(AActor* actor) {
 			request.SetAcceptanceRadius(10);
 			request.SetUsePathfinding(true);
 			request.SetGoalActor(actor);
-			cached_path = u_path;
+			cached_actor = Cast<AInteractableActor>(actor);
+			cached_actor->OnActorSelectedAsDestination();
 			FAIRequestID path_id = PathFinderComponent->RequestMove(request, u_path->GetPath());
 			TArray<FVector> pts = u_path->PathPoints;
 			for (size_t i = 0; i < pts.Num(); ++i) {
@@ -133,6 +134,8 @@ void AProtagClass::StopPathfinderMovement() {
 void AProtagClass::OnReachedPathDestinaton() {
 	isMovingAlongPath = false;
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Request finished"));
+	if (cached_actor)
+		cached_actor->OnActorAsDestinationReached();
 }
 
 // Called when the game starts or when spawned

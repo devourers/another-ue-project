@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "Engine/World.h"
 #include "Engine/LocalPlayer.h"
+#include "Kismet/GameplayStatics.h"
 #include "InteractableActor.h"
 #include "ProtagClass.h"
 
@@ -37,6 +38,8 @@ void APointAndClickPlayerController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		// Setup mouse input events
+		EnhancedInputComponent->BindAction(HighlightAllIntercatbleActors, ETriggerEvent::Started, this, &APointAndClickPlayerController::OnHighlightAllIntercatbleActors);
+		EnhancedInputComponent->BindAction(HighlightAllIntercatbleActors, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnEndHighlightAllIntercatbleActors);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Started, this, &APointAndClickPlayerController::OnInputStarted);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Triggered, this, &APointAndClickPlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnSetDestinationReleased);
@@ -101,4 +104,24 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 	}
 
 	FollowTime = 0.f;
+}
+
+void APointAndClickPlayerController::OnHighlightAllIntercatbleActors() {
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Triggered"));
+	TArray<AActor*> actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInteractableActor::StaticClass(), actors);
+	for (AActor* actor : actors) {
+		AInteractableActor* casted_actor = Cast<AInteractableActor>(actor);
+		casted_actor->OnActorSelectedAsDestination();
+	}
+}
+
+void APointAndClickPlayerController::OnEndHighlightAllIntercatbleActors() {
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Finished Trigger"));
+	TArray<AActor*> actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInteractableActor::StaticClass(), actors);
+	for (AActor* actor : actors) {
+		AInteractableActor* casted_actor = Cast<AInteractableActor>(actor);
+		casted_actor->OnActorAsDestinationReached();
+	}
 }

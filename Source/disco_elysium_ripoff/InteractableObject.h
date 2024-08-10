@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InteractableActor.h"
+#include "HoverWidgetComponent.h"
 #include "InteractableObject.generated.h"
 
 /**
@@ -16,9 +17,15 @@ class DISCO_ELYSIUM_RIPOFF_API AInteractableObject : public AInteractableActor
 
 	AInteractableObject();
 
+	virtual void BeginPlay() override;
+
 	virtual void OnCursorOver(UPrimitiveComponent* component) override;
 
 	virtual void OnCursorEnd(UPrimitiveComponent* component) override;
+
+	virtual void OnActorSelectedAsDestination() override;
+
+	virtual void OnActorAsDestinationReached() override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
@@ -29,5 +36,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material, meta = (AllowPrivateAccess = "true"))
 		UMaterial* SelectedMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
+		UHoverWidgetComponent* tooltip;
 	
 };

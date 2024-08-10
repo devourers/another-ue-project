@@ -33,7 +33,19 @@ UFUNCTION()
 	virtual void OnCursorOver(UPrimitiveComponent* Component);
 
 UFUNCTION()
+	void SetIsSelectedAsDestination(bool isSelected);
+
+UFUNCTION()
+	bool IsSelectedAsDestination();
+
+UFUNCTION()
 	virtual void OnCursorEnd(UPrimitiveComponent* Component);
+
+UFUNCTION()
+	virtual void OnActorSelectedAsDestination();
+
+UFUNCTION()
+	virtual void OnActorAsDestinationReached();
 
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPrivateAccess = "true"))
@@ -42,4 +54,6 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPri
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPrivateAccess = "true"))
 	FString Description;
 
+private:
+	bool isSelectedAsDestination;
 };

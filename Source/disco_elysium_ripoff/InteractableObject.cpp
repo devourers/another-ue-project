@@ -15,15 +15,45 @@ AInteractableObject::AInteractableObject()
 	Mesh->OnBeginCursorOver.AddDynamic(this, &AInteractableObject::OnCursorOver);
 	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractableObject::OnCursorEnd);
 	Mesh->SetMaterial(0, UnselectedMaterial);
+	Mesh->SetCanEverAffectNavigation(false);
+
+	tooltip = CreateDefaultSubobject<UHoverWidgetComponent>(TEXT("Tooltip Widget"));
+	tooltip->SetVisibility(false);
+	tooltip->SetupAttachment(GetRootComponent());
+}
+
+void AInteractableObject::BeginPlay() {
+	Super::BeginPlay();
+	tooltip->SetVisibility(false);
+	tooltip->SetHeader(GetName());
+	tooltip->SetDescription(GetDescription());
 }
 
 
 void AInteractableObject::OnCursorOver(UPrimitiveComponent* Component) {
-	Mesh->SetMaterial(0, SelectedMaterial);
+	if (!IsSelectedAsDestination()) {
+		Mesh->SetMaterial(0, SelectedMaterial);
+		tooltip->SetVisibility(true);
+	}
 
 }
 
 
 void AInteractableObject::OnCursorEnd(UPrimitiveComponent* Component) {
+	if (!IsSelectedAsDestination()) {
+		Mesh->SetMaterial(0, UnselectedMaterial);
+		tooltip->SetVisibility(false);
+	}
+}
+
+void AInteractableObject::OnActorSelectedAsDestination() {
+	SetIsSelectedAsDestination(true);
+	tooltip->SetVisibility(true);
+	Mesh->SetMaterial(0, SelectedMaterial);
+}
+
+void AInteractableObject::OnActorAsDestinationReached() {
+	SetIsSelectedAsDestination(false);
+	tooltip->SetVisibility(false);
 	Mesh->SetMaterial(0, UnselectedMaterial);
 }

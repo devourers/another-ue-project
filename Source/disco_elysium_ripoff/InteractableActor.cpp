@@ -40,3 +40,23 @@ void AInteractableActor::OnCursorOver(UPrimitiveComponent* Component) {
 void AInteractableActor::OnCursorEnd(UPrimitiveComponent* Component) {
 
 }
+
+
+void AInteractableActor::OnActorSelectedAsDestination() {
+
+}
+
+
+void AInteractableActor::OnActorAsDestinationReached() {
+
+}
+
+
+void AInteractableActor::SetIsSelectedAsDestination(bool isSelected) {
+	isSelectedAsDestination = isSelected;
+}
+
+
+bool AInteractableActor::IsSelectedAsDestination() {
+	return isSelectedAsDestination;
+}

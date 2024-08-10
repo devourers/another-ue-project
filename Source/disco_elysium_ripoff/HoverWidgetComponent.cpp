@@ -4,13 +4,15 @@
 #include "HoverWidgetComponent.h"
 
 UHoverWidgetComponent::UHoverWidgetComponent() {
-
+	
 }
 
-void UHoverWidgetComponent::SetText(const FString& text) {
-	Text = text;
+void UHoverWidgetComponent::SetDescription(const FString& description) {
+	UHoverUserWidget* widget = Cast<UHoverUserWidget>(GetWidget());
+	widget->SetDescription(description);
 }
 
 void UHoverWidgetComponent::SetHeader(const FString& header) {
-	Header = header;
+	UHoverUserWidget* widget = Cast<UHoverUserWidget>(GetWidget());
+	widget->SetHeader(header);
 }
