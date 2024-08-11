@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
 #include "InteractableActor.h"
+#include "Components/BoxComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "ProtagClass.generated.h"
 
@@ -31,7 +32,21 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+UFUNCTION()
+	void CameraBoomCollisionBegin(
+		class UPrimitiveComponent* HitComp,
+		class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp, 
+		int32 OtherBodyIndex, 
+		bool bFromSweep, 
+		const FHitResult& SweepResult);
 
+UFUNCTION()
+	void CameraBoomCollisionEnd(
+		class UPrimitiveComponent* HitComp, 
+		class AActor* OtherActor, 
+		class UPrimitiveComponent* OtherComp, 
+		int32 OtherBodyIndex);
 
 UFUNCTION()
 	void CustomMoveToInteractableActor(AActor* Actor);
@@ -58,9 +73,13 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (Allo
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (AllowPrivateAccess = "true"))
 	UNavigationSystemV1* NavSystem;
 
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* SpringArmCollisionVolume;
+
 private:
 	bool isMovingAlongPath = false;
 	AInteractableActor* cached_actor = nullptr;
+	bool isBehindWall;
 
 
 	//glossary

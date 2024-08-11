@@ -51,5 +51,6 @@ private:
 	FVector CachedDestination;
 	AActor* CachedActor;
 	bool isCachedActorInteractible;
+	bool clickedOnWall;
 	float FollowTime; // For how long it has been pressed
 };

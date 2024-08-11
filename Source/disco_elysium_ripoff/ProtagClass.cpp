@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "NavMesh/RecastNavMesh.h"
+#include "FadingActor.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "NavigationPath.h"
@@ -49,7 +50,13 @@ AProtagClass::AProtagClass()
 	PathFinderComponent->OnRequestFinished.AddUFunction(this,FName("OnReachedPathDestinaton"));
 	NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
 
-	
+	SpringArmCollisionVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxSpringArmCollision"));
+	SpringArmCollisionVolume->SetupAttachment(CameraBoom);
+	SpringArmCollisionVolume->SetCollisionProfileName("OverlapAll");
+	SpringArmCollisionVolume->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+	SpringArmCollisionVolume->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
+	SpringArmCollisionVolume->OnComponentBeginOverlap.AddDynamic(this, &AProtagClass::CameraBoomCollisionBegin);
+	SpringArmCollisionVolume->OnComponentEndOverlap.AddDynamic(this, &AProtagClass::CameraBoomCollisionEnd);
 }
 
 void AProtagClass::CustomMoveToInteractableActor(AActor* actor) {
@@ -85,6 +92,35 @@ void AProtagClass::CustomMoveToInteractableActor(AActor* actor) {
 				}
 			}
 		}
+	}
+}
+
+void AProtagClass::CameraBoomCollisionBegin(
+	class UPrimitiveComponent* HitComp, 
+	class AActor* OtherActor, 
+	class UPrimitiveComponent* OtherComp, 
+	int32 OtherBodyIndex, 
+	bool bFromSweep, 
+	const FHitResult& SweepResult) {
+	isBehindWall = true;
+	AFadingActor* wall = Cast<AFadingActor>(OtherActor);
+	if (wall) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Boom overlap " + OtherComp->GetClass()->GetFName().ToString()));
+		wall->OnPlayerBehind();
+	}
+
+}
+
+void AProtagClass::CameraBoomCollisionEnd(
+	class UPrimitiveComponent* HitComp, 
+	class AActor* OtherActor,
+	class UPrimitiveComponent* OtherComp, 
+	int32 OtherBodyIndex) {
+	isBehindWall = false;
+	AFadingActor* wall = Cast<AFadingActor>(OtherActor);
+	if (wall) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Boom overlap end " + OtherComp->GetClass()->GetFName().ToString()));
+		wall->OnPlayerNoLongerBehind();
 	}
 }
 

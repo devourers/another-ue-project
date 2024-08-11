@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "Engine/World.h"
 #include "Engine/LocalPlayer.h"
+#include "FadingActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "InteractableActor.h"
 #include "ProtagClass.h"
@@ -78,7 +79,12 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 
 	// Move towards mouse pointer or touch
 	APawn* ControlledPawn = GetPawn();
-	if (ControlledPawn != nullptr)
+	AFadingActor* wall = Cast<AFadingActor>(Hit.GetActor());
+	if (wall)
+		clickedOnWall = true;
+	else
+		clickedOnWall = false;
+	if (ControlledPawn != nullptr && !clickedOnWall)
 	{
 		AProtagClass * protag = Cast<AProtagClass>(ControlledPawn);
 		protag->StopPathfinderMovement();
@@ -98,7 +104,7 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 		if (isCachedActorInteractible) {
 			protag->CustomMoveToInteractableActor(CachedActor);
 		}
-		else {
+		else if (!clickedOnWall){
 			protag->CustomMoveToLocation(CachedDestination);
 		}
 	}
