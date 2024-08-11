@@ -140,6 +140,7 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 			return;
 		}
 		if (u_path && u_path->IsValid()) {
+			cached_actor = nullptr;
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
 			request.SetAcceptanceRadius(10);
