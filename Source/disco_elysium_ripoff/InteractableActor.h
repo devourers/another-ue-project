@@ -45,7 +45,7 @@ UFUNCTION()
 	virtual void OnActorSelectedAsDestination();
 
 UFUNCTION()
-	virtual void OnActorAsDestinationReached();
+	virtual void OnActorAsDestinationReached(AActor* other_actor);
 
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPrivateAccess = "true"))

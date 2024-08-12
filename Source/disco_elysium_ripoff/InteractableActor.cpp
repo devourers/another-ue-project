@@ -47,7 +47,7 @@ void AInteractableActor::OnActorSelectedAsDestination() {
 }
 
 
-void AInteractableActor::OnActorAsDestinationReached() {
+void AInteractableActor::OnActorAsDestinationReached(AActor* other_actor) {
 
 }
 

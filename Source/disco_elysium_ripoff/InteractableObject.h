@@ -25,7 +25,7 @@ class DISCO_ELYSIUM_RIPOFF_API AInteractableObject : public AInteractableActor
 
 	virtual void OnActorSelectedAsDestination() override;
 
-	virtual void OnActorAsDestinationReached() override;
+	virtual void OnActorAsDestinationReached(AActor* other_actor) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
@@ -39,5 +39,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 		UHoverWidgetComponent* tooltip;
+
+private:
 	
 };

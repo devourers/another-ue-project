@@ -172,7 +172,7 @@ void AProtagClass::OnReachedPathDestinaton() {
 	isMovingAlongPath = false;
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Request finished"));
 	if (cached_actor)
-		cached_actor->OnActorAsDestinationReached();
+		cached_actor->OnActorAsDestinationReached(this);
 }
 
 // Called when the game starts or when spawned

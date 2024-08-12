@@ -2,7 +2,7 @@
 
 
 #include "InteractableObject.h"
-
+#include "MainGameInstanceSubsystem.h"
 
 AInteractableObject::AInteractableObject()
 {
@@ -52,8 +52,22 @@ void AInteractableObject::OnActorSelectedAsDestination() {
 	Mesh->SetMaterial(0, SelectedMaterial);
 }
 
-void AInteractableObject::OnActorAsDestinationReached() {
+void AInteractableObject::OnActorAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	tooltip->SetVisibility(false);
 	Mesh->SetMaterial(0, UnselectedMaterial);
+	float a = GetDistanceTo(other_actor);
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::SanitizeFloat(a));
+	if (a < 105.0f)
+	{
+		UMainGameInstanceSubsystem* handler =  GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
+		if (handler) {
+			FName name(this->GetName());
+			FInventoryEntry entry;
+			entry.Name = name;
+			entry.Description = this->GetDescription();
+			handler->AddItemToInventory(name, entry);
+			Destroy();
+		}
+	}
 }

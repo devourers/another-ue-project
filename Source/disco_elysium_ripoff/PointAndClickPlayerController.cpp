@@ -128,6 +128,8 @@ void APointAndClickPlayerController::OnEndHighlightAllIntercatbleActors() {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInteractableActor::StaticClass(), actors);
 	for (AActor* actor : actors) {
 		AInteractableActor* casted_actor = Cast<AInteractableActor>(actor);
-		casted_actor->OnActorAsDestinationReached();
+		APawn* ControlledPawn = GetPawn();
+		AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
+		casted_actor->OnActorAsDestinationReached(protag);
 	}
 }
