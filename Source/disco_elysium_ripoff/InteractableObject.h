@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InteractableActor.h"
 #include "HoverWidgetComponent.h"
+#include "Components/SphereComponent.h"
 #include "InteractableObject.generated.h"
 
 /**
@@ -40,6 +41,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI, meta = (AllowPrivateAccess = "true"))
 		UHoverWidgetComponent* tooltip;
 
-private:
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
+		USphereComponent* InteractionHitbox;
 };

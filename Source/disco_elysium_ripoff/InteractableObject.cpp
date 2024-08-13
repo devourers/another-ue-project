@@ -20,6 +20,13 @@ AInteractableObject::AInteractableObject()
 	tooltip = CreateDefaultSubobject<UHoverWidgetComponent>(TEXT("Tooltip Widget"));
 	tooltip->SetVisibility(false);
 	tooltip->SetupAttachment(GetRootComponent());
+
+	InteractionHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Collision"));
+	InteractionHitbox->SetupAttachment(Mesh);
+	InteractionHitbox->SetGenerateOverlapEvents(true);
+	InteractionHitbox->SetCollisionProfileName("NoCollision");
+	InteractionHitbox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	InteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 
 void AInteractableObject::BeginPlay() {
@@ -56,10 +63,7 @@ void AInteractableObject::OnActorAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	tooltip->SetVisibility(false);
 	Mesh->SetMaterial(0, UnselectedMaterial);
-	float a = GetDistanceTo(other_actor);
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::SanitizeFloat(a));
-	if (a < 105.0f)
-	{
+	if (InteractionHitbox->IsOverlappingActor(other_actor)){
 		UMainGameInstanceSubsystem* handler =  GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
 		if (handler) {
 			FName name(this->GetName());
