@@ -9,6 +9,6 @@ UPlayerInventory::UPlayerInventory()
 	Inventory.Empty(1);
 }
 
-void UPlayerInventory::AddItemToInventory(const FName& name, const FInventoryEntry& entry) {
+void UPlayerInventory::AddItemToInventory(const FName& name, UInventoryEntry* entry) {
 	Inventory.Add({ name, entry });
 }

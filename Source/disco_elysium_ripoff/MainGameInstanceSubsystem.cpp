@@ -17,7 +17,7 @@ void UMainGameInstanceSubsystem::Deinitialize() {
 	UE_LOGFMT(MainGameInstanceSubsystem, Log, "Deinitialised main subsystem");
 }
 
-void UMainGameInstanceSubsystem::AddItemToInventory(const FName& name, const FInventoryEntry& item) {
+void UMainGameInstanceSubsystem::AddItemToInventory(const FName& name, UInventoryEntry* item) {
 	Inventory->AddItemToInventory(name, item); //internal function is more complex since it decides where to add it.
 	UE_LOGFMT(MainGameInstanceSubsystem, Log, "Added item {0} to inventory", name);
 }

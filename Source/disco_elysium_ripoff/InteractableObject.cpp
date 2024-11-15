@@ -31,9 +31,11 @@ AInteractableObject::AInteractableObject()
 
 void AInteractableObject::BeginPlay() {
 	Super::BeginPlay();
-	tooltip->SetVisibility(false);
-	tooltip->SetHeader(GetName());
-	tooltip->SetDescription(GetDescription());
+	if (tooltip) {
+		tooltip->SetVisibility(false);
+		tooltip->SetHeader(GetName());
+		tooltip->SetDescription(GetDescription());
+	}
 }
 
 
@@ -66,12 +68,12 @@ void AInteractableObject::OnActorAsDestinationReached(AActor* other_actor) {
 	if (InteractionHitbox->IsOverlappingActor(other_actor)){
 		UMainGameInstanceSubsystem* handler =  GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
 		if (handler) {
-			FName name(this->GetName());
-			FInventoryEntry entry;
-			entry.Name = name;
-			entry.Description = this->GetDescription();
-			handler->AddItemToInventory(name, entry);
-			Destroy();
+			//FName name(this->GetName());
+			//FInventoryEntry entry;
+			//entry.Name = name;
+			//entry.Description = this->GetDescription();
+			//handler->AddItemToInventory(name, entry);
+			//Destroy();
 		}
 	}
 }

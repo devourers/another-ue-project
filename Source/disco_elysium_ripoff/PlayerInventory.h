@@ -3,24 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "InventoryEntry.h"
+
 #include "UObject/NoExportTypes.h"
 #include "PlayerInventory.generated.h"
-
-USTRUCT(BlueprintType)
-struct FInventoryEntry : public FTableRowBase {
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName Name;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString Description;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UTexture2D* Thumbnail;
-
-};
-
 /**
  * 
  */
@@ -33,9 +20,9 @@ public:
 	UPlayerInventory();
 
 	UFUNCTION()
-	void AddItemToInventory(const FName& name, const FInventoryEntry& entry);
+	void AddItemToInventory(const FName& name, UInventoryEntry* entry);
 
 private:
-	TMap<FName, FInventoryEntry> Inventory;
+	TMap<FName, UInventoryEntry*> Inventory;
 	
 };

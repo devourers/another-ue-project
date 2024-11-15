@@ -22,7 +22,7 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
-	void AddItemToInventory(const FName& name, const FInventoryEntry& item);
+	void AddItemToInventory(const FName& name, UInventoryEntry* item);
 
 private:
 	UPlayerInventory* Inventory;
