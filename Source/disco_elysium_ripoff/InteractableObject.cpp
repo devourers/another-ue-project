@@ -15,6 +15,7 @@ AInteractableObject::AInteractableObject()
 	Mesh->OnBeginCursorOver.AddDynamic(this, &AInteractableObject::OnCursorOver);
 	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractableObject::OnCursorEnd);
 	Mesh->SetMaterial(0, UnselectedMaterial);
+	Mesh->SetRenderCustomDepth(false);
 	Mesh->SetCanEverAffectNavigation(false);
 
 	tooltip = CreateDefaultSubobject<UHoverWidgetComponent>(TEXT("Tooltip Widget"));
@@ -41,7 +42,8 @@ void AInteractableObject::BeginPlay() {
 
 void AInteractableObject::OnCursorOver(UPrimitiveComponent* Component) {
 	if (!IsSelectedAsDestination()) {
-		Mesh->SetMaterial(0, SelectedMaterial);
+		Mesh->SetRenderCustomDepth(true);
+		//Mesh->SetMaterial(0, SelectedMaterial);
 		tooltip->SetVisibility(true);
 	}
 
@@ -50,7 +52,8 @@ void AInteractableObject::OnCursorOver(UPrimitiveComponent* Component) {
 
 void AInteractableObject::OnCursorEnd(UPrimitiveComponent* Component) {
 	if (!IsSelectedAsDestination()) {
-		Mesh->SetMaterial(0, UnselectedMaterial);
+		//Mesh->SetMaterial(0, UnselectedMaterial);
+		Mesh->SetRenderCustomDepth(false);
 		tooltip->SetVisibility(false);
 	}
 }
@@ -58,13 +61,15 @@ void AInteractableObject::OnCursorEnd(UPrimitiveComponent* Component) {
 void AInteractableObject::OnActorSelectedAsDestination() {
 	SetIsSelectedAsDestination(true);
 	tooltip->SetVisibility(true);
-	Mesh->SetMaterial(0, SelectedMaterial);
+	//Mesh->SetMaterial(0, SelectedMaterial);
+	Mesh->SetRenderCustomDepth(true);
 }
 
 void AInteractableObject::OnActorAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	tooltip->SetVisibility(false);
 	Mesh->SetMaterial(0, UnselectedMaterial);
+	Mesh->SetRenderCustomDepth(false);
 	if (InteractionHitbox->IsOverlappingActor(other_actor)){
 		UMainGameInstanceSubsystem* handler =  GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
 		if (handler) {

@@ -8,6 +8,8 @@
 #include "LoreEntry.h"
 #include "InventoryEntry.h"
 
+#include "Components/SphereComponent.h"
+
 #include "GameFramework/Actor.h"
 #include "InteractiveItem.generated.h"
 
@@ -39,6 +41,10 @@ public:
 
 	virtual void Interact() override;
 
+	virtual void OnCursorOver(UPrimitiveComponent* component) override;
+
+	virtual void OnCursorEnd(UPrimitiveComponent* component) override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
 	FName DisplayedName; //name for gameplay purposes
@@ -56,5 +62,20 @@ private:
 	FString LoreEntryPath; //sets automatically in constructor via level ID and object name
 
 	UPROPERTY()
-	UInventoryEntry* InventoryEntry;
+	UInventoryEntry* InventoryEntry; //Associated with item inventory entry. Loads from JSON
+
+	UPROPERTY(VisibleAnywhere, Category = Loading)
+	FString InventoryEntryPath; //sets automatically in constructor via level ID and object name
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material, meta = (AllowPrivateAccess = "true"))
+	UMaterial* ItemMaterial;
+
+	UPROPERTY()
+	UMaterialInstanceDynamic* ItemMaterialInstance; //custom material with wireframe stuff on being selected
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
+	USphereComponent* InteractionHitbox;
 };

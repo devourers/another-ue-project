@@ -9,6 +9,25 @@ AInteractiveItem::AInteractiveItem()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(GetRootComponent());
+
+	ItemMaterialInstance = UMaterialInstanceDynamic::Create(ItemMaterial, Mesh);
+
+	Mesh->OnBeginCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorOver);
+	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorEnd);
+	Mesh->SetRenderCustomDepth(true);
+	Mesh->SetCustomDepthStencilValue(255);
+	Mesh->SetMaterial(0, ItemMaterialInstance);
+	Mesh->SetCanEverAffectNavigation(false);
+
+	InteractionHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Collision"));
+	InteractionHitbox->SetupAttachment(Mesh);
+	InteractionHitbox->SetGenerateOverlapEvents(true);
+	InteractionHitbox->SetCollisionProfileName("NoCollision");
+	InteractionHitbox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	InteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+
 }
 
 // Called when the game starts or when spawned
@@ -25,11 +44,22 @@ void AInteractiveItem::Tick(float DeltaTime)
 
 }
 
+
 void AInteractiveItem::ToggleHighlight(bool to_toggle) {
 
 }
+
 
 void AInteractiveItem::Interact() {
 
 }
 
+
+void AInteractiveItem::OnCursorOver(UPrimitiveComponent* component) {
+
+}
+
+
+void AInteractiveItem::OnCursorEnd(UPrimitiveComponent* component) {
+
+}

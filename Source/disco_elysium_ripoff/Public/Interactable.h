@@ -25,4 +25,10 @@ public:
 
 	virtual void ToggleHighlight(bool to_toggle) = 0;
 	virtual void Interact() = 0;
+
+	UFUNCTION()
+	virtual void OnCursorOver(UPrimitiveComponent* Component) = 0;
+
+	UFUNCTION()
+	virtual void OnCursorEnd(UPrimitiveComponent* Component) = 0;
 };
