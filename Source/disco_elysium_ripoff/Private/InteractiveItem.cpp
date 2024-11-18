@@ -17,7 +17,14 @@ AInteractiveItem::AInteractiveItem()
 	Mesh->OnBeginCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorOver);
 	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorEnd);
 	Mesh->SetRenderCustomDepth(true);
-	Mesh->SetCustomDepthStencilValue(255);
+
+	if (Type = EItemType::eIT_Pickable) {
+		Mesh->SetCustomDepthStencilValue(STENCIL_PICKABLE_ITEM);
+	}
+	else if (Type = EItemType::eIT_Flair) {
+		Mesh->SetCustomDepthStencilValue(STENCIL_FLAIR_ITEM);
+	}
+
 	Mesh->SetMaterial(0, ItemMaterialInstance);
 	Mesh->SetCanEverAffectNavigation(false);
 

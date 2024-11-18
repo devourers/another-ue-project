@@ -16,6 +16,8 @@ AInteractableObject::AInteractableObject()
 	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractableObject::OnCursorEnd);
 	Mesh->SetMaterial(0, UnselectedMaterial);
 	Mesh->SetRenderCustomDepth(false);
+	Mesh->SetCustomDepthStencilValue(1);
+
 	Mesh->SetCanEverAffectNavigation(false);
 
 	tooltip = CreateDefaultSubobject<UHoverWidgetComponent>(TEXT("Tooltip Widget"));
@@ -37,6 +39,8 @@ void AInteractableObject::BeginPlay() {
 		tooltip->SetHeader(GetName());
 		tooltip->SetDescription(GetDescription());
 	}
+	Mesh->SetRenderCustomDepth(false);
+	Mesh->SetCustomDepthStencilValue(1);
 }
 
 

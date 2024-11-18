@@ -4,3 +4,14 @@
 
 #include "CoreMinimal.h"
 
+#ifndef STENCIL_VALUES
+#define STENCIL_VALUES
+
+#define STENCIL_PICKABLE_ITEM 1
+#define STENCIL_FLAIR_ITEM 2
+#define STENCIL_INTERACT_WITH_TOOL_ITEM 3
+#define STENCIL_PERSON_WITH_DIALOGUE 4
+//..
+#define STENCIL_FADING_WALL 255
+
+#endif;

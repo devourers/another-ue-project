@@ -11,6 +11,8 @@ AFadingActor::AFadingActor()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(GetRootComponent());
 	Mesh->SetGenerateOverlapEvents(true);
+	Mesh->SetRenderCustomDepth(true);
+	Mesh->SetCustomDepthStencilValue(STENCIL_FADING_WALL);
 	Mesh->SetMaterial(0, NormalMaterial);
 }
 
@@ -18,6 +20,8 @@ AFadingActor::AFadingActor()
 void AFadingActor::BeginPlay()
 {
 	Super::BeginPlay();
+	Mesh->SetRenderCustomDepth(true);
+	Mesh->SetCustomDepthStencilValue(STENCIL_FADING_WALL);
 	
 }
 

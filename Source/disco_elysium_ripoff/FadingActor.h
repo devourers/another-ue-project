@@ -2,7 +2,11 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
+
+#include "disco_elysium_ripoff.h"
+
 #include "GameFramework/Actor.h"
 #include "FadingActor.generated.h"
 

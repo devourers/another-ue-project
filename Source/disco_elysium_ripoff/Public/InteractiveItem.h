@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+#include "../disco_elysium_ripoff.h"
+
 #include "Interactable.h"
 #include "LoreEntry.h"
 #include "InventoryEntry.h"
