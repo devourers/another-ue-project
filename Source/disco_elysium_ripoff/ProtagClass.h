@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
 #include "InteractableActor.h"
+#include "PlayerOcclusionHandler.h"
 #include "Components/BoxComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "ProtagClass.generated.h"
@@ -76,10 +77,15 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (Allo
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* SpringArmCollisionVolume;
 
+UPROPERTY()
+	UPlayerOcclusionHandler* occlusion_handler_;
+
 private:
 	bool isMovingAlongPath = false;
 	AInteractableActor* cached_actor = nullptr;
 	bool isBehindWall;
+
+
 
 
 	//glossary

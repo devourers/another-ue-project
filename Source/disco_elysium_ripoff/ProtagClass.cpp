@@ -179,6 +179,9 @@ void AProtagClass::OnReachedPathDestinaton() {
 void AProtagClass::BeginPlay()
 {
 	Super::BeginPlay();
+
+	occlusion_handler_ = NewObject<UPlayerOcclusionHandler>(this, TEXT("OcclusionHandler"));
+	occlusion_handler_->BindPlayer(this);
 	
 }
 
@@ -186,6 +189,11 @@ void AProtagClass::BeginPlay()
 void AProtagClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (occlusion_handler_) {
+		occlusion_handler_->SetCharacterPosition();
+		occlusion_handler_->SetShouldApplyOcclusion(isBehindWall);
+		occlusion_handler_->SetOcclusionRadius(DeltaTime);
+	}
 
 }
 

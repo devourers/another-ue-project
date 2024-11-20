@@ -53,7 +53,7 @@ void AInteractiveItem::Tick(float DeltaTime)
 
 
 void AInteractiveItem::ToggleHighlight(bool to_toggle) {
-
+	
 }
 
 
@@ -63,10 +63,10 @@ void AInteractiveItem::Interact() {
 
 
 void AInteractiveItem::OnCursorOver(UPrimitiveComponent* component) {
-
+	Mesh->SetRenderCustomDepth(true);
 }
 
 
 void AInteractiveItem::OnCursorEnd(UPrimitiveComponent* component) {
-
+	Mesh->SetRenderCustomDepth(false);
 }

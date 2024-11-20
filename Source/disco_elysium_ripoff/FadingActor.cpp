@@ -34,11 +34,11 @@ void AFadingActor::Tick(float DeltaTime)
 
 void AFadingActor::OnPlayerBehind() {
 	Mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
-	Mesh->SetMaterial(0, SeeThroughMaterial);
+	//Mesh->SetMaterial(0, SeeThroughMaterial);
 }
 
 
 void AFadingActor::OnPlayerNoLongerBehind() {
 	Mesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
-	Mesh->SetMaterial(0, NormalMaterial);
+	//Mesh->SetMaterial(0, NormalMaterial);
 }
