@@ -53,20 +53,35 @@ void AInteractiveItem::Tick(float DeltaTime)
 
 
 void AInteractiveItem::ToggleHighlight(bool to_toggle) {
-	
+	Mesh->SetRenderCustomDepth(to_toggle);
 }
 
 
 void AInteractiveItem::Interact() {
+	if (Type = EItemType::eIT_Pickable) {
 
+	}
+	else if (Type = EItemType::eIT_Flair) {
+
+	}
 }
 
 
 void AInteractiveItem::OnCursorOver(UPrimitiveComponent* component) {
-	Mesh->SetRenderCustomDepth(true);
+	ToggleHighlight(true);
 }
 
 
 void AInteractiveItem::OnCursorEnd(UPrimitiveComponent* component) {
-	Mesh->SetRenderCustomDepth(false);
+	ToggleHighlight(false);
+}
+
+
+void AInteractiveItem::OnActorSelectedAsDestination() {
+
+}
+
+
+void AInteractiveItem::OnActorAsDestinationReached(AActor* other_actor) {
+
 }

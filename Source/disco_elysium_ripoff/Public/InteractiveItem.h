@@ -47,6 +47,10 @@ public:
 
 	virtual void OnCursorEnd(UPrimitiveComponent* component) override;
 
+	virtual void OnActorSelectedAsDestination() override;
+
+	virtual void OnActorAsDestinationReached(AActor* other_actor) override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
 	FName DisplayedName; //name for gameplay purposes
