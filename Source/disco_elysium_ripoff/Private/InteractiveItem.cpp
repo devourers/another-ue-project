@@ -12,8 +12,6 @@ AInteractiveItem::AInteractiveItem()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(GetRootComponent());
 
-	ItemMaterialInstance = UMaterialInstanceDynamic::Create(ItemMaterial, Mesh);
-
 	Mesh->OnBeginCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorOver);
 	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorEnd);
 	Mesh->SetRenderCustomDepth(false);
@@ -25,10 +23,8 @@ AInteractiveItem::AInteractiveItem()
 		Mesh->SetCustomDepthStencilValue(STENCIL_FLAIR_ITEM);
 	}
 
-	Mesh->SetMaterial(0, ItemMaterialInstance);
-	Mesh->SetCanEverAffectNavigation(false);
-
 	InteractionHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Collision"));
+	InteractionHitbox->SetCanEverAffectNavigation(false);
 	InteractionHitbox->SetupAttachment(Mesh);
 	InteractionHitbox->SetGenerateOverlapEvents(true);
 	InteractionHitbox->SetCollisionProfileName("NoCollision");
