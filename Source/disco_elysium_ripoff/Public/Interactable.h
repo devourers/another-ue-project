@@ -33,16 +33,16 @@ public:
 	virtual void OnCursorEnd(UPrimitiveComponent* Component) = 0;
 
 	UFUNCTION()
-	virtual void OnActorSelectedAsDestination() = 0;
-
-	UFUNCTION()
-	virtual void OnActorAsDestinationReached(AActor* other_actor) = 0;
-
-	UFUNCTION()
 	virtual void SetIsSelectedAsDestination(bool isSelected);
 
 	UFUNCTION()
 	virtual bool IsSelectedAsDestination();
+
+	UFUNCTION()
+	virtual void OnInteractableAsDestinationReached(AActor* other_actor) = 0;
+
+	UFUNCTION()
+	virtual void OnInteractableSelectedAsDestination() = 0;
 
 protected:
 	bool isSelectedAsDestination;

@@ -47,9 +47,9 @@ public:
 
 	virtual void OnCursorEnd(UPrimitiveComponent* component) override;
 
-	virtual void OnActorSelectedAsDestination() override;
+	virtual void OnInteractableAsDestinationReached(AActor* other_actor) override;
 
-	virtual void OnActorAsDestinationReached(AActor* other_actor) override;
+	virtual void OnInteractableSelectedAsDestination() override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))

@@ -16,7 +16,7 @@ AInteractiveItem::AInteractiveItem()
 
 	Mesh->OnBeginCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorOver);
 	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorEnd);
-	Mesh->SetRenderCustomDepth(true);
+	Mesh->SetRenderCustomDepth(false);
 
 	if (Type = EItemType::eIT_Pickable) {
 		Mesh->SetCustomDepthStencilValue(STENCIL_PICKABLE_ITEM);
@@ -77,11 +77,17 @@ void AInteractiveItem::OnCursorEnd(UPrimitiveComponent* component) {
 }
 
 
-void AInteractiveItem::OnActorSelectedAsDestination() {
-
+void AInteractiveItem::OnInteractableSelectedAsDestination() {
+	SetIsSelectedAsDestination(true);
+	Mesh->SetRenderCustomDepth(true);
 }
 
 
-void AInteractiveItem::OnActorAsDestinationReached(AActor* other_actor) {
-
+void AInteractiveItem::OnInteractableAsDestinationReached(AActor* other_actor) {
+	SetIsSelectedAsDestination(false);
+	Mesh->SetRenderCustomDepth(false);
+	if (InteractionHitbox->IsOverlappingActor(other_actor)) {
+		Interact();
+	}
 }
+
