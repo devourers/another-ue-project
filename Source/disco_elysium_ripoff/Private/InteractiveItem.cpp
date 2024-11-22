@@ -16,10 +16,10 @@ AInteractiveItem::AInteractiveItem()
 	Mesh->OnEndCursorOver.AddDynamic(this, &AInteractiveItem::OnCursorEnd);
 	Mesh->SetRenderCustomDepth(false);
 
-	if (Type = EItemType::eIT_Pickable) {
+	if (Type == EItemType::eIT_Pickable) {
 		Mesh->SetCustomDepthStencilValue(STENCIL_PICKABLE_ITEM);
 	}
-	else if (Type = EItemType::eIT_Flair) {
+	else if (Type == EItemType::eIT_Flair) {
 		Mesh->SetCustomDepthStencilValue(STENCIL_FLAIR_ITEM);
 	}
 
@@ -37,6 +37,13 @@ AInteractiveItem::AInteractiveItem()
 void AInteractiveItem::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (Type == EItemType::eIT_Pickable) {
+		Mesh->SetCustomDepthStencilValue(STENCIL_PICKABLE_ITEM);
+	}
+	else if (Type == EItemType::eIT_Flair) {
+		Mesh->SetCustomDepthStencilValue(STENCIL_FLAIR_ITEM);
+	}
 	
 }
 
@@ -54,10 +61,10 @@ void AInteractiveItem::ToggleHighlight(bool to_toggle) {
 
 
 void AInteractiveItem::Interact() {
-	if (Type = EItemType::eIT_Pickable) {
+	if (Type == EItemType::eIT_Pickable) {
 
 	}
-	else if (Type = EItemType::eIT_Flair) {
+	else if (Type == EItemType::eIT_Flair) {
 
 	}
 }
@@ -69,7 +76,8 @@ void AInteractiveItem::OnCursorOver(UPrimitiveComponent* component) {
 
 
 void AInteractiveItem::OnCursorEnd(UPrimitiveComponent* component) {
-	ToggleHighlight(false);
+	if (!IsSelectedAsDestination())
+		ToggleHighlight(false);
 }
 
 
@@ -87,3 +95,6 @@ void AInteractiveItem::OnInteractableAsDestinationReached(AActor* other_actor) {
 	}
 }
 
+USphereComponent* AInteractiveItem::GetInteractionHitbox() {
+	return InteractionHitbox;
+}

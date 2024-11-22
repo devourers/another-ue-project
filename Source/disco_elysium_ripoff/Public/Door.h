@@ -40,6 +40,8 @@ public:
 
 	virtual void OnInteractableSelectedAsDestination() override;
 
+	virtual USphereComponent* GetInteractionHitbox() override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* DoorFrameMesh;

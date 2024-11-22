@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "Components/SphereComponent.h"
 #include "Interactable.generated.h"
 
 // This class does not need to be modified.
@@ -43,6 +44,9 @@ public:
 
 	UFUNCTION()
 	virtual void OnInteractableSelectedAsDestination() = 0;
+
+	UFUNCTION()
+	virtual USphereComponent* GetInteractionHitbox() = 0;
 
 protected:
 	bool isSelectedAsDestination;

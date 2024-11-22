@@ -15,10 +15,10 @@ ADoor::ADoor()
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
 	DoorMesh->SetupAttachment(DoorFrameMesh);
 
-	DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_DOOR);
+	DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
 	DoorFrameMesh->SetRenderCustomDepth(false);
 
-	DoorMesh->SetCustomDepthStencilValue(STENCIL_DOOR);
+	DoorMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
 	DoorMesh->SetRenderCustomDepth(false);
 
 	InteractionHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Collision"));
@@ -74,4 +74,8 @@ void ADoor::OnInteractableSelectedAsDestination() {
 	SetIsSelectedAsDestination(true);
 	DoorMesh->SetRenderCustomDepth(true);
 	DoorFrameMesh->SetRenderCustomDepth(true);
+}
+
+USphereComponent* ADoor::GetInteractionHitbox() {
+	return InteractionHitbox;
 }

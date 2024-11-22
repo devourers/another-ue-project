@@ -69,10 +69,11 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	if (bHitSuccessful)
 	{
 		CachedDestination = Hit.Location;
-		AInteractableActor* casted_actor = Cast<AInteractableActor>(Hit.GetActor());
-		CachedActor = casted_actor;
-		if (casted_actor)
+		IInteractable* casted_actor = Cast<IInteractable>(Hit.GetActor());
+		if (casted_actor) {
+			CachedActor = Hit.GetActor();
 			isCachedActorInteractible = true;
+		}
 		else
 			isCachedActorInteractible = false;
 	}
@@ -102,7 +103,7 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 		AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
 		// We move there and spawn some particles
 		if (isCachedActorInteractible) {
-			protag->CustomMoveToInteractableActor(CachedActor);
+			protag->CustomMoveToInteractable(CachedActor);
 		}
 		else if (!clickedOnWall){
 			protag->CustomMoveToLocation(CachedDestination);
@@ -113,23 +114,20 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 }
 
 void APointAndClickPlayerController::OnHighlightAllIntercatbleActors() {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Triggered"));
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInteractableActor::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UInteractable::StaticClass(), actors);
 	for (AActor* actor : actors) {
-		AInteractableActor* casted_actor = Cast<AInteractableActor>(actor);
-		casted_actor->OnActorSelectedAsDestination();
+		IInteractable* casted_actor = Cast<IInteractable>(actor);
+		casted_actor->ToggleHighlight(true);
 	}
 }
 
 void APointAndClickPlayerController::OnEndHighlightAllIntercatbleActors() {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Finished Trigger"));
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInteractableActor::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UInteractable::StaticClass(), actors);
 	for (AActor* actor : actors) {
-		AInteractableActor* casted_actor = Cast<AInteractableActor>(actor);
-		APawn* ControlledPawn = GetPawn();
-		AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
-		casted_actor->OnActorAsDestinationReached(protag);
+		IInteractable* casted_actor = Cast<IInteractable>(actor);
+		if (!casted_actor->IsSelectedAsDestination())
+			casted_actor->ToggleHighlight(false);
 	}
 }

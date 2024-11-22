@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
 #include "InteractableActor.h"
+#include "Public/Interactable.h"
 #include "PlayerOcclusionHandler.h"
 #include "Components/BoxComponent.h"
 #include "Navigation/PathFollowingComponent.h"
@@ -50,7 +51,7 @@ UFUNCTION()
 		int32 OtherBodyIndex);
 
 UFUNCTION()
-	void CustomMoveToInteractableActor(AActor* Actor);
+	void CustomMoveToInteractable(AActor* actor);
 
 UFUNCTION()
 	void CustomMoveToLocation(const FVector& target_location);
@@ -82,7 +83,7 @@ UPROPERTY()
 
 private:
 	bool isMovingAlongPath = false;
-	AInteractableActor* cached_actor = nullptr;
+	IInteractable* cached_actor = nullptr;
 	bool isBehindWall;
 
 

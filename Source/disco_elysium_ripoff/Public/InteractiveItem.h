@@ -51,6 +51,8 @@ public:
 
 	virtual void OnInteractableSelectedAsDestination() override;
 
+	virtual USphereComponent* GetInteractionHitbox() override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
 	FName DisplayedName; //name for gameplay purposes

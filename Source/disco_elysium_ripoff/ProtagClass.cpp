@@ -59,7 +59,7 @@ AProtagClass::AProtagClass()
 	SpringArmCollisionVolume->OnComponentEndOverlap.AddDynamic(this, &AProtagClass::CameraBoomCollisionEnd);
 }
 
-void AProtagClass::CustomMoveToInteractableActor(AActor* actor) {
+void AProtagClass::CustomMoveToInteractable(AActor* actor) {
 	if (NavSystem && PathFinderComponent) {
 		TArray<AActor*> nav_mesh;
 		ARecastNavMesh* vol = nullptr;
@@ -67,7 +67,11 @@ void AProtagClass::CustomMoveToInteractableActor(AActor* actor) {
 		if (nav_mesh.Num() == 1) {
 			vol = Cast<ARecastNavMesh>(nav_mesh[0]);
 		}
-		UNavigationPath* u_path = NavSystem->FindPathToActorSynchronously(this, this->GetActorLocation(), actor, 100, vol);
+		IInteractable* casted_actor = Cast<IInteractable>(actor);
+		UNavigationPath* u_path = NavSystem->FindPathToLocationSynchronously(this, 
+			this->GetActorLocation(), 
+			casted_actor->GetInteractionHitbox()->GetComponentLocation(),
+			vol);
 
 		if (u_path && !u_path->IsValid()) {
 			//TODO: custom override if path is blocked by something
@@ -78,17 +82,19 @@ void AProtagClass::CustomMoveToInteractableActor(AActor* actor) {
 		if (u_path && u_path->IsValid()) {
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
-			request.SetAcceptanceRadius(10);
+			request.SetAcceptanceRadius(0);
 			request.SetUsePathfinding(true);
 			request.SetGoalActor(actor);
-			cached_actor = Cast<AInteractableActor>(actor);
-			cached_actor->OnActorSelectedAsDestination();
-			FAIRequestID path_id = PathFinderComponent->RequestMove(request, u_path->GetPath());
-			TArray<FVector> pts = u_path->PathPoints;
-			for (size_t i = 0; i < pts.Num(); ++i) {
-				DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
-				if (i + 1 != pts.Num()) {
-					DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
+			cached_actor = casted_actor;
+			if (cached_actor) {
+				cached_actor->OnInteractableSelectedAsDestination();
+				FAIRequestID path_id = PathFinderComponent->RequestMove(request, u_path->GetPath());
+				TArray<FVector> pts = u_path->PathPoints;
+				for (size_t i = 0; i < pts.Num(); ++i) {
+					DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
+					if (i + 1 != pts.Num()) {
+						DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
+					}
 				}
 			}
 		}
@@ -143,7 +149,7 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 			cached_actor = nullptr;
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
-			request.SetAcceptanceRadius(10);
+			request.SetAcceptanceRadius(0);
 			request.SetUsePathfinding(true);
 			request.SetGoalLocation(target_location);
 			request.SetRequireNavigableEndLocation(true);
@@ -172,7 +178,7 @@ void AProtagClass::OnReachedPathDestinaton() {
 	isMovingAlongPath = false;
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Request finished"));
 	if (cached_actor)
-		cached_actor->OnActorAsDestinationReached(this);
+		cached_actor->OnInteractableAsDestinationReached(this);
 }
 
 // Called when the game starts or when spawned

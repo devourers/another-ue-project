@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Public/Interactable.h"
 #include "PointAndClickPlayerController.generated.h"
 
 class UInputMappingContext;
