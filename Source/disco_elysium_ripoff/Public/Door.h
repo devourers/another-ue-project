@@ -8,6 +8,7 @@
 #include "../disco_elysium_ripoff.h"
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
+#include "Navigation/NavLinkProxy.h"
 
 #include "GameFramework/Actor.h"
 #include "Door.generated.h"

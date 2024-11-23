@@ -79,11 +79,14 @@ void AProtagClass::CustomMoveToInteractable(AActor* actor) {
 			return;
 		}
 
-		if (u_path && u_path->IsValid()) {
+		if (u_path && u_path->IsValid() && !u_path->IsUnreachable()) {
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
-			request.SetAcceptanceRadius(0);
+			request.SetAcceptanceRadius(0.01f);
 			request.SetUsePathfinding(true);
+			request.SetAllowPartialPath(false);
+			request.SetRequireNavigableEndLocation(true);
+			request.SetProjectGoalLocation(false);
 			request.SetGoalActor(actor);
 			cached_actor = casted_actor;
 			if (cached_actor) {
@@ -145,13 +148,15 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unreachable"));
 			return;
 		}
-		if (u_path && u_path->IsValid()) {
+		if (u_path && u_path->IsValid() && !u_path->IsUnreachable()) {
 			cached_actor = nullptr;
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
-			request.SetAcceptanceRadius(0);
+			request.SetAcceptanceRadius(0.01f);
 			request.SetUsePathfinding(true);
+			request.SetAllowPartialPath(false);
 			request.SetGoalLocation(target_location);
+			request.SetProjectGoalLocation(false);
 			request.SetRequireNavigableEndLocation(true);
 			FAIRequestID path_id =  PathFinderComponent->RequestMove(request, u_path->GetPath());
 			TArray<FVector> pts = u_path->PathPoints;
