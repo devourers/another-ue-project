@@ -27,12 +27,19 @@ ADoor::ADoor()
 	InteractionHitbox->SetCollisionProfileName("NoCollision");
 	InteractionHitbox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	InteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+
+	OpeningCurve = CreateDefaultSubobject<UCurveFloat>(TEXT("Opening Curve"));
 }
 
 // Called when the game starts or when spawned
 void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
+	if (OpeningCurve) {
+		FOnTimelineFloat TimeLineProgress;
+		TimeLineProgress.BindDynamic(this, &ADoor::OpenDoor);
+		OpeningTimeline.AddInterpFloat(OpeningCurve, TimeLineProgress);
+	}
 	
 }
 
@@ -41,6 +48,7 @@ void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	OpeningTimeline.TickTimeline(DeltaTime);
 }
 
 
@@ -49,8 +57,20 @@ void ADoor::ToggleHighlight(bool to_toggle) {
 	DoorFrameMesh->SetRenderCustomDepth(to_toggle);
 }
 
+void ADoor::OpenDoor(float Value) {
+	FRotator Rot = FRotator(0.0f, DoorOpeningAngle * Value, 0.0f);
+
+	DoorMesh->SetRelativeRotation(Rot);
+}
+
 void ADoor::Interact() {
-	//TODO
+	if (bIsDoorClosed) {
+		OpeningTimeline.Play();
+	}
+	else {
+		OpeningTimeline.Reverse();
+	}
+	bIsDoorClosed = !bIsDoorClosed;
 }
 
 void ADoor::OnCursorOver(UPrimitiveComponent* component) {
@@ -65,9 +85,9 @@ void ADoor::OnInteractableAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	DoorMesh->SetRenderCustomDepth(false);
 	DoorFrameMesh->SetRenderCustomDepth(false);
-	if (InteractionHitbox->IsOverlappingActor(other_actor)) {
+	//if (InteractionHitbox->IsOverlappingActor(other_actor)) {
 		Interact();
-	}
+	//}
 }
 
 void ADoor::OnInteractableSelectedAsDestination() {

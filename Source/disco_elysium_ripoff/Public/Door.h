@@ -7,6 +7,7 @@
 #include "Interactable.h"
 #include "../disco_elysium_ripoff.h"
 #include "Components/SphereComponent.h"
+#include "Components/TimelineComponent.h"
 
 #include "GameFramework/Actor.h"
 #include "Door.generated.h"
@@ -42,6 +43,9 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	UFUNCTION()
+	void OpenDoor(float Value);
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* DoorFrameMesh;
@@ -51,4 +55,13 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* InteractionHitbox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* OpeningCurve;
+
+private:
+	FTimeline OpeningTimeline;
+	bool bIsDoorClosed = true;
+	bool bIsDoorLocked = false;
+	float DoorOpeningAngle = 90.0f;
 };
