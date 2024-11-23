@@ -27,6 +27,7 @@ public:
 	bool CheckInventoryForItem(const FName& name);
 
 private:
+	UPROPERTY()
 	UPlayerInventory* Inventory;
 	
 };
