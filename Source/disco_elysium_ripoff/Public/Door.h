@@ -47,6 +47,9 @@ public:
 	UFUNCTION()
 	void OpenDoor(float Value);
 
+	UFUNCTION()
+	void UnlockDoor();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* DoorFrameMesh;

@@ -93,6 +93,14 @@ void ADoor::OpenDoor(float Value) {
 	DoorMesh->SetRelativeRotation(Rot);
 }
 
+
+void ADoor::UnlockDoor() {
+	//logic goes here....
+	bIsDoorLocked = false;
+	DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+	DoorMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+}
+
 void ADoor::Interact() {
 	if (!bIsDoorLocked) {
 		if (bIsDoorClosed) {
@@ -106,6 +114,9 @@ void ADoor::Interact() {
 				NavLink->SetSmartLinkEnabled(false);
 		}
 		bIsDoorClosed = !bIsDoorClosed;
+	}
+	else {
+		UnlockDoor();
 	}
 }
 
