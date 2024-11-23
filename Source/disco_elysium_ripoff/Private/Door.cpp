@@ -3,6 +3,7 @@
 
 #include "Door.h"
 #include "../MainGameInstanceSubsystem.h"
+#include "NavLinkCustomComponent.h"
 
 // Sets default values
 ADoor::ADoor()
@@ -71,7 +72,6 @@ void ADoor::BeginPlay()
 	}
 	if (NavLink) {
 		NavLink->SetSmartLinkEnabled(false);
-		NavLink->CopyEndPointsFromSimpleLinkToSmartLink();
 		NavLink->PointLinks.Empty();
 	}
 }
