@@ -22,6 +22,9 @@ public:
 	UFUNCTION()
 	void AddItemToInventory(const FName& name, UInventoryEntry* entry);
 
+	UFUNCTION()
+	bool HasItem(const FName& name);
+
 private:
 	TMap<FName, UInventoryEntry*> Inventory;
 	

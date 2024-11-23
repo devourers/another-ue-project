@@ -22,3 +22,7 @@ void UMainGameInstanceSubsystem::AddItemToInventory(const FName& name, UInventor
 	UE_LOGFMT(MainGameInstanceSubsystem, Log, "Added item {0} to inventory", name);
 }
 
+bool UMainGameInstanceSubsystem::CheckInventoryForItem(const FName& name) {
+	return Inventory->HasItem(name);
+}
+

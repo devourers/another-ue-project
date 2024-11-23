@@ -24,6 +24,8 @@ public:
 
 	void AddItemToInventory(const FName& name, UInventoryEntry* item);
 
+	bool CheckInventoryForItem(const FName& name);
+
 private:
 	UPlayerInventory* Inventory;
 	

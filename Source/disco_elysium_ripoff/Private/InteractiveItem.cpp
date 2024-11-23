@@ -2,6 +2,8 @@
 
 
 #include "InteractiveItem.h"
+#include "Misc/Paths.h"
+#include "../MainGameInstanceSubsystem.h"
 
 // Sets default values
 AInteractiveItem::AInteractiveItem()
@@ -45,6 +47,19 @@ void AInteractiveItem::BeginPlay()
 		Mesh->SetCustomDepthStencilValue(STENCIL_FLAIR_ITEM);
 	}
 	
+	FString RootDir = FPaths::Combine(FPaths::ProjectContentDir(), *FString("Configs/Levels"));
+	LoreEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Lore/" + LoaderName.ToString() + ".json");
+	InventoryEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Inventory/" + LoaderName.ToString() + ".json");
+
+	LoreEntry = NewObject<ULoreEntry>(this, TEXT("Lore Entry"));
+	if (FPaths::FileExists(LoreEntryPath)) {
+		LoreEntry->LoadFromJson(LoreEntryPath);
+	}
+
+	InventoryEntry = NewObject<UInventoryEntry>(this, TEXT("Inventory Entry"));
+	if (FPaths::FileExists(InventoryEntryPath)) {
+		InventoryEntry->LoadFromJson(InventoryEntryPath);
+	}
 }
 
 // Called every frame
@@ -62,7 +77,15 @@ void AInteractiveItem::ToggleHighlight(bool to_toggle) {
 
 void AInteractiveItem::Interact() {
 	if (Type == EItemType::eIT_Pickable) {
-
+		if (InventoryEntry) {
+			UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
+			if (handler) {
+				UInventoryEntry* entry = NewObject<UInventoryEntry>(InventoryEntry);
+				FName entry_name = FName(GetWorld()->GetName() + "_" + LoaderName.ToString());
+				handler->AddItemToInventory(entry_name, entry);
+				Destroy();
+			}
+		}
 	}
 	else if (Type == EItemType::eIT_Flair) {
 

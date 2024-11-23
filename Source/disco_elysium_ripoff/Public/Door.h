@@ -13,6 +13,27 @@
 #include "GameFramework/Actor.h"
 #include "Door.generated.h"
 
+UENUM(BlueprintType)
+enum EUnlockType {
+	eUT_NotLocked = 0 UMETA(DisplayName = "Not locked"),
+	eUT_Key = 1 UMETA(DisplayName = "Key"),
+	eUT_Device = 2 UMETA(DisplayName = "Device")
+};
+
+USTRUCT(BlueprintType)
+struct FLockInfo {
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EUnlockType> UnlockType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName RequiredKeyName; //also adds "WorldName_" as a prefix for easier use
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AActor* Device; //should be castable to device/interactable
+};
+
 UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API ADoor : public AActor, public IInteractable
 {
@@ -50,6 +71,9 @@ public:
 	UFUNCTION()
 	void UnlockDoor();
 
+	UFUNCTION()
+	void ImplUnlock();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* DoorFrameMesh;
@@ -68,6 +92,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = true))
 	bool bIsDoorLocked = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = true))
+	FLockInfo LockInfo;
 
 private:
 	FTimeline OpeningTimeline;

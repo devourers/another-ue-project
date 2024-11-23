@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Json.h"
 #include "LoreEntry.generated.h"
 
 /**
@@ -13,15 +14,16 @@ UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API ULoreEntry : public UObject
 {
 	GENERATED_BODY()
-	
+
+public:
 	ULoreEntry() = default;
 
-	void LoadFromJson();
+	void LoadFromJson(const FString& path);
 
 private:
 	FName Title; //displayed
 	FName Subcategory;
-	FName Caregory;
+	FName Category;
 	
 	TSet<FString> Keywords; //for searching
 	FString JsonPath;

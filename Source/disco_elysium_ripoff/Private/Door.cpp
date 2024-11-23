@@ -2,6 +2,7 @@
 
 
 #include "Door.h"
+#include "../MainGameInstanceSubsystem.h"
 
 // Sets default values
 ADoor::ADoor()
@@ -30,6 +31,8 @@ ADoor::ADoor()
 		DoorMesh->SetRenderCustomDepth(false);
 	}
 
+	DoorMesh->OnBeginCursorOver.AddDynamic(this, &ADoor::OnCursorOver);
+	DoorMesh->OnEndCursorOver.AddDynamic(this, &ADoor::OnCursorEnd);
 
 	InteractionHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Collision"));
 	InteractionHitbox->SetupAttachment(DoorFrameMesh);
@@ -93,12 +96,30 @@ void ADoor::OpenDoor(float Value) {
 	DoorMesh->SetRelativeRotation(Rot);
 }
 
-
-void ADoor::UnlockDoor() {
-	//logic goes here....
+void ADoor::ImplUnlock() {
 	bIsDoorLocked = false;
 	DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
 	DoorMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+}
+
+void ADoor::UnlockDoor() {
+	//logic goes here....
+	UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
+	if (handler) {
+		if (LockInfo.UnlockType == EUnlockType::eUT_NotLocked) {
+			ImplUnlock();
+		}
+		if (LockInfo.UnlockType == EUnlockType::eUT_Key) {
+			FName full_key_name = FName(GetWorld()->GetFName().ToString() + "_" + LockInfo.RequiredKeyName.ToString());
+			if (handler->CheckInventoryForItem(full_key_name)) {
+				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unlocked with key " + full_key_name.ToString()));
+				ImplUnlock();
+			}
+			else {
+				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("You don't have the key"));
+			}
+		}
+	}
 }
 
 void ADoor::Interact() {
