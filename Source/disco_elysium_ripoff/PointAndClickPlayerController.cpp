@@ -8,7 +8,6 @@
 #include "Engine/LocalPlayer.h"
 #include "FadingActor.h"
 #include "Kismet/GameplayStatics.h"
-#include "InteractableActor.h"
 #include "ProtagClass.h"
 
 APointAndClickPlayerController::APointAndClickPlayerController() {

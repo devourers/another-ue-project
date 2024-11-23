@@ -7,7 +7,6 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
-#include "InteractableActor.h"
 #include "Public/Interactable.h"
 #include "PlayerOcclusionHandler.h"
 #include "Components/BoxComponent.h"
