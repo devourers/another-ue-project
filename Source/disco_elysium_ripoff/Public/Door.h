@@ -60,9 +60,14 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	UCurveFloat* OpeningCurve;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Navigation, meta = (AllowPrivateAccess = "true"))
+	ANavLinkProxy* NavLink;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = true))
+	bool bIsDoorLocked = false;
+
 private:
 	FTimeline OpeningTimeline;
 	bool bIsDoorClosed = true;
-	bool bIsDoorLocked = false;
 	float DoorOpeningAngle = 90.0f;
 };

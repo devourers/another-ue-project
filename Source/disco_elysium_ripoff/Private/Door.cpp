@@ -15,11 +15,21 @@ ADoor::ADoor()
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
 	DoorMesh->SetupAttachment(DoorFrameMesh);
 
-	DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
-	DoorFrameMesh->SetRenderCustomDepth(false);
+	if (!bIsDoorLocked) {
+		DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+		DoorFrameMesh->SetRenderCustomDepth(false);
 
-	DoorMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
-	DoorMesh->SetRenderCustomDepth(false);
+		DoorMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+		DoorMesh->SetRenderCustomDepth(false);
+	}
+	else {
+		DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_LOCKED_DOOR);
+		DoorFrameMesh->SetRenderCustomDepth(false);
+
+		DoorMesh->SetCustomDepthStencilValue(STENCIL_LOCKED_DOOR);
+		DoorMesh->SetRenderCustomDepth(false);
+	}
+
 
 	InteractionHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Collision"));
 	InteractionHitbox->SetupAttachment(DoorFrameMesh);
@@ -35,12 +45,32 @@ ADoor::ADoor()
 void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!bIsDoorLocked) {
+		DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+		DoorFrameMesh->SetRenderCustomDepth(false);
+
+		DoorMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+		DoorMesh->SetRenderCustomDepth(false);
+	}
+	else {
+		DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_LOCKED_DOOR);
+		DoorFrameMesh->SetRenderCustomDepth(false);
+
+		DoorMesh->SetCustomDepthStencilValue(STENCIL_LOCKED_DOOR);
+		DoorMesh->SetRenderCustomDepth(false);
+	}
+
 	if (OpeningCurve) {
 		FOnTimelineFloat TimeLineProgress;
 		TimeLineProgress.BindDynamic(this, &ADoor::OpenDoor);
 		OpeningTimeline.AddInterpFloat(OpeningCurve, TimeLineProgress);
 	}
-	
+	if (NavLink) {
+		NavLink->SetSmartLinkEnabled(false);
+		NavLink->CopyEndPointsFromSimpleLinkToSmartLink();
+		NavLink->PointLinks.Empty();
+	}
 }
 
 // Called every frame
@@ -64,13 +94,19 @@ void ADoor::OpenDoor(float Value) {
 }
 
 void ADoor::Interact() {
-	if (bIsDoorClosed) {
-		OpeningTimeline.Play();
+	if (!bIsDoorLocked) {
+		if (bIsDoorClosed) {
+			OpeningTimeline.Play();
+			if (NavLink)
+				NavLink->SetSmartLinkEnabled(true);
+		}
+		else {
+			OpeningTimeline.Reverse();
+			if (NavLink)
+				NavLink->SetSmartLinkEnabled(false);
+		}
+		bIsDoorClosed = !bIsDoorClosed;
 	}
-	else {
-		OpeningTimeline.Reverse();
-	}
-	bIsDoorClosed = !bIsDoorClosed;
 }
 
 void ADoor::OnCursorOver(UPrimitiveComponent* component) {
@@ -85,9 +121,7 @@ void ADoor::OnInteractableAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	DoorMesh->SetRenderCustomDepth(false);
 	DoorFrameMesh->SetRenderCustomDepth(false);
-	//if (InteractionHitbox->IsOverlappingActor(other_actor)) {
-		Interact();
-	//}
+	Interact();
 }
 
 void ADoor::OnInteractableSelectedAsDestination() {
