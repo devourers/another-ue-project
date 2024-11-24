@@ -3,6 +3,7 @@
 
 #include "InteractiveItem.h"
 #include "Misc/Paths.h"
+#include "../ProtagClass.h"
 #include "../MainGameInstanceSubsystem.h"
 
 // Sets default values
@@ -75,7 +76,7 @@ void AInteractiveItem::ToggleHighlight(bool to_toggle) {
 }
 
 
-void AInteractiveItem::Interact() {
+void AInteractiveItem::Interact(AActor* other_actor) {
 	if (Type == EItemType::eIT_Pickable) {
 		if (InventoryEntry) {
 			UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
@@ -83,6 +84,11 @@ void AInteractiveItem::Interact() {
 				UInventoryEntry* entry = NewObject<UInventoryEntry>(InventoryEntry);
 				FName entry_name = FName(GetWorld()->GetName() + "_" + LoaderName.ToString());
 				handler->AddItemToInventory(entry_name, entry);
+				AProtagClass* protag = Cast<AProtagClass>(other_actor);
+				if (protag) {
+					FString log_entry = FString("Item picked up: ") + DisplayedName.ToString();
+					protag->UpdateLog(log_entry);
+				}
 				Destroy();
 			}
 		}
@@ -114,7 +120,7 @@ void AInteractiveItem::OnInteractableAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	Mesh->SetRenderCustomDepth(false);
 	if (InteractionHitbox->IsOverlappingActor(other_actor)) {
-		Interact();
+		Interact(other_actor);
 	}
 }
 

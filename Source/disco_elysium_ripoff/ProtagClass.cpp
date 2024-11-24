@@ -7,6 +7,7 @@
 #include "NavMesh/RecastNavMesh.h"
 #include "FadingActor.h"
 #include "DrawDebugHelpers.h"
+#include "PointAndClickPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "NavigationPath.h"
 
@@ -57,6 +58,9 @@ AProtagClass::AProtagClass()
 	SpringArmCollisionVolume->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
 	SpringArmCollisionVolume->OnComponentBeginOverlap.AddDynamic(this, &AProtagClass::CameraBoomCollisionBegin);
 	SpringArmCollisionVolume->OnComponentEndOverlap.AddDynamic(this, &AProtagClass::CameraBoomCollisionEnd);
+
+	ProtagHUD = nullptr;
+	ProtagHUDClass = nullptr;
 }
 
 void AProtagClass::CustomMoveToInteractable(AActor* actor) {
@@ -193,7 +197,22 @@ void AProtagClass::BeginPlay()
 
 	occlusion_handler_ = NewObject<UPlayerOcclusionHandler>(this, TEXT("OcclusionHandler"));
 	occlusion_handler_->BindPlayer(this);
+
+	if (ProtagHUDClass) {
+		APointAndClickPlayerController* PCC = GetController<APointAndClickPlayerController>();
+		ProtagHUD = CreateWidget<UMainHUD>(PCC, ProtagHUDClass);
+		ProtagHUD->AddToPlayerScreen();
+	}
 	
+}
+
+void AProtagClass::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	if (ProtagHUD) {
+		ProtagHUD->RemoveFromParent();
+		ProtagHUD = nullptr;
+	}
+	Super::EndPlay(EndPlayReason);
+
 }
 
 // Called every frame
@@ -213,5 +232,9 @@ void AProtagClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AProtagClass::UpdateLog(const FString& log_entry) {
+	ProtagHUD->AddLogEntry(log_entry);
 }
 

@@ -53,7 +53,7 @@ public:
 
 	virtual void ToggleHighlight(bool to_toggle) override;
 
-	virtual void Interact() override;
+	virtual void Interact(AActor* other_actor) override;
 
 	virtual void OnCursorOver(UPrimitiveComponent* component) override;
 
@@ -69,10 +69,10 @@ public:
 	void OpenDoor(float Value);
 
 	UFUNCTION()
-	void UnlockDoor();
+	void UnlockDoor(AActor* other_actor);
 
 	UFUNCTION()
-	void ImplUnlock();
+	void ImplUnlock(AActor* other_actor);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))

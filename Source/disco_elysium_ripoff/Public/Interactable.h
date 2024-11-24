@@ -25,7 +25,7 @@ class DISCO_ELYSIUM_RIPOFF_API IInteractable
 public:
 
 	virtual void ToggleHighlight(bool to_toggle) = 0;
-	virtual void Interact() = 0;
+	virtual void Interact(AActor* other_actor) = 0;
 
 	UFUNCTION()
 	virtual void OnCursorOver(UPrimitiveComponent* Component) = 0;

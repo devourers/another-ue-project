@@ -3,6 +3,7 @@
 
 #include "Door.h"
 #include "../MainGameInstanceSubsystem.h"
+#include "../ProtagClass.h"
 #include "NavLinkCustomComponent.h"
 
 // Sets default values
@@ -96,33 +97,41 @@ void ADoor::OpenDoor(float Value) {
 	DoorMesh->SetRelativeRotation(Rot);
 }
 
-void ADoor::ImplUnlock() {
+void ADoor::ImplUnlock(AActor* other_actor) {
 	bIsDoorLocked = false;
 	DoorFrameMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
 	DoorMesh->SetCustomDepthStencilValue(STENCIL_UNLOCKED_DOOR);
+	AProtagClass* protag = Cast<AProtagClass>(other_actor);
+	if (protag) {
+		FString log_entry = FString("Door unlocked.");
+		protag->UpdateLog(log_entry);
+	}
 }
 
-void ADoor::UnlockDoor() {
-	//logic goes here....
+void ADoor::UnlockDoor(AActor* other_actor) {
 	UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
 	if (handler) {
 		if (LockInfo.UnlockType == EUnlockType::eUT_NotLocked) {
-			ImplUnlock();
+			ImplUnlock(other_actor);
 		}
 		if (LockInfo.UnlockType == EUnlockType::eUT_Key) {
 			FName full_key_name = FName(GetWorld()->GetFName().ToString() + "_" + LockInfo.RequiredKeyName.ToString());
 			if (handler->CheckInventoryForItem(full_key_name)) {
 				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unlocked with key " + full_key_name.ToString()));
-				ImplUnlock();
+				ImplUnlock(other_actor);
 			}
 			else {
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("You don't have the key"));
+				AProtagClass* protag = Cast<AProtagClass>(other_actor);
+				if (protag) {
+					FString log_entry = FString("You don't have the key.");
+					protag->UpdateLog(log_entry);
+				}
 			}
 		}
 	}
 }
 
-void ADoor::Interact() {
+void ADoor::Interact(AActor* other_actor) {
 	if (!bIsDoorLocked) {
 		if (bIsDoorClosed) {
 			OpeningTimeline.Play();
@@ -137,7 +146,7 @@ void ADoor::Interact() {
 		bIsDoorClosed = !bIsDoorClosed;
 	}
 	else {
-		UnlockDoor();
+		UnlockDoor(other_actor);
 	}
 }
 
@@ -153,7 +162,7 @@ void ADoor::OnInteractableAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	DoorMesh->SetRenderCustomDepth(false);
 	DoorFrameMesh->SetRenderCustomDepth(false);
-	Interact();
+	Interact(other_actor);
 }
 
 void ADoor::OnInteractableSelectedAsDestination() {

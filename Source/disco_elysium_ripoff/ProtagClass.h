@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
+#include "MainHUD.h"
 #include "Public/Interactable.h"
 #include "PlayerOcclusionHandler.h"
 #include "Components/BoxComponent.h"
@@ -26,12 +27,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void UpdateLog(const FString& log_entry);
 
 UFUNCTION()
 	void CameraBoomCollisionBegin(
@@ -79,6 +84,12 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (
 
 UPROPERTY()
 	UPlayerOcclusionHandler* occlusion_handler_;
+
+UPROPERTY(EditAnywhere)
+	TSubclassOf<class UMainHUD> ProtagHUDClass;
+
+UPROPERTY()
+	class UMainHUD* ProtagHUD;
 
 private:
 	bool isMovingAlongPath = false;

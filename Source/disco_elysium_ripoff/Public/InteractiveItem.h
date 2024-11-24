@@ -41,7 +41,7 @@ public:
 
 	virtual void ToggleHighlight(bool to_toggle) override;
 
-	virtual void Interact() override;
+	virtual void Interact(AActor* other_actor) override;
 
 	virtual void OnCursorOver(UPrimitiveComponent* component) override;
 
