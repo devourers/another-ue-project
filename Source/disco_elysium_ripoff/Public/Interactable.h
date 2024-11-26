@@ -24,7 +24,10 @@ class DISCO_ELYSIUM_RIPOFF_API IInteractable
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
+	UFUNCTION()
 	virtual void ToggleHighlight(bool to_toggle) = 0;
+
+	UFUNCTION()
 	virtual void Interact(AActor* other_actor) = 0;
 
 	UFUNCTION()

@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "BaseDeviceUI.generated.h"
 
+//class ADevice;
+//struct FDeviceConfig;
 /**
  * 
  */
@@ -14,6 +16,11 @@ class DISCO_ELYSIUM_RIPOFF_API UBaseDeviceUI : public UUserWidget
 {
 	GENERATED_BODY()
 
+	//UFUNCTION()
+	//virtual void BindDevice() = 0;
+	//
+	//UFUNCTION()
+	//virtual void SetupUIFromDeviceConfig(const FDeviceConfig& config) = 0;
 
 	//Empty class serving as interface
 	

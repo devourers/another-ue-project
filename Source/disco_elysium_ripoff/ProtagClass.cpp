@@ -86,7 +86,7 @@ void AProtagClass::CustomMoveToInteractable(AActor* actor) {
 		if (u_path && u_path->IsValid() && !u_path->IsUnreachable()) {
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
-			request.SetAcceptanceRadius(0.01f);
+			request.SetAcceptanceRadius(0.0f);
 			request.SetUsePathfinding(true);
 			request.SetAllowPartialPath(false);
 			request.SetRequireNavigableEndLocation(true);
@@ -156,7 +156,7 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 			cached_actor = nullptr;
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
-			request.SetAcceptanceRadius(0.01f);
+			request.SetAcceptanceRadius(0.0f);
 			request.SetUsePathfinding(true);
 			request.SetAllowPartialPath(false);
 			request.SetGoalLocation(target_location);
@@ -187,7 +187,7 @@ void AProtagClass::OnReachedPathDestinaton() {
 	isMovingAlongPath = false;
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Request finished"));
 	if (cached_actor)
-		cached_actor->OnInteractableAsDestinationReached(this);
+		cached_actor->OnInteractableAsDestinationReached(this); //TODO: check for cached location? was it reached?
 }
 
 // Called when the game starts or when spawned
