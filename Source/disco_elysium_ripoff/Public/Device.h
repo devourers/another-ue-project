@@ -7,6 +7,7 @@
 
 #include "../disco_elysium_ripoff.h"
 
+#include "../ProtagClass.h"
 #include "Interactable.h"
 #include "LoreEntry.h"
 #include "BaseDeviceUI.h"
@@ -29,6 +30,10 @@ struct FDeviceSignal {
 
 	UPROPERTY()
 	bool bSuccess;
+
+
+	UPROPERTY()
+	class AProtagClass* PlayerPtr;
 };
 
 USTRUCT(BlueprintType)
@@ -112,6 +117,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UBaseDeviceUI> DeviceUIClass;
+
+	UPROPERTY()
+	class AProtagClass* PlayerPtr; //for signals
 
 	UPROPERTY()
 	class UBaseDeviceUI* DeviceUI;

@@ -113,31 +113,38 @@ void ADoor::ImplUnlock(AActor* other_actor) {
 }
 
 void ADoor::UnlockDoor(AActor* other_actor) {
-	UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
-	if (handler) {
 		if (LockInfo.UnlockType == EUnlockType::eUT_NotLocked) {
 			ImplUnlock(other_actor);
 		}
-		if (LockInfo.UnlockType == EUnlockType::eUT_Key) {
-			FName full_key_name = FName(GetWorld()->GetFName().ToString() + "_" + LockInfo.RequiredKeyName.ToString());
-			if (handler->CheckInventoryForItem(full_key_name)) {
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unlocked with key " + full_key_name.ToString()));
-				ImplUnlock(other_actor);
-			}
-			else {
-				AProtagClass* protag = Cast<AProtagClass>(other_actor);
-				if (protag) {
-					FString log_entry = FString("You don't have the key.");
-					protag->UpdateLog(log_entry);
+		else if (LockInfo.UnlockType == EUnlockType::eUT_Key) {
+			UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
+			if (handler) {
+				FName full_key_name = FName(GetWorld()->GetFName().ToString() + "_" + LockInfo.RequiredKeyName.ToString());
+				if (handler->CheckInventoryForItem(full_key_name)) {
+					GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unlocked with key " + full_key_name.ToString()));
+					ImplUnlock(other_actor);
+				}
+				else {
+					AProtagClass* protag = Cast<AProtagClass>(other_actor);
+					if (protag) {
+						FString log_entry = FString("You don't have the key.");
+						protag->UpdateLog(log_entry);
+					}
 				}
 			}
 		}
-	}
+		else {
+			AProtagClass* protag = Cast<AProtagClass>(other_actor);
+			if (protag) {
+				FString log_entry = FString("This door doesn't open here.");
+				protag->UpdateLog(log_entry);
+			}
+		}
 }
 
 void ADoor::OnSignalRecieved(const FDeviceSignal& signal) {
 	if (signal.bSuccess)
-		ImplUnlock(nullptr);
+		ImplUnlock(signal.PlayerPtr);
 }
 
 void ADoor::Interact(AActor* other_actor) {

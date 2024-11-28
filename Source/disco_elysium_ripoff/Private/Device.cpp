@@ -41,6 +41,7 @@ void ADevice::CloseUI() {
 }
 
 void ADevice::Interact(AActor* other_actor) {
+	PlayerPtr = Cast<AProtagClass>(other_actor);
 	if (DeviceConfig.DeviceType == EDeviceType::eDT_Lockpad) {
 		if (DeviceUIClass && !DeviceUI) {
 			AProtagClass* protag = Cast<AProtagClass>(other_actor);
@@ -99,12 +100,14 @@ void ADevice::Tick(float DeltaTime)
 
 void ADevice::OnSignalRecieved(const FDeviceUISignal& signal) {
 	FDeviceSignal d_signal;
+	d_signal.PlayerPtr = PlayerPtr;
 	d_signal.DeviceType = DeviceConfig.DeviceType;
 	if (signal.SignalType == EDST_CodepadCorrectCode) {
 		d_signal.bSuccess = true;
 	}
 	else {
 		d_signal.bSuccess = false;
+		PlayerPtr->UpdateLog(FString("Wrong code."));
 	}
 	OnSignalSent.Broadcast(d_signal);
 }
