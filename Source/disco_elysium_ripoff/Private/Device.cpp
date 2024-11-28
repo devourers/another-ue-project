@@ -35,12 +35,20 @@ void ADevice::ToggleHighlight(bool to_toggle) {
 	Mesh->SetRenderCustomDepth(to_toggle);
 }
 
+void ADevice::CloseUI() {
+	DeviceUI->RemoveFromViewport();
+	DeviceUI = nullptr;
+}
+
 void ADevice::Interact(AActor* other_actor) {
 	if (DeviceConfig.DeviceType == EDeviceType::eDT_Lockpad) {
 		if (DeviceUIClass && !DeviceUI) {
 			AProtagClass* protag = Cast<AProtagClass>(other_actor);
 			APointAndClickPlayerController* PCC = protag->GetController<APointAndClickPlayerController>();
 			DeviceUI = CreateWidget<UBaseDeviceUI>(PCC, DeviceUIClass);
+			DeviceUI->BindDevice(this);
+			DeviceUI->SetupUIFromDeviceConfig(DeviceConfig);
+			DeviceUI->SignalDelegate.AddUniqueDynamic(this, &ADevice::OnSignalRecieved);
 			DeviceUI->AddToPlayerScreen();
 			DeviceUI->SetFocus();
 		}
@@ -89,3 +97,14 @@ void ADevice::Tick(float DeltaTime)
 	//TODO: load devices
 }
 
+void ADevice::OnSignalRecieved(const FDeviceUISignal& signal) {
+	FDeviceSignal d_signal;
+	d_signal.DeviceType = DeviceConfig.DeviceType;
+	if (signal.SignalType == EDST_CodepadCorrectCode) {
+		d_signal.bSuccess = true;
+	}
+	else {
+		d_signal.bSuccess = false;
+	}
+	OnSignalSent.Broadcast(d_signal);
+}

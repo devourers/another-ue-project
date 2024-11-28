@@ -19,23 +19,35 @@ enum EDeviceType {
 	eDT_Computer = 1 UMETA(DisplayName = "Computer")
 };
 
+
+USTRUCT(BlueprintType)
+struct FDeviceSignal {
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY()
+	TEnumAsByte<EDeviceType> DeviceType;
+
+	UPROPERTY()
+	bool bSuccess;
+};
+
 USTRUCT(BlueprintType)
 struct FDeviceConfig {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, Category = General)
 	TEnumAsByte<EDeviceType> DeviceType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//CODEPAD
+	UPROPERTY(EditAnywhere, Category = Codepad, meta = (EditCondition = "DeviceType == EDeviceType::eDT_Lockpad", EditConditionHides))
 	FString CodepadCode;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, Category = Codepad, meta = (EditCondition = "DeviceType == EDeviceType::eDT_Lockpad", EditConditionHides))
 	int MaxCodepadCodeLength; //to reset UI
 
-	//this will be a big struct probs...
-	//may be use class with interface?
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDeviceSignalSentSignature, const FDeviceSignal&, Signal);
 
 UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API ADevice : public AActor, public IInteractable
@@ -60,6 +72,12 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	UFUNCTION()
+	void CloseUI();
+
+	UFUNCTION()
+	void OnSignalRecieved(const FDeviceUISignal& signal);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -67,6 +85,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	FDeviceSignalSentSignature OnSignalSent;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))

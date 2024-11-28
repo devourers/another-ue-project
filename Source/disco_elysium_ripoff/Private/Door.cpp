@@ -75,6 +75,10 @@ void ADoor::BeginPlay()
 		NavLink->SetSmartLinkEnabled(false);
 		NavLink->PointLinks.Empty();
 	}
+
+	if (LockInfo.Device) {
+		LockInfo.Device->OnSignalSent.AddUniqueDynamic(this, &ADoor::OnSignalRecieved);
+	}
 }
 
 // Called every frame
@@ -129,6 +133,11 @@ void ADoor::UnlockDoor(AActor* other_actor) {
 			}
 		}
 	}
+}
+
+void ADoor::OnSignalRecieved(const FDeviceSignal& signal) {
+	if (signal.bSuccess)
+		ImplUnlock(nullptr);
 }
 
 void ADoor::Interact(AActor* other_actor) {

@@ -9,6 +9,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Navigation/NavLinkProxy.h"
+#include "Device.h"
 
 #include "GameFramework/Actor.h"
 #include "Door.generated.h"
@@ -31,7 +32,7 @@ struct FLockInfo {
 	FName RequiredKeyName; //also adds "WorldName_" as a prefix for easier use
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AActor* Device; //should be castable to device/interactable
+	ADevice* Device; //should be castable to device/interactable
 };
 
 UCLASS()
@@ -73,6 +74,9 @@ public:
 
 	UFUNCTION()
 	void ImplUnlock(AActor* other_actor);
+
+	UFUNCTION()
+	void OnSignalRecieved(const FDeviceSignal& signal);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
