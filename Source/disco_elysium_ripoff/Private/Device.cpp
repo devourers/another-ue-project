@@ -86,7 +86,8 @@ USphereComponent* ADevice::GetInteractionHitbox() {
 void ADevice::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Mesh->SetCustomDepthStencilValue(STENCIL_DEVICE);
 }
 
 // Called every frame
@@ -94,7 +95,6 @@ void ADevice::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Mesh->SetCustomDepthStencilValue(STENCIL_DEVICE);
 	//TODO: load devices
 }
 
