@@ -42,11 +42,24 @@ void ALevelChanger::Tick(float DeltaTime)
 }
 
 void ALevelChanger::ToggleHighlight(bool to_toggle) {
-
+	Mesh->SetRenderCustomDepth(to_toggle);
 }
 
 void ALevelChanger::Interact(AActor* other_actor) {
-
+	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {
+		if (Configuration.OtherTeleport) {
+			bool success = other_actor->TeleportTo(Configuration.OtherTeleport->GetInteractionHitbox()->GetComponentLocation(), other_actor->GetActorRotation());
+			if (success) {
+				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Teleported"));
+			}
+			else {
+				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Not teleported"));
+			}
+		}
+	}
+	else {
+		//TODO
+	}
 }
 
 void ALevelChanger::OnCursorOver(UPrimitiveComponent* Component) {
@@ -59,11 +72,14 @@ void ALevelChanger::OnCursorEnd(UPrimitiveComponent* Component) {
 }
 
 void ALevelChanger::OnInteractableAsDestinationReached(AActor* other_actor) {
-
+	SetIsSelectedAsDestination(false);
+	Mesh->SetRenderCustomDepth(false);
+	Interact(other_actor);
 }
 
 void ALevelChanger::OnInteractableSelectedAsDestination() {
-
+	SetIsSelectedAsDestination(true);
+	Mesh->SetRenderCustomDepth(true);
 }
 
 USphereComponent* ALevelChanger::GetInteractionHitbox() {
