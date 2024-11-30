@@ -8,9 +8,12 @@
 void UButtonWithDelegate::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	MainButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnButtonClicked);
-	ButtonText->SetText(FText::FromString(button_text));
+	if (MainButton) {
+		MainButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnButtonClicked);
+	}
+	if (ButtonText) {
+		ButtonText->SetText(FText::FromString(button_text));
+	}
 }
 
 void UButtonWithDelegate::OnButtonClicked()
