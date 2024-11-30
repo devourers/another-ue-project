@@ -21,9 +21,11 @@ public:
 
 	void SetCharacterPosition();
 
-	void SetShouldApplyOcclusion(bool to_apply);
+	void SetShouldApplyOcclusion(bool isBehindWall, bool radius_condition);
 
 	void SetOcclusionRadius(float DeltaTime);
+
+	float GetCurrentOcclusionRadius() const;
 
 	void BindPlayer(AActor* player);
 
@@ -31,7 +33,8 @@ private:
 	AActor* player_;
 	UMaterialParameterCollection* collection_;
 	float OcclusionRadius = 0.1;
-	float FadeDuration = 0.5;
+	float FadeDuration = 0.3;
 	float CurrentOcclusionRadius = 0.0;
+	bool __internal__ShouldApplyOcclusion = false;
 	
 };

@@ -221,7 +221,7 @@ void AProtagClass::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (occlusion_handler_) {
 		occlusion_handler_->SetCharacterPosition();
-		occlusion_handler_->SetShouldApplyOcclusion(isBehindWall);
+		occlusion_handler_->SetShouldApplyOcclusion(isBehindWall, (occlusion_handler_->GetCurrentOcclusionRadius() > 0.0f));
 		occlusion_handler_->SetOcclusionRadius(DeltaTime);
 	}
 

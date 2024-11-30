@@ -41,18 +41,26 @@ void UPlayerOcclusionHandler::SetCharacterPosition() {
 	}
 }
 
-void UPlayerOcclusionHandler::SetShouldApplyOcclusion(bool to_apply) {
+void UPlayerOcclusionHandler::SetShouldApplyOcclusion(bool isBehindWall, bool radius_condition) {
 	UMaterialParameterCollectionInstance* pci = GetWorld()->GetParameterCollectionInstance(collection_);
 	if (pci) {
-		pci->SetScalarParameterValue(FName("ShouldApplyOcclusion"), float(int(to_apply)));
+		pci->SetScalarParameterValue(FName("ShouldApplyOcclusion"), float(int(isBehindWall || radius_condition)));
 	}
+	__internal__ShouldApplyOcclusion = isBehindWall;
 }
 
 void UPlayerOcclusionHandler::SetOcclusionRadius(float DeltaTime) {
-	CurrentOcclusionRadius += (OcclusionRadius / FadeDuration) * DeltaTime;
+
+	float multiplyer = __internal__ShouldApplyOcclusion ? 1.0f : -1.0f;
+	CurrentOcclusionRadius += (OcclusionRadius / FadeDuration) * DeltaTime * multiplyer;
 	CurrentOcclusionRadius = FMath::Clamp(CurrentOcclusionRadius, 0.0, OcclusionRadius);
+
 	UMaterialParameterCollectionInstance* pci = GetWorld()->GetParameterCollectionInstance(collection_);
 	if (pci) {
 		pci->SetScalarParameterValue(FName("Radius"), CurrentOcclusionRadius);
 	}
+}
+
+float UPlayerOcclusionHandler::GetCurrentOcclusionRadius() const {
+	return CurrentOcclusionRadius;
 }
