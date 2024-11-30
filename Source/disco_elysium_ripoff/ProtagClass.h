@@ -66,6 +66,12 @@ UFUNCTION()
 UFUNCTION()
 	void OnReachedPathDestinaton();
 
+UFUNCTION()
+	void FadeCamera(bool FadeIn);
+
+UFUNCTION()
+	void FadeOutAfterTeleport();
+
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* ProtagCameraComponent;

@@ -2,6 +2,7 @@
 
 
 #include "LevelChanger.h"
+#include "../ProtagClass.h"
 
 // Sets default values
 ALevelChanger::ALevelChanger()
@@ -45,16 +46,21 @@ void ALevelChanger::ToggleHighlight(bool to_toggle) {
 	Mesh->SetRenderCustomDepth(to_toggle);
 }
 
+void ALevelChanger::TeleportTimerElapsed() {
+	PlayerPtr->TeleportTo(Configuration.OtherTeleport->GetInteractionHitbox()->GetComponentLocation(), PlayerPtr->GetActorRotation());
+	GetWorldTimerManager().SetTimer(
+		UnusedHandle, PlayerPtr, &AProtagClass::FadeOutAfterTeleport, 1.0f, false);
+}
+
 void ALevelChanger::Interact(AActor* other_actor) {
 	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {
 		if (Configuration.OtherTeleport) {
-			bool success = other_actor->TeleportTo(Configuration.OtherTeleport->GetInteractionHitbox()->GetComponentLocation(), other_actor->GetActorRotation());
-			if (success) {
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Teleported"));
-			}
-			else {
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Not teleported"));
-			}
+			AProtagClass* protag = Cast<AProtagClass>(other_actor);
+			PlayerPtr = protag;
+			protag->FadeCamera(true);
+			GetWorldTimerManager().SetTimer(
+				UnusedHandle, this, &ALevelChanger::TeleportTimerElapsed, 1.0f, false);
+			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Teleported"));
 		}
 	}
 	else {

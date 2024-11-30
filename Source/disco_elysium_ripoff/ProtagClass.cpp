@@ -97,12 +97,12 @@ void AProtagClass::CustomMoveToInteractable(AActor* actor) {
 				cached_actor->OnInteractableSelectedAsDestination();
 				FAIRequestID path_id = PathFinderComponent->RequestMove(request, u_path->GetPath());
 				TArray<FVector> pts = u_path->PathPoints;
-				for (size_t i = 0; i < pts.Num(); ++i) {
-					DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
-					if (i + 1 != pts.Num()) {
-						DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
-					}
-				}
+				//for (size_t i = 0; i < pts.Num(); ++i) {
+				//	DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
+				//	if (i + 1 != pts.Num()) {
+				//		DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
+				//	}
+				//}
 			}
 		}
 	}
@@ -145,7 +145,7 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 		if (nav_mesh.Num() == 1) {
 			vol = Cast<ARecastNavMesh>(nav_mesh[0]);
 		}
-		DrawDebugSphere(GetWorld(), target_location, 10, 10, FColor::Red, false, 5);
+		//DrawDebugSphere(GetWorld(), target_location, 10, 10, FColor::Red, false, 5);
 		UNavigationPath* u_path = NavSystem->FindPathToLocationSynchronously(this, this->GetActorLocation(), target_location, vol);
 		
 		if (!u_path->IsValid()) {
@@ -164,12 +164,12 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 			request.SetRequireNavigableEndLocation(true);
 			FAIRequestID path_id =  PathFinderComponent->RequestMove(request, u_path->GetPath());
 			TArray<FVector> pts = u_path->PathPoints;
-			for (size_t i = 0; i < pts.Num(); ++i) {
-				DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
-				if (i + 1 != pts.Num()) {
-					DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
-				}
-			}
+			//for (size_t i = 0; i < pts.Num(); ++i) {
+			//	DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
+			//	if (i + 1 != pts.Num()) {
+			//		DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
+			//	}
+			//}
 		}
 		
 	}
@@ -238,3 +238,17 @@ void AProtagClass::UpdateLog(const FString& log_entry) {
 	ProtagHUD->AddLogEntry(log_entry);
 }
 
+void AProtagClass::FadeCamera(bool FadeIn) {
+	GetWorld()->GetFirstPlayerController()->PlayerCameraManager->FadeAmount = 1.0;
+	if (FadeIn)
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraFade(0.0, 1.0, 1.0, FLinearColor::Black, false, true);
+	else {
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StopCameraFade();
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraFade(1.0, 0.0, 1.0, FLinearColor::Black, false);
+	}
+
+}
+
+void AProtagClass::FadeOutAfterTeleport() {
+	FadeCamera(false);
+}

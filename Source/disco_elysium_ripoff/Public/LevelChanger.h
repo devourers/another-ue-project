@@ -53,6 +53,9 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	UFUNCTION()
+	void TeleportTimerElapsed();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -83,5 +86,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPrivateAccess = "true"))
 	FLevelChangerConfig Configuration;
+
+	UPROPERTY()
+	FTimerHandle UnusedHandle;
 
 };
