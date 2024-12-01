@@ -22,6 +22,7 @@ void AFadingActor::BeginPlay()
 	Super::BeginPlay();
 	Mesh->SetRenderCustomDepth(true);
 	Mesh->SetCustomDepthStencilValue(STENCIL_FADING_WALL);
+	Mesh->bCastVolumetricTranslucentShadow = true;
 	
 }
 
