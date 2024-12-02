@@ -10,6 +10,7 @@
 #include "MainHUD.h"
 #include "Public/Interactable.h"
 #include "PlayerOcclusionHandler.h"
+#include "Public/ProtagOcclusionHandler.h"
 #include "Components/BoxComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "ProtagClass.generated.h"
@@ -87,6 +88,9 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pathfinding, meta = (Allo
 
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* SpringArmCollisionVolume;
+
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (AllowPrivateAccess = "true"))
+	UProtagOcclusionHandler* OcclusionHandler;
 
 UPROPERTY()
 	UPlayerOcclusionHandler* occlusion_handler_;

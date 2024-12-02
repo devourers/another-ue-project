@@ -59,6 +59,8 @@ AProtagClass::AProtagClass()
 	SpringArmCollisionVolume->OnComponentBeginOverlap.AddDynamic(this, &AProtagClass::CameraBoomCollisionBegin);
 	SpringArmCollisionVolume->OnComponentEndOverlap.AddDynamic(this, &AProtagClass::CameraBoomCollisionEnd);
 
+	OcclusionHandler = CreateDefaultSubobject<UProtagOcclusionHandler>(TEXT("OcclusionHandler"));
+
 	ProtagHUD = nullptr;
 	ProtagHUDClass = nullptr;
 }
@@ -195,8 +197,8 @@ void AProtagClass::BeginPlay()
 {
 	Super::BeginPlay();
 
-	occlusion_handler_ = NewObject<UPlayerOcclusionHandler>(this, TEXT("OcclusionHandler"));
-	occlusion_handler_->BindPlayer(this);
+	//occlusion_handler_ = NewObject<UPlayerOcclusionHandler>(this, TEXT("OcclusionHandler"));
+	//occlusion_handler_->BindPlayer(this);
 
 	if (ProtagHUDClass) {
 		APointAndClickPlayerController* PCC = GetController<APointAndClickPlayerController>();
@@ -219,11 +221,16 @@ void AProtagClass::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 void AProtagClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (occlusion_handler_) {
-		occlusion_handler_->SetCharacterPosition();
-		occlusion_handler_->SetShouldApplyOcclusion(isBehindWall, (occlusion_handler_->GetCurrentOcclusionRadius() > 0.0f));
-		occlusion_handler_->SetOcclusionRadius(DeltaTime);
+	if (OcclusionHandler) {
+		OcclusionHandler->SetCharacterPosition();
+		OcclusionHandler->SetShouldApplyOcclusion(isBehindWall, (OcclusionHandler->GetCurrentOcclusionRadius() > 0.0f));
+		OcclusionHandler->SetOcclusionRadius(DeltaTime);
 	}
+	//if (occlusion_handler_) {
+	//	occlusion_handler_->SetCharacterPosition();
+	//	occlusion_handler_->SetShouldApplyOcclusion(isBehindWall, (occlusion_handler_->GetCurrentOcclusionRadius() > 0.0f));
+	//	occlusion_handler_->SetOcclusionRadius(DeltaTime);
+	//}
 
 }
 
