@@ -60,6 +60,9 @@ void UProtagOcclusionHandler::SetCharacterPosition() {
 
 
 void UProtagOcclusionHandler::SetShouldApplyOcclusion(bool isBehindWall, bool radius_condition) {
+	if (!GetWorld()) {
+		return;
+	}
 	UMaterialParameterCollectionInstance* pci = GetWorld()->GetParameterCollectionInstance(collection_);
 	if (pci) {
 		pci->SetScalarParameterValue(FName("ShouldApplyOcclusion"), float(int(isBehindWall || radius_condition)));
@@ -76,6 +79,9 @@ void UProtagOcclusionHandler::SetOcclusionRadius(float DeltaTime) {
 	UMaterialParameterCollectionInstance* pci = GetWorld()->GetParameterCollectionInstance(collection_);
 	if (pci) {
 		pci->SetScalarParameterValue(FName("Radius"), CurrentOcclusionRadius);
+		FVector2D a;
+		a.X = CurrentOcclusionRadius;
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, a.ToString());
 	}
 }
 

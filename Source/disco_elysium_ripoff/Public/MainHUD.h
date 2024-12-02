@@ -30,4 +30,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* LoreButton;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UButton* NotesButton;
 };

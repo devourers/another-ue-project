@@ -9,7 +9,6 @@
 #include "NavigationSystem.h"
 #include "MainHUD.h"
 #include "Public/Interactable.h"
-#include "PlayerOcclusionHandler.h"
 #include "Public/ProtagOcclusionHandler.h"
 #include "Components/BoxComponent.h"
 #include "Navigation/PathFollowingComponent.h"
@@ -91,9 +90,6 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (
 
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (AllowPrivateAccess = "true"))
 	UProtagOcclusionHandler* OcclusionHandler;
-
-UPROPERTY()
-	UPlayerOcclusionHandler* occlusion_handler_;
 
 UPROPERTY(EditAnywhere)
 	TSubclassOf<class UMainHUD> ProtagHUDClass;
