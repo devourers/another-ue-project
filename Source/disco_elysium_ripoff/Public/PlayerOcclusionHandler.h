@@ -32,8 +32,8 @@ public:
 private:
 	AActor* player_;
 	UMaterialParameterCollection* collection_;
-	float OcclusionRadius = 0.1;
-	float FadeDuration = 0.3;
+	float OcclusionRadius = 0.3;
+	float FadeDuration = 0.25;
 	float CurrentOcclusionRadius = 0.0;
 	bool __internal__ShouldApplyOcclusion = false;
 	
