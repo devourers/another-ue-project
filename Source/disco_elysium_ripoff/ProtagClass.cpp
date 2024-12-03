@@ -117,9 +117,9 @@ void AProtagClass::CameraBoomCollisionBegin(
 	int32 OtherBodyIndex, 
 	bool bFromSweep, 
 	const FHitResult& SweepResult) {
-	isBehindWall = true;
 	AFadingActor* wall = Cast<AFadingActor>(OtherActor);
 	if (wall) {
+		isBehindWall = true;
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Boom overlap " + OtherComp->GetClass()->GetFName().ToString()));
 		wall->OnPlayerBehind();
 	}
@@ -131,9 +131,9 @@ void AProtagClass::CameraBoomCollisionEnd(
 	class AActor* OtherActor,
 	class UPrimitiveComponent* OtherComp, 
 	int32 OtherBodyIndex) {
-	isBehindWall = false;
 	AFadingActor* wall = Cast<AFadingActor>(OtherActor);
 	if (wall) {
+		isBehindWall = false;
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Boom overlap end " + OtherComp->GetClass()->GetFName().ToString()));
 		wall->OnPlayerNoLongerBehind();
 	}
@@ -218,11 +218,11 @@ void AProtagClass::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 void AProtagClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (OcclusionHandler) {
-		OcclusionHandler->SetCharacterPosition();
-		OcclusionHandler->SetShouldApplyOcclusion(isBehindWall, (OcclusionHandler->GetCurrentOcclusionRadius() > 0.0f));
-		OcclusionHandler->SetOcclusionRadius(DeltaTime);
-	}
+	//if (OcclusionHandler) {
+	//	OcclusionHandler->SetCharacterPosition();
+	//	OcclusionHandler->SetShouldApplyOcclusion(isBehindWall, (OcclusionHandler->GetCurrentOcclusionRadius() > 0.0f));
+	//	OcclusionHandler->SetOcclusionRadius(DeltaTime);
+	//}
 
 }
 
@@ -250,4 +250,8 @@ void AProtagClass::FadeCamera(bool FadeIn) {
 
 void AProtagClass::FadeOutAfterTeleport() {
 	FadeCamera(false);
+}
+
+bool AProtagClass::IsBehindWall() const {
+	return isBehindWall;
 }

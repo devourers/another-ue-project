@@ -72,6 +72,9 @@ UFUNCTION()
 UFUNCTION()
 	void FadeOutAfterTeleport();
 
+UFUNCTION()
+	bool IsBehindWall() const;
+
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* ProtagCameraComponent;

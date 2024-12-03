@@ -4,6 +4,7 @@
 #include "ProtagOcclusionHandler.h"
 #include "Materials/MaterialParameterCollection.h"
 #include "Materials/MaterialParameterCollectionInstance.h"
+#include "../ProtagClass.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -35,7 +36,10 @@ void UProtagOcclusionHandler::BeginPlay()
 void UProtagOcclusionHandler::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	SetCharacterPosition();
+	AProtagClass* protag = Cast<AProtagClass>(GetOwner());
+	SetShouldApplyOcclusion(protag->IsBehindWall(), (GetCurrentOcclusionRadius() > 0.0f));
+	SetOcclusionRadius(DeltaTime);
 	// ...
 }
 
@@ -79,9 +83,6 @@ void UProtagOcclusionHandler::SetOcclusionRadius(float DeltaTime) {
 	UMaterialParameterCollectionInstance* pci = GetWorld()->GetParameterCollectionInstance(collection_);
 	if (pci) {
 		pci->SetScalarParameterValue(FName("Radius"), CurrentOcclusionRadius);
-		FVector2D a;
-		a.X = CurrentOcclusionRadius;
-		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, a.ToString());
 	}
 }
 

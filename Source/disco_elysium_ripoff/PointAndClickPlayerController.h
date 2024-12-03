@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* HighlightAllIntercatbleActors;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAcess = "true"))
+	UInputAction* DoubleClick;
+
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -47,6 +50,7 @@ protected:
 	void OnSetDestinationReleased();
 	void OnHighlightAllIntercatbleActors();
 	void OnEndHighlightAllIntercatbleActors();
+	void OnDoubleClickTriggered();
 
 private:
 	FVector CachedDestination;
