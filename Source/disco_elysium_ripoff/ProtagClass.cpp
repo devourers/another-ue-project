@@ -10,6 +10,7 @@
 #include "PointAndClickPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "NavigationPath.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 // Sets default values
@@ -164,6 +165,9 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 			request.SetGoalLocation(target_location);
 			request.SetProjectGoalLocation(false);
 			request.SetRequireNavigableEndLocation(true);
+			if (MoveToEffect != nullptr) {
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), MoveToEffect, target_location);
+			}
 			FAIRequestID path_id =  PathFinderComponent->RequestMove(request, u_path->GetPath());
 			TArray<FVector> pts = u_path->PathPoints;
 			//for (size_t i = 0; i < pts.Num(); ++i) {

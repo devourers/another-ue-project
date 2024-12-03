@@ -21,7 +21,7 @@ public:
 	APointAndClickPlayerController();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	float ShortPressThreshold;
+	float ShortPressThreshold = 0.3;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
@@ -57,5 +57,6 @@ private:
 	AActor* CachedActor;
 	bool isCachedActorInteractible;
 	bool clickedOnWall;
+	bool DoubleClicked = false;
 	float FollowTime; // For how long it has been pressed
 };

@@ -94,6 +94,9 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraCollision, meta = (AllowPrivateAccess = "true"))
 	UProtagOcclusionHandler* OcclusionHandler;
 
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FX, meta = (AllowPrivateAccess = "true"))
+	class UNiagaraSystem* MoveToEffect;
+
 UPROPERTY(EditAnywhere)
 	TSubclassOf<class UMainHUD> ProtagHUDClass;
 

@@ -9,6 +9,7 @@
 #include "FadingActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProtagClass.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 APointAndClickPlayerController::APointAndClickPlayerController() {
 	bShowMouseCursor = true;
@@ -43,7 +44,7 @@ void APointAndClickPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Started, this, &APointAndClickPlayerController::OnInputStarted);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Triggered, this, &APointAndClickPlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnSetDestinationReleased);
-		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &APointAndClickPlayerController::OnSetDestinationReleased);
+		//EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &APointAndClickPlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(DoubleClick, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnDoubleClickTriggered);
 	}
 }
@@ -88,6 +89,7 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	if (ControlledPawn != nullptr && !clickedOnWall)
 	{
 		AProtagClass * protag = Cast<AProtagClass>(ControlledPawn);
+		
 		protag->StopPathfinderMovement();
 		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
@@ -96,11 +98,20 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 
 void APointAndClickPlayerController::OnSetDestinationReleased()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Released"));
 	// If it was a short press
+
 	if (FollowTime <= ShortPressThreshold)
 	{
 		APawn* ControlledPawn = GetPawn();
 		AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
+		if (DoubleClicked) {
+			protag->GetCharacterMovement()->MaxWalkSpeed = 600;
+			DoubleClicked = false;
+		}
+		else {
+			protag->GetCharacterMovement()->MaxWalkSpeed = 300;
+		}
 		// We move there and spawn some particles
 		if (isCachedActorInteractible) {
 			protag->CustomMoveToInteractable(CachedActor);
@@ -109,6 +120,7 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 			protag->CustomMoveToLocation(CachedDestination);
 		}
 	}
+	
 
 	FollowTime = 0.f;
 }
@@ -134,4 +146,8 @@ void APointAndClickPlayerController::OnEndHighlightAllIntercatbleActors() {
 
 void APointAndClickPlayerController::OnDoubleClickTriggered() {
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Double click"));
+
+	FollowTime += GetWorld()->GetDeltaSeconds();
+	DoubleClicked = true;
+	OnSetDestinationReleased();
 }
