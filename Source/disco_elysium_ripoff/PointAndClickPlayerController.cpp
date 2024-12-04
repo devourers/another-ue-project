@@ -44,7 +44,7 @@ void APointAndClickPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Started, this, &APointAndClickPlayerController::OnInputStarted);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Triggered, this, &APointAndClickPlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnSetDestinationReleased);
-		//EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &APointAndClickPlayerController::OnSetDestinationReleased);
+		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &APointAndClickPlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(DoubleClick, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnDoubleClickTriggered);
 	}
 }
@@ -147,7 +147,10 @@ void APointAndClickPlayerController::OnEndHighlightAllIntercatbleActors() {
 void APointAndClickPlayerController::OnDoubleClickTriggered() {
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Double click"));
 
-	FollowTime += GetWorld()->GetDeltaSeconds();
+	//FollowTime += GetWorld()->GetDeltaSeconds();
+	APawn* ControlledPawn = GetPawn();
+	AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
+	protag->StopPathfinderMovement();
 	DoubleClicked = true;
 	OnSetDestinationReleased();
 }

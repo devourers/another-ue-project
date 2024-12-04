@@ -1,17 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InventoryEntry.h"
+#include "NoteEntry.h"
 
-UInventoryEntry::UInventoryEntry(UInventoryEntry* other) {
+UNoteEntry::UNoteEntry(UNoteEntry* other) {
 	Title = other->GetTitle();
 	Keywords = other->GetKeywords();
 	Description = other->GetDescription();
-	Image = other->GetImages();
 }
 
-void UInventoryEntry::LoadFromJson(const FString& path) {
-	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Loading Inventory"));
+void UNoteEntry::LoadFromJson(const FString& path) {
+	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Loading Note"));
 
 	FString loaded_file;
 	FFileHelper::LoadFileToString(loaded_file, *path);
