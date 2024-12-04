@@ -26,6 +26,11 @@ public:
 	FString GetDescription() { return Description; }
 	TMap<FName, UTexture2D*> GetImages() { return Image; }
 
+	void SetTitle(FName title) { Title = title; }
+	void SetKeywords(TSet<FString> keywords) { Keywords = keywords; }
+	void SetDescription(FString description) { Description = description; }
+	void SetImages(TMap<FName, UTexture2D*> images) { Image = images; }
+
 private:
 	FName Title; //displayed
 

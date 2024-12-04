@@ -6,11 +6,16 @@
 
 #include "InventoryEntry.h"
 
+#include "Components/ListView.h"
+
 #include "UObject/NoExportTypes.h"
 #include "PlayerInventory.generated.h"
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryEntryAdded, class UInventoryEntry*, Entry);
+
 UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API UPlayerInventory : public UObject
 {
@@ -24,6 +29,11 @@ public:
 
 	UFUNCTION()
 	bool HasItem(const FName& name);
+
+	UFUNCTION()
+	TArray<UInventoryEntry*> GetAllItems();
+
+	FInventoryEntryAdded OnInventoryItemAdded;
 
 private:
 	TMap<FName, UInventoryEntry*> Inventory;

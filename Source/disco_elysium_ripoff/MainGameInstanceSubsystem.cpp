@@ -26,3 +26,6 @@ bool UMainGameInstanceSubsystem::CheckInventoryForItem(const FName& name) {
 	return Inventory->HasItem(name);
 }
 
+UPlayerInventory* UMainGameInstanceSubsystem::GetInventory() {
+	return Inventory;
+}

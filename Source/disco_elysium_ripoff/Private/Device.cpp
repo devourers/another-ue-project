@@ -36,7 +36,7 @@ void ADevice::ToggleHighlight(bool to_toggle) {
 }
 
 void ADevice::CloseUI() {
-	DeviceUI->RemoveFromViewport();
+	DeviceUI->RemoveFromParent();
 	DeviceUI = nullptr;
 }
 

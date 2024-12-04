@@ -81,7 +81,11 @@ void AInteractiveItem::Interact(AActor* other_actor) {
 		if (InventoryEntry) {
 			UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
 			if (handler) {
-				UInventoryEntry* entry = NewObject<UInventoryEntry>(InventoryEntry);
+				UInventoryEntry* entry = NewObject<UInventoryEntry>();
+				entry->SetTitle(InventoryEntry->GetTitle());
+				entry->SetKeywords(InventoryEntry->GetKeywords());
+				entry->SetDescription(InventoryEntry->GetDescription());
+				entry->SetImages(InventoryEntry->GetImages());
 				FName entry_name = FName(GetWorld()->GetName() + "_" + LoaderName.ToString());
 				handler->AddItemToInventory(entry_name, entry);
 				AProtagClass* protag = Cast<AProtagClass>(other_actor);
