@@ -68,9 +68,9 @@ void ADevice::OnCursorEnd(UPrimitiveComponent* Component) {
 void ADevice::OnInteractableAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	Mesh->SetRenderCustomDepth(false);
-	//if (InteractionHitbox->IsOverlappingActor(other_actor)) {
-	Interact(other_actor);
-	//}
+	if (InteractionHitbox->IsOverlappingActor(other_actor)) {
+		Interact(other_actor);
+	}
 }
 
 void ADevice::OnInteractableSelectedAsDestination() {
