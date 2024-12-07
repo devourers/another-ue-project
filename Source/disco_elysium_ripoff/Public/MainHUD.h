@@ -48,6 +48,9 @@ protected:
 	UFUNCTION()
 	void OnInventotyEntryAdded(UInventoryEntry* entry);
 
+	UFUNCTION()
+	void OnInventotyEntrySelected(UObject* SelectedObject);
+
 protected:
 
 	//LOG

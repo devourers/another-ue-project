@@ -21,6 +21,7 @@ void UMainHUD::NativeConstruct() {
 	handler->GetInventory()->OnInventoryItemAdded.AddUniqueDynamic(this, &UMainHUD::OnInventotyEntryAdded);
 	InventoryListView->SetVisibility(ESlateVisibility::Visible);
 	InventoryListView->SetListItems(entries);
+	InventoryListView->OnItemSelectionChanged().AddUFunction(this, FName("OnInventotyEntrySelected"));
 }
 
 FReply UMainHUD::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) {
@@ -74,4 +75,11 @@ void UMainHUD::OnNotesButtonClicked() {
 
 void UMainHUD::OnInventotyEntryAdded(UInventoryEntry* entry) {
 	InventoryListView->AddItem(entry);
+}
+
+void UMainHUD::OnInventotyEntrySelected(UObject* SelectedObject) {
+	UInventoryEntry* entry = Cast<UInventoryEntry>(SelectedObject);
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Item selected"));
+	if (entry)
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Casted"));
 }
