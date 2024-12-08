@@ -77,6 +77,7 @@ void UProtagOcclusionHandler::SetShouldApplyOcclusion(bool isBehindWall, bool ra
 
 void UProtagOcclusionHandler::SetOcclusionRadius(float DeltaTime) {
 	float multiplyer = __internal__ShouldApplyOcclusion ? 1.0f : -1.0f;
+	//CurrentOcclusionRadius = OcclusionRadius;
 	CurrentOcclusionRadius += (OcclusionRadius / FadeDuration) * DeltaTime * multiplyer;
 	CurrentOcclusionRadius = FMath::Clamp(CurrentOcclusionRadius, 0.0, OcclusionRadius);
 

@@ -107,10 +107,7 @@ private:
 	bool isMovingAlongPath = false;
 	IInteractable* cached_actor = nullptr;
 	bool isBehindWall;
-
-
-
-
+	int OcclusionCounter = 0;
 	//glossary
 	//inventory
 	

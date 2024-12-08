@@ -120,7 +120,8 @@ void AProtagClass::CameraBoomCollisionBegin(
 	const FHitResult& SweepResult) {
 	AFadingActor* wall = Cast<AFadingActor>(OtherActor);
 	if (wall) {
-		isBehindWall = true;
+		++OcclusionCounter;
+		isBehindWall = (OcclusionCounter > 0);
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Boom overlap " + OtherComp->GetClass()->GetFName().ToString()));
 		wall->OnPlayerBehind();
 	}
@@ -134,7 +135,8 @@ void AProtagClass::CameraBoomCollisionEnd(
 	int32 OtherBodyIndex) {
 	AFadingActor* wall = Cast<AFadingActor>(OtherActor);
 	if (wall) {
-		isBehindWall = false;
+		--OcclusionCounter;
+		isBehindWall = (OcclusionCounter > 0);
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString("Boom overlap end " + OtherComp->GetClass()->GetFName().ToString()));
 		wall->OnPlayerNoLongerBehind();
 	}
@@ -222,11 +224,6 @@ void AProtagClass::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 void AProtagClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//if (OcclusionHandler) {
-	//	OcclusionHandler->SetCharacterPosition();
-	//	OcclusionHandler->SetShouldApplyOcclusion(isBehindWall, (OcclusionHandler->GetCurrentOcclusionRadius() > 0.0f));
-	//	OcclusionHandler->SetOcclusionRadius(DeltaTime);
-	//}
 
 }
 
