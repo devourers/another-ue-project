@@ -51,6 +51,9 @@ protected:
 	UFUNCTION()
 	void OnInventotyEntrySelected(UObject* SelectedObject);
 
+	UFUNCTION()
+	void UpdateInventoryDetailsScreen(UInventoryEntry* entry);
+
 protected:
 
 	//LOG
@@ -73,6 +76,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UListView* InventoryListView;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* InventoryListEntryTitle;
 
 	//LORE
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
