@@ -88,4 +88,5 @@ void UMainHUD::OnInventotyEntrySelected(UObject* SelectedObject) {
 
 void UMainHUD::UpdateInventoryDetailsScreen(UInventoryEntry* entry) {
 	InventoryListEntryTitle->SetText(FText::FromName(entry->GetTitle()));
+	InventoryLineEntryDescription->SetText(FText::FromString(entry->GetDescription()));
 }

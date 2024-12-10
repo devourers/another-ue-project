@@ -80,6 +80,9 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* InventoryListEntryTitle;
 
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* InventoryLineEntryDescription;
+
 	//LORE
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* LoreButton;
