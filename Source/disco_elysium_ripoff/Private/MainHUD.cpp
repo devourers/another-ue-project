@@ -79,9 +79,7 @@ void UMainHUD::OnInventotyEntryAdded(UInventoryEntry* entry) {
 
 void UMainHUD::OnInventotyEntrySelected(UObject* SelectedObject) {
 	UInventoryEntry* entry = Cast<UInventoryEntry>(SelectedObject);
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Item selected"));
 	if (entry) {
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Casted"));
 		UpdateInventoryDetailsScreen(entry);
 	}
 }
