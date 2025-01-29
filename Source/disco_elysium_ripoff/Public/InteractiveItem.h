@@ -9,6 +9,7 @@
 #include "Interactable.h"
 #include "LoreEntry.h"
 #include "InventoryEntry.h"
+#include "Dialogue/Dialogue.h"
 
 #include "Components/SphereComponent.h"
 
@@ -62,6 +63,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
 	TEnumAsByte<EItemType> Type;
+
+	UPROPERTY()
+	UDialogue* Dialogue;
+
+	UPROPERTY(VisibleAnywhere, Category = Loading)
+	FString DialoguePath; //Associated with item dialogue. Loads from JSON
 
 	UPROPERTY()
 	ULoreEntry* LoreEntry; //Associated with item lore entry. Loads from JSON

@@ -51,15 +51,21 @@ void AInteractiveItem::BeginPlay()
 	FString RootDir = FPaths::Combine(FPaths::ProjectContentDir(), *FString("Configs/Levels"));
 	LoreEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Lore/" + LoaderName.ToString() + ".json");
 	InventoryEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Inventory/" + LoaderName.ToString() + ".json");
+	DialoguePath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Dialogue/" + LoaderName.ToString() + ".json");
 
-	LoreEntry = NewObject<ULoreEntry>(this, TEXT("Lore Entry"));
 	if (FPaths::FileExists(LoreEntryPath)) {
+		LoreEntry = NewObject<ULoreEntry>(this, TEXT("Lore Entry"));
 		LoreEntry->LoadFromJson(LoreEntryPath);
 	}
 
-	InventoryEntry = NewObject<UInventoryEntry>(this, TEXT("Inventory Entry"));
 	if (FPaths::FileExists(InventoryEntryPath)) {
+		InventoryEntry = NewObject<UInventoryEntry>(this, TEXT("Inventory Entry"));
 		InventoryEntry->LoadFromJson(InventoryEntryPath);
+	}
+
+	if (FPaths::FileExists(DialoguePath)) {
+		Dialogue = NewObject<UDialogue>(this, TEXT("Dialogue"));
+		Dialogue->LoadFromJson(DialoguePath);
 	}
 }
 
@@ -98,7 +104,9 @@ void AInteractiveItem::Interact(AActor* other_actor) {
 		}
 	}
 	else if (Type == EItemType::eIT_Flair) {
-
+		if (Dialogue) {
+			Dialogue->StartDialogue();
+		}
 	}
 }
 
