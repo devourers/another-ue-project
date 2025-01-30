@@ -4,6 +4,8 @@
 #include "InteractiveItem.h"
 #include "Misc/Paths.h"
 #include "../ProtagClass.h"
+#include "../PointAndClickPlayerController.h"
+#include "Dialogue/DialogueUI.h"
 #include "../MainGameInstanceSubsystem.h"
 
 // Sets default values
@@ -104,8 +106,16 @@ void AInteractiveItem::Interact(AActor* other_actor) {
 		}
 	}
 	else if (Type == EItemType::eIT_Flair) {
-		if (Dialogue) {
+		if (Dialogue && !DialogueUI && DialogueUIClass) {
+			AProtagClass* protag = Cast<AProtagClass>(other_actor);
+			APointAndClickPlayerController* PCC = protag->GetController<APointAndClickPlayerController>();
+			DialogueUI = CreateWidget<UDialogueUI>(PCC, DialogueUIClass);
+			DialogueUI->BindDialogue(Dialogue);
 			Dialogue->StartDialogue();
+			DialogueUI->AddToPlayerScreen();
+			DialogueUI->SetFocus();
+
+			
 		}
 	}
 }

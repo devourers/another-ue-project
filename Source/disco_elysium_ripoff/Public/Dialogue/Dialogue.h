@@ -32,6 +32,7 @@ struct FDialogueResponseConditions {
 USTRUCT()
 struct FDialogueEntry {
 	GENERATED_BODY()
+public:
 	FName EntryName;
 	FName EntryCharacter;
 	FText EntryText;
@@ -45,11 +46,21 @@ struct FDialogueEntry {
 	//construct from JSON or loader?
 };
 
+UCLASS()
+class DISCO_ELYSIUM_RIPOFF_API UDialogueEntryWrapper : public UObject {
+	GENERATED_BODY()
+public:
+	UPROPERTY()
+	FDialogueEntry entry_;
+};
+
 USTRUCT()
 struct FDialogueResponse {
 	GENERATED_BODY()
+public:
 	FDialogueResponseConditions Conditions;
 	int FromEntry;
+	int Id;
 	int ToEntry;
 	FText ResponseText;
 
@@ -58,8 +69,22 @@ struct FDialogueResponse {
 	//construct from JSON or loader?
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueStarted, struct FDialogueEntry, StartingEntry);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueAdvanced, struct FDialogueEntry, NextEntry);
+UCLASS()
+class DISCO_ELYSIUM_RIPOFF_API UDialogueResponseWrapper : public UObject {
+	GENERATED_BODY()
+public:
+	UPROPERTY()
+	FDialogueResponse response_;
+};
+
+USTRUCT()
+struct FDialogueHistory {
+	GENERATED_BODY()
+	//TODO
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueStarted, class UDialogueEntryWrapper*, StartingEntry);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueAdvanced, class UDialogueEntryWrapper*, NextEntry);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDialogueEnded);
 
 /**
@@ -81,7 +106,7 @@ public:
 public:
 	void LoadFromJson(const FString& path);
 
-	FDialogueResponse GetResponse();
+	UDialogueResponseWrapper* GetResponse(int response_id) const;
 
 public: //delegates
 	UPROPERTY()
@@ -97,6 +122,12 @@ private:
 	FName Title;
 	int CurrentStartingEntry = 0;
 	int CurrentEntry;
+	
+	UPROPERTY()
+	TArray<UDialogueEntryWrapper*> EntryWrappers;
+
+	UPROPERTY()
+	TArray<UDialogueResponseWrapper*> ReponseWrappers;
 
 	TArray<FDialogueEntry> Entries;
 	TArray<FDialogueResponse> Responses;

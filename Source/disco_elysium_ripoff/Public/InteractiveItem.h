@@ -70,6 +70,12 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Loading)
 	FString DialoguePath; //Associated with item dialogue. Loads from JSON
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UDialogueUI> DialogueUIClass;
+
+	UPROPERTY()
+	class UDialogueUI* DialogueUI;
+
 	UPROPERTY()
 	ULoreEntry* LoreEntry; //Associated with item lore entry. Loads from JSON
 

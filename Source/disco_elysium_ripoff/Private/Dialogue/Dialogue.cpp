@@ -41,6 +41,9 @@ void UDialogue::LoadFromJson(const FString& path) {
 			UE_LOGFMT(DialogueLoading, Log, "Loaded entry {0}", i);
 			TSharedPtr<FJsonObject> cur_entry = entries[i]->AsObject();
 			Entries.Add(FDialogueEntry(cur_entry));
+			UDialogueEntryWrapper* wrapper = NewObject<UDialogueEntryWrapper>();
+			wrapper->entry_ = cur_entry;
+			EntryWrappers.Add(wrapper);
 		}
 
 		TArray<TSharedPtr<FJsonValue>> responses = json_object->GetArrayField("responses");
@@ -48,20 +51,29 @@ void UDialogue::LoadFromJson(const FString& path) {
 			UE_LOGFMT(DialogueLoading, Log, "Loaded response {0}", i);
 			TSharedPtr<FJsonObject> cur_response = responses[i]->AsObject();
 			Responses.Add(FDialogueResponse(cur_response));
+			UDialogueResponseWrapper* wrapper = NewObject<UDialogueResponseWrapper>();
+			wrapper->response_ = cur_response;
+			ReponseWrappers.Add(wrapper);
+			wrapper->response_.Id = ReponseWrappers.Num() - 1;
 		}
 	}
 }
 
+UDialogueResponseWrapper* UDialogue::GetResponse(int response_id) const{
+	return ReponseWrappers[response_id];
+}
+
 void UDialogue::StartDialogue(){
-	//emit delegates?
+	DialogueStarted.Broadcast(EntryWrappers[CurrentStartingEntry]);
 }
 
 void UDialogue::AdvanceDialogue(int ChoosenResponse){
-	if (Responses[ChoosenResponse].ToEntry == -1) {
+	if (ReponseWrappers[ChoosenResponse]->response_.ToEntry == -1) {
 		EndDialogue();
 	}
 	else {
-		CurrentEntry = Responses[ChoosenResponse].ToEntry;
+		CurrentEntry = ReponseWrappers[ChoosenResponse]->response_.ToEntry;
+		DialogueAdvanced.Broadcast(EntryWrappers[CurrentEntry]);
 	}
 }
 
@@ -69,6 +81,7 @@ void UDialogue::EndDialogue(){
 	if (ReEnterDialogueStartingEntry != -1) {
 		CurrentStartingEntry = ReEnterDialogueStartingEntry;
 	}
+	DialogueEnded.Broadcast();
 }
 
 
