@@ -114,8 +114,6 @@ void AInteractiveItem::Interact(AActor* other_actor) {
 			Dialogue->StartDialogue();
 			DialogueUI->AddToPlayerScreen();
 			DialogueUI->SetFocus();
-
-			
 		}
 	}
 }

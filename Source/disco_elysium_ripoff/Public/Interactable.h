@@ -51,6 +51,8 @@ public:
 	UFUNCTION()
 	virtual USphereComponent* GetInteractionHitbox() = 0;
 
+private:
+
 protected:
 	bool isSelectedAsDestination;
 };
