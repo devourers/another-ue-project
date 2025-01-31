@@ -18,19 +18,19 @@ struct FDialogueEntry;
 struct FDialogueResponse;
 
 USTRUCT()
-struct FDialogueResult {
+struct DISCO_ELYSIUM_RIPOFF_API FDialogueResult {
 	GENERATED_BODY()
 	//what checks finishing dialogue grants
 };
 
 USTRUCT()
-struct FDialogueResponseConditions {
+struct DISCO_ELYSIUM_RIPOFF_API FDialogueResponseConditions {
 	GENERATED_BODY()
 	//conditions for unlocking response
 };
 
 USTRUCT()
-struct FDialogueEntry {
+struct DISCO_ELYSIUM_RIPOFF_API FDialogueEntry {
 	GENERATED_BODY()
 public:
 	FName EntryName;
@@ -55,7 +55,7 @@ public:
 };
 
 USTRUCT()
-struct FDialogueResponse {
+struct DISCO_ELYSIUM_RIPOFF_API FDialogueResponse {
 	GENERATED_BODY()
 public:
 	FDialogueResponseConditions Conditions;
@@ -80,7 +80,10 @@ public:
 USTRUCT()
 struct FDialogueHistory {
 	GENERATED_BODY()
-	//TODO
+
+public:
+	TArray<int> entries;
+	TArray<int> responses;
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueStarted, class UDialogueEntryWrapper*, StartingEntry);
@@ -106,7 +109,13 @@ public:
 public:
 	void LoadFromJson(const FString& path);
 
+	UFUNCTION()
 	UDialogueResponseWrapper* GetResponse(int response_id) const;
+
+	UFUNCTION()
+	UDialogueEntryWrapper* GetEntry(int entry_id) const;
+
+	const FDialogueHistory& GetHistory() const;
 
 public: //delegates
 	UPROPERTY()
@@ -132,6 +141,7 @@ private:
 	TArray<FDialogueEntry> Entries;
 	TArray<FDialogueResponse> Responses;
 	FDialogueResult Result;
+	FDialogueHistory History;
 
 private: //flags
 	bool bCanBeReinitated;

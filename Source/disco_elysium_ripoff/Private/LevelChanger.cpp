@@ -53,6 +53,7 @@ void ALevelChanger::TeleportTimerElapsed() {
 }
 
 void ALevelChanger::Interact(AActor* other_actor) {
+	IInteractable::Interact(other_actor);
 	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {
 		if (Configuration.OtherTeleport) {
 			AProtagClass* protag = Cast<AProtagClass>(other_actor);
@@ -90,4 +91,9 @@ void ALevelChanger::OnInteractableSelectedAsDestination() {
 
 USphereComponent* ALevelChanger::GetInteractionHitbox() {
 	return InteractionHitbox;
+}
+
+ULogicComponent* ALevelChanger::GetLogicComponent()
+{
+	return LogicComponent;
 }

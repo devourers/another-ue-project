@@ -148,6 +148,7 @@ void ADoor::OnSignalRecieved(const FDeviceSignal& signal) {
 }
 
 void ADoor::Interact(AActor* other_actor) {
+	IInteractable::Interact(other_actor);
 	if (!bIsDoorLocked) {
 		if (bIsDoorClosed) {
 			OpeningTimeline.Play();
@@ -189,4 +190,9 @@ void ADoor::OnInteractableSelectedAsDestination() {
 
 USphereComponent* ADoor::GetInteractionHitbox() {
 	return InteractionHitbox;
+}
+
+ULogicComponent* ADoor::GetLogicComponent()
+{
+	return LogicComponent;
 }

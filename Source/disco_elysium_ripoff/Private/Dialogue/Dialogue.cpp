@@ -59,20 +59,33 @@ void UDialogue::LoadFromJson(const FString& path) {
 	}
 }
 
-UDialogueResponseWrapper* UDialogue::GetResponse(int response_id) const{
+UDialogueResponseWrapper* UDialogue::GetResponse(int response_id) const {
 	return ReponseWrappers[response_id];
 }
 
+UDialogueEntryWrapper* UDialogue::GetEntry(int entry_id) const {
+	return EntryWrappers[entry_id];
+}
+
+const FDialogueHistory& UDialogue::GetHistory() const {
+	return History;
+}
+
 void UDialogue::StartDialogue(){
+	History.entries.Empty();
+	History.responses.Empty();
 	DialogueStarted.Broadcast(EntryWrappers[CurrentStartingEntry]);
+	History.entries.Add(CurrentStartingEntry);
 }
 
 void UDialogue::AdvanceDialogue(int ChoosenResponse){
+	History.responses.Add(ChoosenResponse);
 	if (ReponseWrappers[ChoosenResponse]->response_.ToEntry == -1) {
 		EndDialogue();
 	}
 	else {
 		CurrentEntry = ReponseWrappers[ChoosenResponse]->response_.ToEntry;
+		History.entries.Add(CurrentEntry);
 		DialogueAdvanced.Broadcast(EntryWrappers[CurrentEntry]);
 	}
 }

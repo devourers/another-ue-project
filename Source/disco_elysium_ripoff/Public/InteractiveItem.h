@@ -54,6 +54,8 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	virtual ULogicComponent* GetLogicComponent() override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
 	FName DisplayedName; //name for gameplay purposes
@@ -93,4 +95,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* InteractionHitbox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
+	ULogicComponent* LogicComponent;
 };

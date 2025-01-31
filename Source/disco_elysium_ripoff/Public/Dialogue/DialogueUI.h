@@ -53,4 +53,5 @@ private:
 	UPROPERTY()
 	UDialogue* dialogue_;
 	IInteractable* actor_;
+	//AProtagClass* PlayerPtr;
 };

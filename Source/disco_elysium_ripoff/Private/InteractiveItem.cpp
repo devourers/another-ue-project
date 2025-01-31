@@ -85,6 +85,7 @@ void AInteractiveItem::ToggleHighlight(bool to_toggle) {
 
 
 void AInteractiveItem::Interact(AActor* other_actor) {
+	IInteractable::Interact(other_actor);
 	if (Type == EItemType::eIT_Pickable) {
 		if (InventoryEntry) {
 			UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
@@ -146,4 +147,9 @@ void AInteractiveItem::OnInteractableAsDestinationReached(AActor* other_actor) {
 
 USphereComponent* AInteractiveItem::GetInteractionHitbox() {
 	return InteractionHitbox;
+}
+
+ULogicComponent* AInteractiveItem::GetLogicComponent()
+{
+	return LogicComponent;
 }

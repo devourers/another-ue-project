@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "Components/SphereComponent.h"
+#include "Interactable/LogicComponent.h"
+
 #include "Interactable.generated.h"
 
 // This class does not need to be modified.
@@ -28,7 +31,7 @@ public:
 	virtual void ToggleHighlight(bool to_toggle) = 0;
 
 	UFUNCTION()
-	virtual void Interact(AActor* other_actor) = 0;
+	virtual void Interact(AActor* other_actor);
 
 	UFUNCTION()
 	virtual void OnCursorOver(UPrimitiveComponent* Component) = 0;
@@ -51,7 +54,8 @@ public:
 	UFUNCTION()
 	virtual USphereComponent* GetInteractionHitbox() = 0;
 
-private:
+	UFUNCTION()
+	virtual ULogicComponent* GetLogicComponent() = 0;
 
 protected:
 	bool isSelectedAsDestination;

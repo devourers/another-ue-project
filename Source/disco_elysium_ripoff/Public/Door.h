@@ -66,6 +66,8 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	virtual ULogicComponent* GetLogicComponent() override;
+
 	UFUNCTION()
 	void OpenDoor(float Value);
 
@@ -87,6 +89,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* InteractionHitbox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
+	ULogicComponent* LogicComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	UCurveFloat* OpeningCurve;

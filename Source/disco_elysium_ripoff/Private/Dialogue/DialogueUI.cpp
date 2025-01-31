@@ -17,6 +17,15 @@ FReply UDialogueUI::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent
 }
 
 void UDialogueUI::LogConversation(){
+	const FDialogueHistory& history = dialogue_->GetHistory();
+	FString DialogueLog;
+	int history_size = history.entries.Num();
+	for (int i = 0; i < history_size; ++i) {
+		UDialogueEntryWrapper* cur_entry = dialogue_->GetEntry(history.entries[i]);
+		DialogueLog += cur_entry->entry_.EntryCharacter.ToString() + FString(": ") + cur_entry->entry_.EntryText.ToString() + FString("\n");
+		UDialogueResponseWrapper* cur_response = dialogue_->GetResponse(history.responses[i]);
+		DialogueLog += FString("Player: ") + cur_response->response_.ResponseText.ToString() + FString("\n");
+	}
 
 }
 

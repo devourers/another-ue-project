@@ -53,6 +53,8 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	virtual ULogicComponent* GetLogicComponent() override;
+
 	UFUNCTION()
 	void TeleportTimerElapsed();
 
@@ -68,6 +70,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
 	FName DisplayedName; //name for gameplay purposes
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
+	ULogicComponent* LogicComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Loading, meta = (AllowPrivateAccess = "true"))
 	FName LoaderName; //name for loading items from configs 

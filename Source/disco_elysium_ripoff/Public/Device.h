@@ -22,8 +22,8 @@ enum EDeviceType {
 
 
 USTRUCT(BlueprintType)
-struct FDeviceSignal {
-	GENERATED_USTRUCT_BODY()
+struct DISCO_ELYSIUM_RIPOFF_API FDeviceSignal {
+	GENERATED_BODY()
 
 	UPROPERTY()
 	TEnumAsByte<EDeviceType> DeviceType;
@@ -37,8 +37,8 @@ struct FDeviceSignal {
 };
 
 USTRUCT(BlueprintType)
-struct FDeviceConfig {
-	GENERATED_USTRUCT_BODY()
+struct DISCO_ELYSIUM_RIPOFF_API FDeviceConfig {
+	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category = General)
 	TEnumAsByte<EDeviceType> DeviceType;
@@ -77,6 +77,8 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	virtual ULogicComponent* GetLogicComponent() override;
+
 	UFUNCTION()
 	void CloseUI();
 
@@ -114,6 +116,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* InteractionHitbox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
+	ULogicComponent* LogicComponent;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UBaseDeviceUI> DeviceUIClass;

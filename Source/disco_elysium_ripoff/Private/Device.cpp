@@ -41,6 +41,7 @@ void ADevice::CloseUI() {
 }
 
 void ADevice::Interact(AActor* other_actor) {
+	IInteractable::Interact(other_actor);
 	PlayerPtr = Cast<AProtagClass>(other_actor);
 	if (DeviceConfig.DeviceType == EDeviceType::eDT_Lockpad) {
 		if (DeviceUIClass && !DeviceUI) {
@@ -80,6 +81,11 @@ void ADevice::OnInteractableSelectedAsDestination() {
 
 USphereComponent* ADevice::GetInteractionHitbox() {
 	return InteractionHitbox;
+}
+
+ULogicComponent* ADevice::GetLogicComponent()
+{
+	return LogicComponent;
 }
 
 // Called when the game starts or when spawned
