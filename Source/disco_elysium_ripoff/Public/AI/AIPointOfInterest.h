@@ -6,6 +6,13 @@
 #include "GameFramework/Actor.h"
 #include "AIPointOfInterest.generated.h"
 
+UENUM()
+enum EPOIAction {
+	ePOIA_Idle UMETA(DisplayName = "Idle"),
+	ePOIA_Smoke UMETA(DisplayName = "Smoke"),
+	ePOIA_Investigate UMETA(DisplayName = "Investigate")
+}
+
 UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API AAIPointOfInterest : public AActor
 {
@@ -26,7 +33,13 @@ public:
 	UFUNCTION()
 	const FString& GetChannel() const;
 
+	UFUNCTION()
+	const TArray<TEnumAsByte<EPOIAction>>& GetAvaliableActions() const;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPrivateAccess = "true"))
 	FString Channel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPrivateAccess = "true"))
+	TArray<TEnumAsByte<EPOIAction>> AvaliableActions;
 };

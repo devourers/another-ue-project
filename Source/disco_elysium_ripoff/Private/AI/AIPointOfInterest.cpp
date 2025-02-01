@@ -25,8 +25,11 @@ void AAIPointOfInterest::Tick(float DeltaTime)
 
 }
 
-const FString& AAIPointOfInterest::GetChannel() const
-{
+const FString& AAIPointOfInterest::GetChannel() const {
 	return Channel;
+}
+
+const TArray<TEnumAsByte<EPOIAction>>& AAIPointOfInterest::GetAvaliableActions() const {
+	return AvaliableActions;
 }
 

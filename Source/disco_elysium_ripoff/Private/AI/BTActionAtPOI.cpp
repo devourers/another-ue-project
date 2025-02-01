@@ -3,3 +3,11 @@
 
 #include "AI/BTActionAtPOI.h"
 
+EBTNodeResult::Type UBTActionAtPOI::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory){
+
+	OwnerComp.GetAIOwner();
+
+
+
+	return EBTNodeResult::Succeeded;
+}
