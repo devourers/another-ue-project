@@ -105,7 +105,7 @@ class DISCO_ELYSIUM_RIPOFF_API UDialogue : public UObject
 public:
 	void StartDialogue();
 	void AdvanceDialogue(int ChoosenResponse);
-	void EndDialogue();
+	void EndDialogue(int FinalResponse);
 
 public:
 	void LoadFromJson(const FString& path);

@@ -44,6 +44,8 @@ ADoor::ADoor()
 	InteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	OpeningCurve = CreateDefaultSubobject<UCurveFloat>(TEXT("Opening Curve"));
+
+	LogicComponent = CreateDefaultSubobject<ULogicComponent>(TEXT("Logic Component"));
 }
 
 // Called when the game starts or when spawned

@@ -1,0 +1,56 @@
+{
+    "general":{
+        "title" : "Test2",
+        "can_be_reinitiated" : true,
+        "re_enter_dialogue_starting_entry" : 2
+    },
+    "entries":[
+        {
+            "name" : "TPI2_first_entry",
+            "character": "Author",
+            "text" : "You see a stol, yet somehow you think this is a key.",
+            "incoming_response" : -1,
+            "responses":[0]
+        },
+        {
+            "name" : "TPI2_second_entry",
+            "character": "Author",
+            "text" : "You gotta choose carefully though.",
+            "incoming_response" : 0,
+            "responses":[1, 2]
+        },
+        {
+            "name" : "TPI2_first_entry",
+            "character": "Author",
+            "text" : "You once again see a stol.",
+            "incoming_response" : -1,
+            "responses":[0]
+        }
+    ],
+    "responses":[
+        {
+            "conditions" :{
+
+            },
+            "from": 0,
+            "to": 1,
+            "text": "[Try to pick it up]"
+        },
+        {
+            "conditions" :{
+
+            },
+            "from" : 1,
+            "to" : -1,
+            "text" : "Carefully."
+        },
+        {
+            "conditions" :{
+
+            },
+            "from" : 1,
+            "to" : -2,
+            "text" : "Not carefully."
+        }
+    ]
+}

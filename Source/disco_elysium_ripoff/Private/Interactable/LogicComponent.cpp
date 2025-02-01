@@ -64,7 +64,7 @@ UDialogueUI* ULogicComponent::CreateDialogueUI(APointAndClickPlayerController* P
 	}
 }
 
-void ULogicComponent::CloseDialogueUI(){
+void ULogicComponent::CloseDialogueUI() {
 	DialogueUI->RemoveFromParent();
 	DialogueUI = nullptr;
 }

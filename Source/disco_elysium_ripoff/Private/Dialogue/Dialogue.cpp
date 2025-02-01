@@ -34,6 +34,7 @@ void UDialogue::LoadFromJson(const FString& path) {
 		TSharedPtr<FJsonObject> general = json_object->GetObjectField("general");
 		bCanBeReinitated = bool(general->GetBoolField("can_be_reinitiated"));
 		Title = FName(general->GetStringField("title"));
+		ReEnterDialogueStartingEntry = general->GetIntegerField("re_enter_dialogue_starting_entry");
 		//parsing general stuff
 
 		TArray<TSharedPtr<FJsonValue>> entries = json_object->GetArrayField("entries");
@@ -84,8 +85,8 @@ void UDialogue::StartDialogue(){
 
 void UDialogue::AdvanceDialogue(int ChoosenResponse){
 	History.responses.Add(ChoosenResponse);
-	if (ReponseWrappers[ChoosenResponse]->response_.ToEntry == -1) {
-		EndDialogue();
+	if (ReponseWrappers[ChoosenResponse]->response_.ToEntry == -1 || ReponseWrappers[ChoosenResponse]->response_.ToEntry == -2) {
+		EndDialogue(ReponseWrappers[ChoosenResponse]->response_.ToEntry);
 	}
 	else {
 		CurrentEntry = ReponseWrappers[ChoosenResponse]->response_.ToEntry;
@@ -94,11 +95,16 @@ void UDialogue::AdvanceDialogue(int ChoosenResponse){
 	}
 }
 
-void UDialogue::EndDialogue(){
+void UDialogue::EndDialogue(int FinalResponse){
 	if (ReEnterDialogueStartingEntry != -1) {
 		CurrentStartingEntry = ReEnterDialogueStartingEntry;
 	}
-	Result.IsSuccessful = true;
+	if (FinalResponse == -1) {
+		Result.IsSuccessful = true;
+	}
+	else if (FinalResponse == -2) {
+		Result.IsSuccessful = false;
+	}
 	DialogueEnded.Broadcast();
 }
 

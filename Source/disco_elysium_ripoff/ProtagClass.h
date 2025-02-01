@@ -78,6 +78,9 @@ UFUNCTION()
 UFUNCTION()
 	void InitDialogueWindow(UDialogueUI* ui);
 
+UFUNCTION()
+	void UnhideHUD();
+
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* ProtagCameraComponent;

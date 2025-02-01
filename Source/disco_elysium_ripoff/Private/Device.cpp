@@ -29,6 +29,8 @@ ADevice::ADevice()
 
 	DeviceUIClass = nullptr;
 	DeviceUI = nullptr;
+
+	LogicComponent = CreateDefaultSubobject<ULogicComponent>(TEXT("Logic Component"));
 }
 
 void ADevice::ToggleHighlight(bool to_toggle) {
@@ -36,6 +38,7 @@ void ADevice::ToggleHighlight(bool to_toggle) {
 }
 
 void ADevice::CloseUI() {
+	DeviceUI->SignalDelegate.RemoveAll(this);
 	DeviceUI->RemoveFromParent();
 	DeviceUI = nullptr;
 }

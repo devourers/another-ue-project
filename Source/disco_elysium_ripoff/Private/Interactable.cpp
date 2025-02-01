@@ -17,6 +17,7 @@ void IInteractable::OnDialogueEnded() {
 		ProcessInventoryEntry();
 		ProcessNoteEntry();
 		ProcessLoreEntry();
+		InternalInteract(GetProtag());
 	}
 }
 
@@ -67,7 +68,6 @@ void IInteractable::ProcessNoteEntry() {
 }
 
 void IInteractable::Interact(AActor* other_actor){
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Interface called"));
 	ULogicComponent* logic = GetLogicComponent();
 	BindProtag(other_actor);
 	if (logic) {
@@ -79,9 +79,10 @@ void IInteractable::Interact(AActor* other_actor){
 			ProcessInventoryEntry();
 			ProcessNoteEntry();
 			ProcessLoreEntry();
+			InternalInteract(other_actor);
 		}
 	}
-	InternalInteract(other_actor);
+
 }
 
 void IInteractable::SetIsSelectedAsDestination(bool isSelected) {

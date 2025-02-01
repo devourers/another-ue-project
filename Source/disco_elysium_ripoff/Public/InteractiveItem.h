@@ -63,38 +63,9 @@ public:
 	virtual void BindProtag(AActor* other_actor) override;
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
-	FName DisplayedName; //name for gameplay purposes
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Loading, meta = (AllowPrivateAccess = "true"))
-	FName LoaderName; //name for loading items from configs 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay, meta = (AllowPrivateAccess = "true"))
 	TEnumAsByte<EItemType> Type;
-
-	UPROPERTY()
-	UDialogue* Dialogue;
-
-	UPROPERTY(VisibleAnywhere, Category = Loading)
-	FString DialoguePath; //Associated with item dialogue. Loads from JSON
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UDialogueUI> DialogueUIClass;
-
-	UPROPERTY()
-	class UDialogueUI* DialogueUI;
-
-	UPROPERTY()
-	ULoreEntry* LoreEntry; //Associated with item lore entry. Loads from JSON
-
-	UPROPERTY(VisibleAnywhere, Category = Loading)
-	FString LoreEntryPath; //sets automatically in constructor via level ID and object name
-
-	UPROPERTY()
-	UInventoryEntry* InventoryEntry; //Associated with item inventory entry. Loads from JSON
-
-	UPROPERTY(VisibleAnywhere, Category = Loading)
-	FString InventoryEntryPath; //sets automatically in constructor via level ID and object name
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;

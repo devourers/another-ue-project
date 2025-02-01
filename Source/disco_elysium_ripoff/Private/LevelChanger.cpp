@@ -26,6 +26,7 @@ ALevelChanger::ALevelChanger()
 	InteractionHitbox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	InteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
+	LogicComponent = CreateDefaultSubobject<ULogicComponent>(TEXT("Logic Component"));
 }
 
 // Called when the game starts or when spawned
@@ -53,23 +54,6 @@ void ALevelChanger::TeleportTimerElapsed() {
 			UnusedHandle, protag_, &AProtagClass::FadeOutAfterTeleport, 1.0f, false);
 	}
 }
-
-//void ALevelChanger::Interact(AActor* other_actor) {
-//	IInteractable::Interact(other_actor);
-//	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {
-//		if (Configuration.OtherTeleport) {
-//			AProtagClass* protag = Cast<AProtagClass>(other_actor);
-//			PlayerPtr = protag;
-//			protag->FadeCamera(true);
-//			GetWorldTimerManager().SetTimer(
-//				UnusedHandle, this, &ALevelChanger::TeleportTimerElapsed, 1.0f, false);
-//			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Teleported"));
-//		}
-//	}
-//	else {
-//		//TODO
-//	}
-//}
 
 void ALevelChanger::InternalInteract(AActor* other_actor){
 	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {

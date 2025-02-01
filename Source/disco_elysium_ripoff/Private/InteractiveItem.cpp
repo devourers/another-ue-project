@@ -52,26 +52,7 @@ void AInteractiveItem::BeginPlay()
 	else if (Type == EItemType::eIT_Flair) {
 		Mesh->SetCustomDepthStencilValue(STENCIL_FLAIR_ITEM);
 	}
-	
-	FString RootDir = FPaths::Combine(FPaths::ProjectContentDir(), *FString("Configs/Levels"));
-	LoreEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Lore/" + LoaderName.ToString() + ".json");
-	InventoryEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Inventory/" + LoaderName.ToString() + ".json");
-	DialoguePath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Dialogue/" + LoaderName.ToString() + ".json");
 
-	if (FPaths::FileExists(LoreEntryPath)) {
-		LoreEntry = NewObject<ULoreEntry>(this, TEXT("Lore Entry"));
-		LoreEntry->LoadFromJson(LoreEntryPath);
-	}
-
-	if (FPaths::FileExists(InventoryEntryPath)) {
-		InventoryEntry = NewObject<UInventoryEntry>(this, TEXT("Inventory Entry"));
-		InventoryEntry->LoadFromJson(InventoryEntryPath);
-	}
-
-	if (FPaths::FileExists(DialoguePath)) {
-		Dialogue = NewObject<UDialogue>(this, TEXT("Dialogue"));
-		Dialogue->LoadFromJson(DialoguePath);
-	}
 }
 
 // Called every frame

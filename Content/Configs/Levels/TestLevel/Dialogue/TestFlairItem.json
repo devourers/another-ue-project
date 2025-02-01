@@ -1,7 +1,8 @@
 {
     "general":{
         "title" : "Test",
-        "can_be_reinitiated" : true
+        "can_be_reinitiated" : true,
+        "re_enter_dialogue_starting_entry" : 2
     },
     "entries":[
         {
@@ -17,6 +18,13 @@
             "text" : "Gotta be nuts talking with me.",
             "incoming_response" : 0,
             "responses":[1]
+        },
+        {
+            "name": "TFI_reentry",
+            "character": "Huita",
+            "text": "Here again?",
+            "incoming_response" : -1,
+            "responses" : [0]
         }
     ],
     "responses":[
