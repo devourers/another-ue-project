@@ -47,18 +47,34 @@ void ALevelChanger::ToggleHighlight(bool to_toggle) {
 }
 
 void ALevelChanger::TeleportTimerElapsed() {
-	PlayerPtr->TeleportTo(Configuration.OtherTeleport->GetInteractionHitbox()->GetComponentLocation(), PlayerPtr->GetActorRotation());
-	GetWorldTimerManager().SetTimer(
-		UnusedHandle, PlayerPtr, &AProtagClass::FadeOutAfterTeleport, 1.0f, false);
+	if (protag_) {
+		protag_->TeleportTo(Configuration.OtherTeleport->GetInteractionHitbox()->GetComponentLocation(), protag_->GetActorRotation());
+		GetWorldTimerManager().SetTimer(
+			UnusedHandle, protag_, &AProtagClass::FadeOutAfterTeleport, 1.0f, false);
+	}
 }
 
-void ALevelChanger::Interact(AActor* other_actor) {
-	IInteractable::Interact(other_actor);
+//void ALevelChanger::Interact(AActor* other_actor) {
+//	IInteractable::Interact(other_actor);
+//	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {
+//		if (Configuration.OtherTeleport) {
+//			AProtagClass* protag = Cast<AProtagClass>(other_actor);
+//			PlayerPtr = protag;
+//			protag->FadeCamera(true);
+//			GetWorldTimerManager().SetTimer(
+//				UnusedHandle, this, &ALevelChanger::TeleportTimerElapsed, 1.0f, false);
+//			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Teleported"));
+//		}
+//	}
+//	else {
+//		//TODO
+//	}
+//}
+
+void ALevelChanger::InternalInteract(AActor* other_actor){
 	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {
 		if (Configuration.OtherTeleport) {
-			AProtagClass* protag = Cast<AProtagClass>(other_actor);
-			PlayerPtr = protag;
-			protag->FadeCamera(true);
+			protag_->FadeCamera(true);
 			GetWorldTimerManager().SetTimer(
 				UnusedHandle, this, &ALevelChanger::TeleportTimerElapsed, 1.0f, false);
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Teleported"));
@@ -96,4 +112,16 @@ USphereComponent* ALevelChanger::GetInteractionHitbox() {
 ULogicComponent* ALevelChanger::GetLogicComponent()
 {
 	return LogicComponent;
+}
+
+UMainGameInstanceSubsystem* ALevelChanger::GetHandler() {
+	return handler_;
+}
+
+AProtagClass* ALevelChanger::GetProtag() {
+	return protag_;
+}
+
+void ALevelChanger::BindProtag(AActor* other_actor) {
+	protag_ = Cast<AProtagClass>(other_actor);
 }

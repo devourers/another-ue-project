@@ -40,9 +40,7 @@ void ADevice::CloseUI() {
 	DeviceUI = nullptr;
 }
 
-void ADevice::Interact(AActor* other_actor) {
-	IInteractable::Interact(other_actor);
-	PlayerPtr = Cast<AProtagClass>(other_actor);
+void ADevice::InternalInteract(AActor* other_actor) {
 	if (DeviceConfig.DeviceType == EDeviceType::eDT_Lockpad) {
 		if (DeviceUIClass && !DeviceUI) {
 			AProtagClass* protag = Cast<AProtagClass>(other_actor);
@@ -83,11 +81,6 @@ USphereComponent* ADevice::GetInteractionHitbox() {
 	return InteractionHitbox;
 }
 
-ULogicComponent* ADevice::GetLogicComponent()
-{
-	return LogicComponent;
-}
-
 // Called when the game starts or when spawned
 void ADevice::BeginPlay()
 {
@@ -106,14 +99,33 @@ void ADevice::Tick(float DeltaTime)
 
 void ADevice::OnSignalRecieved(const FDeviceUISignal& signal) {
 	FDeviceSignal d_signal;
-	d_signal.PlayerPtr = PlayerPtr;
-	d_signal.DeviceType = DeviceConfig.DeviceType;
-	if (signal.SignalType == EDST_CodepadCorrectCode) {
-		d_signal.bSuccess = true;
+	if (protag_) {
+		d_signal.PlayerPtr = protag_;
+		d_signal.DeviceType = DeviceConfig.DeviceType;
+		if (signal.SignalType == EDST_CodepadCorrectCode) {
+			d_signal.bSuccess = true;
+		}
+		else {
+			d_signal.bSuccess = false;
+			protag_->UpdateLog(FString("Wrong code."));
+		}
+		OnSignalSent.Broadcast(d_signal);
 	}
-	else {
-		d_signal.bSuccess = false;
-		PlayerPtr->UpdateLog(FString("Wrong code."));
-	}
-	OnSignalSent.Broadcast(d_signal);
+}
+
+ULogicComponent* ADevice::GetLogicComponent()
+{
+	return LogicComponent;
+}
+
+UMainGameInstanceSubsystem* ADevice::GetHandler() {
+	return handler_;
+}
+
+AProtagClass* ADevice::GetProtag() {
+	return protag_;
+}
+
+void ADevice::BindProtag(AActor* other_actor) {
+	protag_ = Cast<AProtagClass>(other_actor);
 }

@@ -71,6 +71,10 @@ const FDialogueHistory& UDialogue::GetHistory() const {
 	return History;
 }
 
+const FDialogueResult& UDialogue::GetResult() const{
+	return Result;
+}
+
 void UDialogue::StartDialogue(){
 	History.entries.Empty();
 	History.responses.Empty();
@@ -94,6 +98,7 @@ void UDialogue::EndDialogue(){
 	if (ReEnterDialogueStartingEntry != -1) {
 		CurrentStartingEntry = ReEnterDialogueStartingEntry;
 	}
+	Result.IsSuccessful = true;
 	DialogueEnded.Broadcast();
 }
 

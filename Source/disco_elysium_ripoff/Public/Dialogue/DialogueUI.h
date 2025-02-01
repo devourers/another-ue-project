@@ -10,6 +10,8 @@
 
 #include "DialogueUI.generated.h"
 
+class AProtagClass;
+
 /**
  * 
  */
@@ -26,6 +28,11 @@ public:
 	void LogConversation();
 
 	void BindDialogue(UDialogue* dalogue);
+
+	void BindLogicComponent(ULogicComponent* logic);
+
+	void BindProtag(AProtagClass* protag);
+
 protected:
 	UFUNCTION()
 	void OnResponseSelectionChanged(UObject* SelectedObject);
@@ -52,6 +59,10 @@ private:
 private:
 	UPROPERTY()
 	UDialogue* dialogue_;
-	IInteractable* actor_;
-	//AProtagClass* PlayerPtr;
+
+	UPROPERTY()
+	ULogicComponent* logic_;
+
+	UPROPERTY()
+	AProtagClass* protag_;
 };

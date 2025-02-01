@@ -75,6 +75,9 @@ UFUNCTION()
 UFUNCTION()
 	bool IsBehindWall() const;
 
+UFUNCTION()
+	void InitDialogueWindow(UDialogueUI* ui);
+
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* ProtagCameraComponent;

@@ -7,6 +7,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Interactable/LogicComponent.h"
+#include "../MainGameInstanceSubsystem.h"
 
 #include "Interactable.generated.h"
 
@@ -31,7 +32,25 @@ public:
 	virtual void ToggleHighlight(bool to_toggle) = 0;
 
 	UFUNCTION()
+	virtual void OnDialogueEnded();
+
+	UFUNCTION()
+	virtual void ProcessDialogue();
+
+	UFUNCTION()
+	virtual void ProcessInventoryEntry();
+
+	UFUNCTION()
+	virtual void ProcessLoreEntry();
+
+	UFUNCTION()
+	virtual void ProcessNoteEntry();
+
+	UFUNCTION()
 	virtual void Interact(AActor* other_actor);
+
+	UFUNCTION()
+	virtual void InternalInteract(AActor* other_actor) = 0;
 
 	UFUNCTION()
 	virtual void OnCursorOver(UPrimitiveComponent* Component) = 0;
@@ -56,6 +75,15 @@ public:
 
 	UFUNCTION()
 	virtual ULogicComponent* GetLogicComponent() = 0;
+
+	UFUNCTION()
+	virtual UMainGameInstanceSubsystem* GetHandler() = 0;
+
+	UFUNCTION()
+	virtual AProtagClass* GetProtag() = 0;
+
+	UFUNCTION()
+	virtual void BindProtag(AActor* other_actor) = 0;
 
 protected:
 	bool isSelectedAsDestination;

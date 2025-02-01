@@ -65,7 +65,7 @@ public:
 
 	virtual void ToggleHighlight(bool to_toggle) override;
 
-	virtual void Interact(AActor* other_actor) override;
+	virtual void InternalInteract(AActor* other_actor) override;
 
 	virtual void OnCursorOver(UPrimitiveComponent* Component) override;
 
@@ -78,6 +78,12 @@ public:
 	virtual USphereComponent* GetInteractionHitbox() override;
 
 	virtual ULogicComponent* GetLogicComponent() override;
+
+	virtual UMainGameInstanceSubsystem* GetHandler() override;
+
+	virtual AProtagClass* GetProtag() override;
+
+	virtual void BindProtag(AActor* other_actor) override;
 
 	UFUNCTION()
 	void CloseUI();
@@ -120,11 +126,14 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
 	ULogicComponent* LogicComponent;
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UBaseDeviceUI> DeviceUIClass;
+	UPROPERTY()
+	AProtagClass* protag_;
 
 	UPROPERTY()
-	class AProtagClass* PlayerPtr; //for signals
+	UMainGameInstanceSubsystem* handler_;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UBaseDeviceUI> DeviceUIClass;
 
 	UPROPERTY()
 	class UBaseDeviceUI* DeviceUI;

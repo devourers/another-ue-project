@@ -41,7 +41,7 @@ public:
 
 	virtual void ToggleHighlight(bool to_toggle) override;
 
-	virtual void Interact(AActor* other_actor) override;
+	virtual void InternalInteract(AActor* other_actor) override;
 
 	virtual void OnCursorOver(UPrimitiveComponent* Component) override;
 
@@ -54,6 +54,12 @@ public:
 	virtual USphereComponent* GetInteractionHitbox() override;
 
 	virtual ULogicComponent* GetLogicComponent() override;
+
+	virtual UMainGameInstanceSubsystem* GetHandler() override;
+
+	virtual AProtagClass* GetProtag() override;
+
+	virtual void BindProtag(AActor* other_actor) override;
 
 	UFUNCTION()
 	void TeleportTimerElapsed();
@@ -74,6 +80,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
 	ULogicComponent* LogicComponent;
 
+	UPROPERTY()
+	AProtagClass* protag_;
+
+	UPROPERTY()
+	UMainGameInstanceSubsystem* handler_;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Loading, meta = (AllowPrivateAccess = "true"))
 	FName LoaderName; //name for loading items from configs 
 
@@ -82,9 +94,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* InteractionHitbox;
-
-	UPROPERTY()
-	class AProtagClass* PlayerPtr;
 
 	UPROPERTY()
 	class UBaseDeviceUI* ExitLocationUI;

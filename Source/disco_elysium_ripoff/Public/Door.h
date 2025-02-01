@@ -54,7 +54,7 @@ public:
 
 	virtual void ToggleHighlight(bool to_toggle) override;
 
-	virtual void Interact(AActor* other_actor) override;
+	virtual void InternalInteract(AActor* other_actor) override;
 
 	virtual void OnCursorOver(UPrimitiveComponent* component) override;
 
@@ -67,6 +67,12 @@ public:
 	virtual USphereComponent* GetInteractionHitbox() override;
 
 	virtual ULogicComponent* GetLogicComponent() override;
+
+	virtual UMainGameInstanceSubsystem* GetHandler() override;
+
+	virtual AProtagClass* GetProtag() override;
+
+	virtual void BindProtag(AActor* other_actor) override;
 
 	UFUNCTION()
 	void OpenDoor(float Value);
@@ -92,6 +98,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
 	ULogicComponent* LogicComponent;
+
+	UPROPERTY()
+	AProtagClass* protag_;
+
+	UPROPERTY()
+	UMainGameInstanceSubsystem* handler_;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	UCurveFloat* OpeningCurve;

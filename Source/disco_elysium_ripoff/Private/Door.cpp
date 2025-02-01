@@ -147,8 +147,7 @@ void ADoor::OnSignalRecieved(const FDeviceSignal& signal) {
 		ImplUnlock(signal.PlayerPtr);
 }
 
-void ADoor::Interact(AActor* other_actor) {
-	IInteractable::Interact(other_actor);
+void ADoor::InternalInteract(AActor* other_actor){
 	if (!bIsDoorLocked) {
 		if (bIsDoorClosed) {
 			OpeningTimeline.Play();
@@ -195,4 +194,16 @@ USphereComponent* ADoor::GetInteractionHitbox() {
 ULogicComponent* ADoor::GetLogicComponent()
 {
 	return LogicComponent;
+}
+
+UMainGameInstanceSubsystem* ADoor::GetHandler() {
+	return handler_;
+}
+
+AProtagClass* ADoor::GetProtag() {
+	return protag_;
+}
+
+void ADoor::BindProtag(AActor* other_actor) {
+	protag_ = Cast<AProtagClass>(other_actor);
 }

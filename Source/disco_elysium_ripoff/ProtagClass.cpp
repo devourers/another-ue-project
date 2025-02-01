@@ -10,6 +10,7 @@
 #include "PointAndClickPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "NavigationPath.h"
+#include "Dialogue/DialogueUI.h"
 #include "NiagaraFunctionLibrary.h"
 
 
@@ -255,4 +256,10 @@ void AProtagClass::FadeOutAfterTeleport() {
 
 bool AProtagClass::IsBehindWall() const {
 	return isBehindWall;
+}
+
+void AProtagClass::InitDialogueWindow(UDialogueUI* ui){
+	//todo: hide other Ui, or spawn at some point of main hud
+	ui->AddToPlayerScreen();
+	ui->SetFocus();
 }

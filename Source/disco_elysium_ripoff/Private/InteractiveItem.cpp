@@ -36,12 +36,15 @@ AInteractiveItem::AInteractiveItem()
 	InteractionHitbox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	InteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
+	LogicComponent = CreateDefaultSubobject<ULogicComponent>(TEXT("Logic Component"));
 }
 
 // Called when the game starts or when spawned
 void AInteractiveItem::BeginPlay()
 {
 	Super::BeginPlay();
+
+	handler_ = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
 
 	if (Type == EItemType::eIT_Pickable) {
 		Mesh->SetCustomDepthStencilValue(STENCIL_PICKABLE_ITEM);
@@ -83,39 +86,12 @@ void AInteractiveItem::ToggleHighlight(bool to_toggle) {
 	Mesh->SetRenderCustomDepth(to_toggle);
 }
 
-
-void AInteractiveItem::Interact(AActor* other_actor) {
-	IInteractable::Interact(other_actor);
+void AInteractiveItem::InternalInteract(AActor* other_actor) {
 	if (Type == EItemType::eIT_Pickable) {
-		if (InventoryEntry) {
-			UMainGameInstanceSubsystem* handler = GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
-			if (handler) {
-				UInventoryEntry* entry = NewObject<UInventoryEntry>();
-				entry->SetTitle(InventoryEntry->GetTitle());
-				entry->SetKeywords(InventoryEntry->GetKeywords());
-				entry->SetDescription(InventoryEntry->GetDescription());
-				entry->SetImages(InventoryEntry->GetImages());
-				FName entry_name = FName(GetWorld()->GetName() + "_" + LoaderName.ToString());
-				handler->AddItemToInventory(entry_name, entry);
-				AProtagClass* protag = Cast<AProtagClass>(other_actor);
-				if (protag) {
-					FString log_entry = FString("Item picked up: ") + DisplayedName.ToString();
-					protag->UpdateLog(log_entry);
-				}
-				Destroy();
-			}
-		}
+		Destroy();
 	}
 	else if (Type == EItemType::eIT_Flair) {
-		if (Dialogue && !DialogueUI && DialogueUIClass) {
-			AProtagClass* protag = Cast<AProtagClass>(other_actor);
-			APointAndClickPlayerController* PCC = protag->GetController<APointAndClickPlayerController>();
-			DialogueUI = CreateWidget<UDialogueUI>(PCC, DialogueUIClass);
-			DialogueUI->BindDialogue(Dialogue);
-			Dialogue->StartDialogue();
-			DialogueUI->AddToPlayerScreen();
-			DialogueUI->SetFocus();
-		}
+		//TODO
 	}
 }
 
@@ -149,7 +125,18 @@ USphereComponent* AInteractiveItem::GetInteractionHitbox() {
 	return InteractionHitbox;
 }
 
-ULogicComponent* AInteractiveItem::GetLogicComponent()
-{
+ULogicComponent* AInteractiveItem::GetLogicComponent(){
 	return LogicComponent;
+}
+
+UMainGameInstanceSubsystem* AInteractiveItem::GetHandler(){
+	return handler_;
+}
+
+AProtagClass* AInteractiveItem::GetProtag(){
+	return protag_;
+}
+
+void AInteractiveItem::BindProtag(AActor* other_actor){
+	protag_ = Cast<AProtagClass>(other_actor);
 }

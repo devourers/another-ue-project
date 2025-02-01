@@ -12,20 +12,13 @@
 
 #include "LogicComponent.generated.h"
 
+class APointAndClickPlayerController;
+class AProtagClass;
+
 UENUM()
-enum ELogicType {
-	eLT_Dialogue UMETA(DisplayName = "Dialogue"),
-	eLT_Lore UMETA(DisplayName = "Lore"),
-	eLT_Inventory UMETA(DisplayName = "Inventory"),
-	eLT_Note UMETA(DisplayName = "Note")
-};
-
-USTRUCT(BlueprintType)
-struct DISCO_ELYSIUM_RIPOFF_API FLogicOrder {
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, Category = General)
-	TArray<TEnumAsByte<ELogicType>> Order;
+enum ELogicOrder {
+	eLO_DiagloueFirst UMETA(DisplayName = "Dialogue first"),
+	eLO_DialogueAfter UMETA(DisplayName = "Dialogue after")
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -58,11 +51,32 @@ public:
 	UNoteEntry* GetNoteEntry();
 
 	UFUNCTION()
-	const FLogicOrder& GetLogicOrder() const;
+	ELogicOrder GetLogicOrder() const;
+
+	UFUNCTION()
+	const FString& GetLoaderName() const;
+
+	UFUNCTION()
+	const FString& GetWorldName() const;
+
+	UFUNCTION()
+	const FString& GetDisplayedName() const;
+
+	UFUNCTION()
+	class UDialogueUI* CreateDialogueUI(APointAndClickPlayerController* PCC, AProtagClass* protag);
+
+	UFUNCTION()
+	void CloseDialogueUI();
 
 private:
 	UPROPERTY()
 	UDialogue* Dialogue;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UDialogueUI> DialogueUIClass;
+
+	UPROPERTY()
+	class UDialogueUI* DialogueUI;
 
 	UPROPERTY()
 	ULoreEntry* LoreEntry;
@@ -75,7 +89,10 @@ private:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Order, meta = (AllowPrivateAccess = "true"))
-	FLogicOrder LogicOrder;
+	TEnumAsByte<ELogicOrder> LogicOrder;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = General, meta = (AllowPrivateAccess = "true"))
+	FString DisplayedName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Loading, meta = (AllowPrivateAccess = "true"))
 	FString LoaderName;
@@ -91,4 +108,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Loading)
 	FString NoteEntryPath;
+
+	UPROPERTY(VisibleAnywhere)
+	FString WorldName;
 };

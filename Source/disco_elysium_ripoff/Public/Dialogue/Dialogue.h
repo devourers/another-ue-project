@@ -20,7 +20,8 @@ struct FDialogueResponse;
 USTRUCT()
 struct DISCO_ELYSIUM_RIPOFF_API FDialogueResult {
 	GENERATED_BODY()
-	//what checks finishing dialogue grants
+public:
+	bool IsSuccessful;
 };
 
 USTRUCT()
@@ -116,6 +117,8 @@ public:
 	UDialogueEntryWrapper* GetEntry(int entry_id) const;
 
 	const FDialogueHistory& GetHistory() const;
+	
+	const FDialogueResult& GetResult() const;
 
 public: //delegates
 	UPROPERTY()

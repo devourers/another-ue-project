@@ -2,6 +2,8 @@
 
 
 #include "Interactable/LogicComponent.h"
+#include "../PointAndClickPlayerController.h"
+#include "Dialogue/DialogueUI.h"
 
 // Sets default values for this component's properties
 ULogicComponent::ULogicComponent()
@@ -30,9 +32,41 @@ UNoteEntry* ULogicComponent::GetNoteEntry(){
 	return NoteEntry; 
 }
 
-const FLogicOrder& ULogicComponent::GetLogicOrder() const
-{
+ELogicOrder ULogicComponent::GetLogicOrder() const {
 	return LogicOrder;
+}
+
+const FString& ULogicComponent::GetLoaderName() const {
+	return LoaderName;
+}
+
+const FString& ULogicComponent::GetWorldName() const
+{
+	return WorldName;
+}
+
+const FString& ULogicComponent::GetDisplayedName() const
+{
+	return DisplayedName;
+}
+
+UDialogueUI* ULogicComponent::CreateDialogueUI(APointAndClickPlayerController* PCC, AProtagClass* protag){
+	if (Dialogue && !DialogueUI && DialogueUIClass) {
+		DialogueUI = CreateWidget<UDialogueUI>(PCC, DialogueUIClass);
+		DialogueUI->BindDialogue(Dialogue);
+		DialogueUI->BindLogicComponent(this);
+		DialogueUI->BindProtag(protag);
+		Dialogue->StartDialogue();
+		return DialogueUI;
+	}
+	else {
+		return nullptr;
+	}
+}
+
+void ULogicComponent::CloseDialogueUI(){
+	DialogueUI->RemoveFromParent();
+	DialogueUI = nullptr;
 }
 
 
@@ -40,6 +74,8 @@ const FLogicOrder& ULogicComponent::GetLogicOrder() const
 void ULogicComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	WorldName = GetWorld()->GetName();
 
 	if (LoaderName.IsEmpty())
 		return;
