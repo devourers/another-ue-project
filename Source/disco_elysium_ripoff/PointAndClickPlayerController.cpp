@@ -70,6 +70,9 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	if (bHitSuccessful)
 	{
 		CachedDestination = Hit.Location;
+
+		PlayerTargetLocationChanged.Broadcast(CachedDestination);
+
 		IInteractable* casted_actor = Cast<IInteractable>(Hit.GetActor());
 		if (casted_actor) {
 			CachedActor = Hit.GetActor();
@@ -120,7 +123,6 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 			protag->CustomMoveToLocation(CachedDestination);
 		}
 	}
-	
 
 	FollowTime = 0.f;
 }

@@ -81,6 +81,9 @@ UFUNCTION()
 UFUNCTION()
 	void UnhideHUD();
 
+UFUNCTION()
+	void OnPlayerTargerLocationChanged(const FVector& NewLocation);
+
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* ProtagCameraComponent;
@@ -109,13 +112,12 @@ UPROPERTY(EditAnywhere)
 UPROPERTY()
 	class UMainHUD* ProtagHUD;
 
+UPROPERTY()
+	APointAndClickPlayerController* controller_;
+
 private:
 	bool isMovingAlongPath = false;
 	IInteractable* cached_actor = nullptr;
 	bool isBehindWall;
 	int OcclusionCounter = 0;
-	//glossary
-	//inventory
-	
-
 };

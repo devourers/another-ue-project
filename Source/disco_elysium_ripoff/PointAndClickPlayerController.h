@@ -10,7 +10,7 @@
 class UInputMappingContext;
 class UInputAction;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerTargetLocationChanged, FVector, NewLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerTargetLocationChanged, const FVector&, NewLocation);
 
 /**
  * 
@@ -36,6 +36,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAcess = "true"))
 	UInputAction* DoubleClick;
+
+	UPROPERTY()
+	FPlayerTargetLocationChanged PlayerTargetLocationChanged;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */

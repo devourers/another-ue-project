@@ -101,12 +101,6 @@ void AProtagClass::CustomMoveToInteractable(AActor* actor) {
 				cached_actor->OnInteractableSelectedAsDestination();
 				FAIRequestID path_id = PathFinderComponent->RequestMove(request, u_path->GetPath());
 				TArray<FVector> pts = u_path->PathPoints;
-				//for (size_t i = 0; i < pts.Num(); ++i) {
-				//	DrawDebugSphere(GetWorld(), pts[i], 10, 10, FColor::Green, false, 5);
-				//	if (i + 1 != pts.Num()) {
-				//		DrawDebugLine(GetWorld(), pts[i], pts[i + 1], FColor::Green, false, 5);
-				//	}
-				//}
 			}
 		}
 	}
@@ -204,6 +198,11 @@ void AProtagClass::BeginPlay()
 {
 	Super::BeginPlay();
 
+	controller_ = Cast<APointAndClickPlayerController>(GetController());
+	if (controller_) {
+		controller_->PlayerTargetLocationChanged.AddUniqueDynamic(this, &AProtagClass::OnPlayerTargerLocationChanged);
+	}
+
 	if (ProtagHUDClass) {
 		APointAndClickPlayerController* PCC = GetController<APointAndClickPlayerController>();
 		ProtagHUD = CreateWidget<UMainHUD>(PCC, ProtagHUDClass);
@@ -267,4 +266,8 @@ void AProtagClass::InitDialogueWindow(UDialogueUI* ui){
 
 void AProtagClass::UnhideHUD(){
 	ProtagHUD->SetVisibility(ESlateVisibility::Visible);
+}
+
+void AProtagClass::OnPlayerTargerLocationChanged(const FVector& NewLocation){
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, NewLocation.ToString());
 }
