@@ -10,6 +10,8 @@
 class UInputMappingContext;
 class UInputAction;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerTargetLocationChanged, FVector, NewLocation);
+
 /**
  * 
  */
