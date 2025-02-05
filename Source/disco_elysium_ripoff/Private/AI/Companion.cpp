@@ -2,6 +2,9 @@
 
 
 #include "AI/Companion.h"
+#include "AI/CompanionAIController.h"
+#include "../PointAndClickPlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ACompanion::ACompanion()
@@ -16,6 +19,14 @@ void ACompanion::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AController* self_controller = GetController();
+	controller_ = Cast<ACompanionAIController>(self_controller);
+
+	APlayerController* controller = GetWorld()->GetFirstPlayerController();
+	APointAndClickPlayerController* casted_controller = Cast<APointAndClickPlayerController>(controller);
+	if (casted_controller) {
+		casted_controller->PlayerDoubleClicked.AddUniqueDynamic(this, &ACompanion::OnPlayerDoubleClicked);
+	}
 }
 
 // Called every frame
@@ -32,3 +43,9 @@ void ACompanion::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+void ACompanion::OnPlayerDoubleClicked(bool didDoubleClick) {
+	if (didDoubleClick)
+		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	else
+		GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+}

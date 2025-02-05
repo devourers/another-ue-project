@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Companion.generated.h"
 
+class ACompanionAIController;
+
 UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API ACompanion : public ACharacter
 {
@@ -26,10 +28,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-	class UBehaviorTree* BTree;
+	UFUNCTION()
+	void OnPlayerDoubleClicked(bool didDoubleClick);
 
 private:
+
+	UPROPERTY()
+	ACompanionAIController* controller_;
 
 };

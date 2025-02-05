@@ -269,5 +269,4 @@ void AProtagClass::UnhideHUD(){
 }
 
 void AProtagClass::OnPlayerTargerLocationChanged(const FVector& NewLocation){
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, NewLocation.ToString());
 }

@@ -22,7 +22,6 @@ void APointAndClickPlayerController::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-	LastBroadcastedLocation;
 	APawn* ControlledPawn = GetPawn();
 	if (ControlledPawn) {
 		LastBroadcastedLocation = ControlledPawn->GetActorLocation();
@@ -78,11 +77,6 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	{
 		CachedDestination = Hit.Location;
 
-		if ((CachedDestination - LastBroadcastedLocation).Length() > distance_update_threshold_) {
-			PlayerTargetLocationChanged.Broadcast(CachedDestination);
-			LastBroadcastedLocation = CachedDestination;
-		}
-
 		IInteractable* casted_actor = Cast<IInteractable>(Hit.GetActor());
 		if (casted_actor) {
 			CachedActor = Hit.GetActor();
@@ -101,6 +95,10 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 		clickedOnWall = false;
 	if (ControlledPawn != nullptr && !clickedOnWall)
 	{
+		if ((CachedDestination - LastBroadcastedLocation).Length() > distance_update_threshold_) {
+			PlayerTargetLocationChanged.Broadcast(CachedDestination);
+			LastBroadcastedLocation = CachedDestination;
+		}
 		AProtagClass * protag = Cast<AProtagClass>(ControlledPawn);
 		if (FollowTime <= ShortPressThreshold) {
 			protag->StopPathfinderMovement();
@@ -125,6 +123,7 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 		}
 		else {
 			protag->GetCharacterMovement()->MaxWalkSpeed = 300;
+			PlayerDoubleClicked.Broadcast(false);
 		}
 		// We move there and spawn some particles
 		if (isCachedActorInteractible) {
@@ -166,6 +165,7 @@ void APointAndClickPlayerController::OnDoubleClickTriggered() {
 	if (FollowTime <= ShortPressThreshold) {
 		protag->StopPathfinderMovement();
 	}
+	PlayerDoubleClicked.Broadcast(true);
 	DoubleClicked = true;
 	OnSetDestinationReleased();
 }

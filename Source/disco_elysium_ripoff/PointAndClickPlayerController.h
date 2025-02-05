@@ -11,6 +11,7 @@ class UInputMappingContext;
 class UInputAction;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerTargetLocationChanged, const FVector&, NewLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerDoubleClicked, bool, didDoubleClick);
 
 /**
  * 
@@ -39,6 +40,10 @@ public:
 
 	UPROPERTY()
 	FPlayerTargetLocationChanged PlayerTargetLocationChanged;
+	
+	UPROPERTY()
+	FPlayerDoubleClicked PlayerDoubleClicked;
+
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
