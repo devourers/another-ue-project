@@ -37,7 +37,11 @@ void ACompanionAIController::BeginPlay(){
 
 
 void ACompanionAIController::OnPlayerTargetLocationUpdated(const FVector& target_location) {
-	BBComp->SetValueAsVector("PlayerTargetLocation", target_location);
+	if (!companion_->IsSelectedAsDestination()) {
+		FVector int_char = (companion_->GetInteractionHitbox()->GetComponentLocation() - companion_->GetActorLocation());
+		BBComp->SetValueAsVector("PlayerTargetLocation", target_location - int_char);
+	}
+		
 }
 
 void ACompanionAIController::OnPlayerTeleported(const FVector& teleport_location) {

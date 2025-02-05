@@ -71,7 +71,8 @@ void IInteractable::Interact(AActor* other_actor){
 	if (!GetInteractionHitbox()->IsOverlappingActor(other_actor))
 		return;
 	ULogicComponent* logic = GetLogicComponent();
-	BindProtag(other_actor);
+	if (!GetProtag())
+		BindProtag(other_actor);
 	if (logic) {
 		ELogicOrder order = logic->GetLogicOrder();
 		if (order == ELogicOrder::eLO_DiagloueFirst) {
