@@ -58,6 +58,8 @@ protected:
 	void OnDoubleClickTriggered();
 
 private:
+	double distance_update_threshold_ = 300.0f;
+	FVector LastBroadcastedLocation;
 	FVector CachedDestination;
 	AActor* CachedActor;
 	bool isCachedActorInteractible;

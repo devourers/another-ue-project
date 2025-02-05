@@ -22,6 +22,11 @@ void APointAndClickPlayerController::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	LastBroadcastedLocation;
+	APawn* ControlledPawn = GetPawn();
+	if (ControlledPawn) {
+		LastBroadcastedLocation = ControlledPawn->GetActorLocation();
+	}
 }
 
 void APointAndClickPlayerController::SetupInputComponent()
@@ -51,12 +56,14 @@ void APointAndClickPlayerController::SetupInputComponent()
 
 void APointAndClickPlayerController::OnInputStarted()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Started"));
 	StopMovement();
 }
 
 // Triggered every frame when the input is held down
 void APointAndClickPlayerController::OnSetDestinationTriggered()
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Triggered"));
 	// We flag that the input is being pressed
 	FollowTime += GetWorld()->GetDeltaSeconds();
 
@@ -71,7 +78,10 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	{
 		CachedDestination = Hit.Location;
 
-		PlayerTargetLocationChanged.Broadcast(CachedDestination);
+		if ((CachedDestination - LastBroadcastedLocation).Length() > distance_update_threshold_) {
+			PlayerTargetLocationChanged.Broadcast(CachedDestination);
+			LastBroadcastedLocation = CachedDestination;
+		}
 
 		IInteractable* casted_actor = Cast<IInteractable>(Hit.GetActor());
 		if (casted_actor) {
@@ -92,8 +102,9 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 	if (ControlledPawn != nullptr && !clickedOnWall)
 	{
 		AProtagClass * protag = Cast<AProtagClass>(ControlledPawn);
-		
-		protag->StopPathfinderMovement();
+		if (FollowTime <= ShortPressThreshold) {
+			protag->StopPathfinderMovement();
+		}
 		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
 	}
@@ -101,7 +112,7 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 
 void APointAndClickPlayerController::OnSetDestinationReleased()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Released"));
+	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Released"));
 	// If it was a short press
 
 	if (FollowTime <= ShortPressThreshold)
@@ -147,12 +158,14 @@ void APointAndClickPlayerController::OnEndHighlightAllIntercatbleActors() {
 }
 
 void APointAndClickPlayerController::OnDoubleClickTriggered() {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Double click"));
+	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Double click"));
 
 	//FollowTime += GetWorld()->GetDeltaSeconds();
 	APawn* ControlledPawn = GetPawn();
 	AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
-	protag->StopPathfinderMovement();
+	if (FollowTime <= ShortPressThreshold) {
+		protag->StopPathfinderMovement();
+	}
 	DoubleClicked = true;
 	OnSetDestinationReleased();
 }
