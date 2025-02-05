@@ -10,6 +10,7 @@
 #include "CompanionAIController.generated.h"
 
 class ACompanion;
+class AProtagClass;
 /**
  * 
  */
@@ -29,8 +30,16 @@ public:
 	UFUNCTION()
 	void OnPlayerTargetLocationUpdated(const FVector& target_location);
 
+	UFUNCTION()
+	void OnPlayerTeleported(const FVector& teleport_location);
+
+
+private:
 	UPROPERTY()
-	ACompanion* Companion;
+	ACompanion* companion_;
+
+	UPROPERTY()
+	AProtagClass* protag_;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI, meta = (AllowPrivateAccess = "true"))
 	UBehaviorTreeComponent* BehaviourTree;

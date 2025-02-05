@@ -14,6 +14,8 @@
 #include "Navigation/PathFollowingComponent.h"
 #include "ProtagClass.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerTeleported, const FVector&, TeleportLocation);
+
 UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API AProtagClass : public ACharacter
 {
@@ -83,6 +85,9 @@ UFUNCTION()
 
 UFUNCTION()
 	void OnPlayerTargerLocationChanged(const FVector& NewLocation);
+
+UPROPERTY()
+	FPlayerTeleported PlayerTeleported;
 
 private:
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))

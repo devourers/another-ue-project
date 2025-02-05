@@ -50,6 +50,7 @@ void ALevelChanger::ToggleHighlight(bool to_toggle) {
 void ALevelChanger::TeleportTimerElapsed() {
 	if (protag_) {
 		protag_->TeleportTo(Configuration.OtherTeleport->GetInteractionHitbox()->GetComponentLocation(), protag_->GetActorRotation());
+		protag_->PlayerTeleported.Broadcast(Configuration.OtherTeleport->GetInteractionHitbox()->GetComponentLocation());
 		GetWorldTimerManager().SetTimer(
 			UnusedHandle, protag_, &AProtagClass::FadeOutAfterTeleport, 1.0f, false);
 	}
