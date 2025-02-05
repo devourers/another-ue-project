@@ -45,7 +45,7 @@ void ACompanion::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ACompanion::OnPlayerDoubleClicked(bool didDoubleClick) {
 	if (didDoubleClick)
-		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+		GetCharacterMovement()->MaxWalkSpeed = 590.0f;
 	else
-		GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+		GetCharacterMovement()->MaxWalkSpeed = 295.0f;
 }

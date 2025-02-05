@@ -80,6 +80,7 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 		IInteractable* casted_actor = Cast<IInteractable>(Hit.GetActor());
 		if (casted_actor) {
 			CachedActor = Hit.GetActor();
+			CachedDestination = casted_actor->GetInteractionHitbox()->GetComponentLocation();
 			isCachedActorInteractible = true;
 		}
 		else

@@ -29,13 +29,14 @@ void ACompanionAIController::BeginPlay(){
 		casted_controller->PlayerTargetLocationChanged.AddUniqueDynamic(this, &ACompanionAIController::OnPlayerTargetLocationUpdated);
 	
 	protag_ = Cast<AProtagClass>(controller->GetPawn());
-	if (protag_)
+	if (protag_) {
 		protag_->PlayerTeleported.AddUniqueDynamic(this, &ACompanionAIController::OnPlayerTeleported);
+		GetPathFollowingComponent()->SetAcceptanceRadius(150.0f);
+	}
 }
 
 
 void ACompanionAIController::OnPlayerTargetLocationUpdated(const FVector& target_location) {
-	//select some point in radius around?
 	BBComp->SetValueAsVector("PlayerTargetLocation", target_location);
 }
 

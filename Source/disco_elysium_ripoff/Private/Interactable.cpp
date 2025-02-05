@@ -68,6 +68,8 @@ void IInteractable::ProcessNoteEntry() {
 }
 
 void IInteractable::Interact(AActor* other_actor){
+	if (!GetInteractionHitbox()->IsOverlappingActor(other_actor))
+		return;
 	ULogicComponent* logic = GetLogicComponent();
 	BindProtag(other_actor);
 	if (logic) {

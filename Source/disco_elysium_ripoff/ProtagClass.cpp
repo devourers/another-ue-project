@@ -90,12 +90,12 @@ void AProtagClass::CustomMoveToInteractable(AActor* actor) {
 		if (u_path && u_path->IsValid() && !u_path->IsUnreachable()) {
 			isMovingAlongPath = true;
 			FAIMoveRequest request;
-			request.SetAcceptanceRadius(150.0f);
+			request.SetAcceptanceRadius(0.0f);
 			request.SetUsePathfinding(true);
+			request.SetGoalLocation(casted_actor->GetInteractionHitbox()->GetComponentLocation());
 			request.SetAllowPartialPath(false);
 			request.SetRequireNavigableEndLocation(true);
 			request.SetProjectGoalLocation(false);
-			request.SetGoalActor(actor);
 			cached_actor = casted_actor;
 			if (cached_actor) {
 				cached_actor->OnInteractableSelectedAsDestination();
