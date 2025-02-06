@@ -1,0 +1,56 @@
+{
+    "general":{
+        "title" : "Companion test",
+        "can_be_reinitiated" : true,
+        "re_enter_dialogue_starting_entry" : 2
+    },
+    "entries":[
+        {
+            "name" : "TFI_first_entry",
+            "character": "Kim",
+            "text" : "What are we doing?",
+            "incoming_response" : -1,
+            "responses":[0]
+        },
+        {
+            "name" : "TFI_second_entry",
+            "character": "Kim",
+            "text" : "Sure, lead the way.",
+            "incoming_response" : 0,
+            "responses":[1]
+        },
+        {
+            "name": "TFI_reentry",
+            "character": "Kim",
+            "text": "Still walking?",
+            "incoming_response" : -1,
+            "responses" : [2]
+        }
+    ],
+    "responses":[
+        {
+            "conditions" :{
+
+            },
+            "from": 0,
+            "to": 1,
+            "text": "Just walking"
+        },
+        {
+            "conditions" :{
+
+            },
+            "from" : 1,
+            "to" : -1,
+            "text" : "Let's go."
+        },
+        {
+            "conditions" :{
+
+            },
+            "from" : 2,
+            "to" : -1,
+            "text" : "Yeah."
+        }
+    ]
+}

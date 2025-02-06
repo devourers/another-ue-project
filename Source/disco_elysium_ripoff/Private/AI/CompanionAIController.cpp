@@ -41,6 +41,9 @@ void ACompanionAIController::OnPlayerTargetLocationUpdated(const FVector& target
 		FVector int_char = (companion_->GetInteractionHitbox()->GetComponentLocation() - companion_->GetActorLocation());
 		BBComp->SetValueAsVector("PlayerTargetLocation", target_location - int_char);
 	}
+	else {
+		BBComp->ClearValue("PlayerTargetLocation");
+	}
 		
 }
 

@@ -21,7 +21,10 @@ FDialogueResponse::FDialogueResponse(TSharedPtr<FJsonObject> obj) {
 	//conditions
 	FromEntry = obj->GetIntegerField("from");
 	ToEntry = obj->GetIntegerField("to");
-	ResponseText = FText::FromString(obj->GetStringField("text"));
+	FString ResponseString = obj->GetStringField("text");
+	if (ToEntry == -1)
+		ResponseString += "\t [End]";
+	ResponseText = FText::FromString(ResponseString);
 }
 
 void UDialogue::LoadFromJson(const FString& path) {

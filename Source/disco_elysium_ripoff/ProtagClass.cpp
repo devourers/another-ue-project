@@ -260,6 +260,7 @@ bool AProtagClass::IsBehindWall() const {
 void AProtagClass::InitDialogueWindow(UDialogueUI* ui){
 	//todo: hide other Ui, or spawn at some point of main hud
 	ProtagHUD->SetVisibility(ESlateVisibility::Hidden);
+	DisableInput(Cast<APlayerController>(controller_));
 	ui->AddToPlayerScreen();
 	ui->SetFocus();
 }

@@ -32,7 +32,6 @@ void APointAndClickPlayerController::SetupInputComponent()
 {
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
-
 	// Add Input Mapping Context
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
@@ -96,10 +95,6 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 		clickedOnWall = false;
 	if (ControlledPawn != nullptr && !clickedOnWall)
 	{
-		if ((CachedDestination - LastBroadcastedLocation).Length() > distance_update_threshold_) {
-			PlayerTargetLocationChanged.Broadcast(CachedDestination);
-			LastBroadcastedLocation = CachedDestination;
-		}
 		AProtagClass * protag = Cast<AProtagClass>(ControlledPawn);
 		if (FollowTime <= ShortPressThreshold) {
 			protag->StopPathfinderMovement();
@@ -132,6 +127,10 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 		}
 		else if (!clickedOnWall){
 			protag->CustomMoveToLocation(CachedDestination);
+		}
+		if ((CachedDestination - LastBroadcastedLocation).Length() > distance_update_threshold_) {
+			PlayerTargetLocationChanged.Broadcast(CachedDestination);
+			LastBroadcastedLocation = CachedDestination;
 		}
 	}
 
