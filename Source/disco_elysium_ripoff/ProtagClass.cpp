@@ -148,7 +148,7 @@ void AProtagClass::CustomMoveToLocation(const FVector& target_location) {
 		//DrawDebugSphere(GetWorld(), target_location, 10, 10, FColor::Red, false, 5);
 		UNavigationPath* u_path = NavSystem->FindPathToLocationSynchronously(this, this->GetActorLocation(), target_location, vol);
 		
-		if (!u_path->IsValid()) {
+		if (u_path && !u_path->IsValid()) {
 			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Unreachable"));
 			return;
 		}
