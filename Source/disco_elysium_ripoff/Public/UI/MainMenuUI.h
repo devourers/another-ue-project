@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "MainMenuUI.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMainMenuUIButtonPressed, const FString&, ButtonName);
+
 /**
  * 
  */
@@ -18,6 +21,10 @@ public:
 	virtual void NativeConstruct() override;
 
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
+
+public:
+	UPROPERTY()
+	FMainMenuUIButtonPressed MainMenuUIButtonPressed;
 
 protected:
 	UFUNCTION()

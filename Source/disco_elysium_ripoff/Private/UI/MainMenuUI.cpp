@@ -17,21 +17,21 @@ FReply UMainMenuUI::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent
 }
 
 void UMainMenuUI::OnContinueButtonClicked() {
-
+	MainMenuUIButtonPressed.Broadcast("Continue");
 }
 
 void UMainMenuUI::OnNewGameButtonClicked() {
-
+	MainMenuUIButtonPressed.Broadcast("NewGame");
 }
 
 void UMainMenuUI::OnLoadGameButtonPressed() {
-
+	MainMenuUIButtonPressed.Broadcast("LoadGame");
 }
 
 void UMainMenuUI::OnOptionsButtonPressed() {
-
+	MainMenuUIButtonPressed.Broadcast("Options");
 }
 
 void UMainMenuUI::OnQuitButtonPressed() {
-
+	MainMenuUIButtonPressed.Broadcast("Quit");
 }
