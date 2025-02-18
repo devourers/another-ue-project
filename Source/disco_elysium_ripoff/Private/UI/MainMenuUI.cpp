@@ -2,6 +2,10 @@
 
 
 #include "UI/MainMenuUI.h"
+
+#include <Kismet/KismetSystemLibrary.h>
+#include <Kismet/GameplayStatics.h>
+
 #include "Components/Button.h"
 
 void UMainMenuUI::NativeConstruct(){
@@ -17,11 +21,13 @@ FReply UMainMenuUI::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent
 }
 
 void UMainMenuUI::OnContinueButtonClicked() {
-	MainMenuUIButtonPressed.Broadcast("Continue");
+	MainMenuUIButtonPressed.Broadcast("Continue"); 
+	UGameplayStatics::OpenLevel(GetWorld(), FName("/Game/Levels/TestLevel"));
 }
 
 void UMainMenuUI::OnNewGameButtonClicked() {
 	MainMenuUIButtonPressed.Broadcast("NewGame");
+	UGameplayStatics::OpenLevel(GetWorld(), FName("/Game/Levels/GameLevels/Chapter1/L_CH1_ProtagFlat"));
 }
 
 void UMainMenuUI::OnLoadGameButtonPressed() {
@@ -34,4 +40,5 @@ void UMainMenuUI::OnOptionsButtonPressed() {
 
 void UMainMenuUI::OnQuitButtonPressed() {
 	MainMenuUIButtonPressed.Broadcast("Quit");
+	UKismetSystemLibrary::QuitGame(GetWorld(), GetWorld()->GetFirstPlayerController(), EQuitPreference::Quit, true);
 }
