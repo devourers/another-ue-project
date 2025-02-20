@@ -12,7 +12,9 @@
 				"Engine",
 				"UMG",
 				"CoreUObject",
-				"AIModule"
+				"AIModule",
+				"UnrealEd",
+				"EditorSubsystem"
 			]
 		}
 	],
