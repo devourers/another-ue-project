@@ -2,6 +2,8 @@
 
 
 #include "Editor/InteractableSpawnerSubsystem.h"
+#include "PythonEditorHelper.h"
+#include "../../Public/Interactable.h"
 #include "Subsystems/EditorActorSubsystem.h"
 
 DEFINE_LOG_CATEGORY(InteractableSpawnerSubsystem);
@@ -19,5 +21,13 @@ void UInteractableSpawnerSubsystem::Deinitialize(){
 
 void UInteractableSpawnerSubsystem::OnInteractableActorDropped(const TArray<UObject*>& DroppedObjects, const TArray<AActor*>& DroppedActors){
 	UE_LOGFMT(InteractableSpawnerSubsystem, Log, "Firing due to actor dropped");
+	if (DroppedActors.Num() == 1) {
+		IInteractable* interactable = Cast<IInteractable>(DroppedActors[0]);
+		UPythonEditorHelper* helper = UPythonEditorHelper::Get();
+		if (interactable && helper) {
+			helper->CreateInteractableConfigs(FString());
+		}
+	}
+	
 	GEditor->Exec(GetWorld(), TEXT("py test.py")); //todo -- create python bridge?
 }

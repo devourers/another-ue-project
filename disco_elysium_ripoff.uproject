@@ -14,7 +14,8 @@
 				"CoreUObject",
 				"AIModule",
 				"UnrealEd",
-				"EditorSubsystem"
+				"EditorSubsystem",
+				"Blutility"
 			]
 		}
 	],
