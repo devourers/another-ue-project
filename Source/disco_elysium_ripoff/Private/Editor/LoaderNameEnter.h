@@ -4,10 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "EditorUtilityWidget.h"
+#include "Logging/StructuredLog.h"
+#include "InputCoreTypes.h"
 #include "EditorUtilityWidgetComponents.h"
 #include "LoaderNameEnter.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LoaderNameEnterLog, Log, All);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLoaderNameEntered, const FString&, LoaderName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLoaderNameChanged, const FString&, LoaderName);
 
 /**
  * 
@@ -22,13 +27,34 @@ public:
 
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 
+UFUNCTION()
+	void NameExists();
+
+UFUNCTION()
+	void NameDoesNotExist();
+
+private:
+
+UFUNCTION()
+	void OnTextBoxTextCommited(const FText& Text, ETextCommit::Type CommitMethod);
+
+UFUNCTION()
+	void OnTextBoxTextChanged(const FText& Text);
+
 public:
 	UPROPERTY()
 	FLoaderNameEntered LoaderNameEntered;
 
+	UPROPERTY()
+	FLoaderNameChanged LoaderNameChanged;
+
 protected:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UEditorUtilityEditableTextBox* TextBox;
+	class UEditorUtilityEditableTextBox* TextBox;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* BadNameLabel;
 
 private:
+	bool safe_to_create = false;
 };

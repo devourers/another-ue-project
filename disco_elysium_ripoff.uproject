@@ -15,7 +15,8 @@
 				"AIModule",
 				"UnrealEd",
 				"EditorSubsystem",
-				"Blutility"
+				"Blutility",
+				"EditorScriptingUtilities"
 			]
 		}
 	],

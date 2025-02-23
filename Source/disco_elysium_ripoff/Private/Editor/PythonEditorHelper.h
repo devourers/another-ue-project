@@ -21,5 +21,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Python)
 	void CreateInteractableConfigs(const FString& LoaderName) const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Python)
+	void CreateLevelConfigStructure(const FString& LevelName) const;
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = Python)
+	TArray<FString> GetLevelIndex() const;
 	
 };
