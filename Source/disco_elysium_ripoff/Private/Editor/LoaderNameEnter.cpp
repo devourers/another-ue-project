@@ -35,6 +35,12 @@ void ULoaderNameEnter::NameDoesNotExist() {
 	BadNameLabel->SetColorAndOpacity(FSlateColor(FColor::Green));
 }
 
+void ULoaderNameEnter::NameEmpty(){
+	safe_to_create = false;
+	BadNameLabel->SetText(FText::FromString(TEXT("Name can't be empty")));
+	BadNameLabel->SetColorAndOpacity(FSlateColor(FColor::Red));
+}
+
 void ULoaderNameEnter::OnTextBoxTextCommited(const FText& Text, ETextCommit::Type CommitMethod){
 	if (CommitMethod == ETextCommit::OnEnter && safe_to_create) {
 		UE_LOGFMT(LoaderNameEnterLog, Log, "Text committed");

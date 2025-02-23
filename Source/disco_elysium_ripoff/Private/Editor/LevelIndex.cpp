@@ -4,6 +4,8 @@
 #include "Editor/LevelIndex.h"
 
 void ULevelIndex::BuildIndex(const TArray<FString>& levels){
+	Levels.Reset();
+	Levels.Reserve(levels.Num());
 	for (auto level : levels) {
 		AddLevel(level);
 	}

@@ -17,8 +17,9 @@ void UInteractableSpawnerSubsystem::Initialize(FSubsystemCollectionBase& Collect
 	UE_LOGFMT(InteractableSpawnerSubsystem, Log, "Initialised interactable spawner subsystem");
 	UEditorActorSubsystem* editor_actor_subsystem = GEditor->GetEditorSubsystem<UEditorActorSubsystem>();
 	editor_actor_subsystem->OnNewActorsDropped.AddUniqueDynamic(this, &UInteractableSpawnerSubsystem::OnInteractableActorDropped);
-	LoaderNameEdtiorBleuprint = UEditorAssetLibrary::LoadAsset(FString(TEXT("/Script/Blutility.EditorUtilityWidgetBlueprint'/Game/Blueprints/UI/Editor/BP_LoaderNameEnter1.BP_LoaderNameEnter1'")));
+	LoaderNameEdtiorBleuprint = UEditorAssetLibrary::LoadAsset(FString(TEXT("/Script/Blutility.EditorUtilityWidgetBlueprint'/Game/Blueprints/UI/Editor/BP_LoaderNameEnter.BP_LoaderNameEnter'")));
 	LevelIndex = NewObject<ULevelIndex>(this, ULevelIndex::StaticClass());
+	ActorIndex = NewObject<UActorIndex>(this, UActorIndex::StaticClass());
 }
 
 void UInteractableSpawnerSubsystem::Deinitialize(){
@@ -53,21 +54,26 @@ void UInteractableSpawnerSubsystem::CreateInteractableConfigs(const FString& nam
 	if (!Helper) {
 		Helper = UPythonEditorHelper::Get();
 		//TODO -- inits
-		TArray<FString> levels = Helper->GetLevelIndex();
-		LevelIndex->BuildIndex(levels);
-		UE_LOGFMT(InteractableSpawnerSubsystem, Log, "Index has level {0}", LevelIndex->HasLevel(levels[0]));
+		if (!LevelIndex->IsInitialised()) {
+			TArray<FString> levels = Helper->GetLevelIndex();
+			LevelIndex->BuildIndex(levels);
+			UE_LOGFMT(InteractableSpawnerSubsystem, Log, "Index has level {0}", LevelIndex->HasLevel(levels[0]));
+		}
+		if (!ActorIndex->IsInitialised()) {
+			//TODO
+		}
 	}
 	if (Helper) {
-		
 		Helper->CreateInteractableConfigs(FString());
 	}
 }
 
 void UInteractableSpawnerSubsystem::CheckActorName(const FString& Name){
-	
-	bool name_free = fmod(Name.Len(), 2) == 0; //todo -- run script for checking if exist
-	//there may be a probl
-	// em if we type to fast and script is too slow -- build index of those files here?
+	if (Name.IsEmpty()) {
+		LoaderNameEditor->NameEmpty();
+		return;
+	}
+	bool name_free = !ActorIndex->HasActor(Name);
 	if (name_free) {
 		LoaderNameEditor->NameDoesNotExist();
 	}

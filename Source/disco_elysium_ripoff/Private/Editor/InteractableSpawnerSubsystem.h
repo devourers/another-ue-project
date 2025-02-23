@@ -6,6 +6,7 @@
 #include "Logging/StructuredLog.h"
 #include "EditorSubsystem.h"
 #include "LevelIndex.h"
+#include "ActorIndex.h"
 #include "EditorUtilityWidgetBlueprint.h"
 #include "PythonEditorHelper.h"
 #include "LoaderNameEnter.h"
@@ -39,16 +40,19 @@ private:
 private:
 	
 	UPROPERTY()
-	UObject* LoaderNameEdtiorBleuprint;
+	class UObject* LoaderNameEdtiorBleuprint;
 
 	UPROPERTY()
-	UEditorUtilityWidgetBlueprint* LoaderNameEditorBlueprint;
+	class UEditorUtilityWidgetBlueprint* LoaderNameEditorBlueprint;
 
 	UPROPERTY()
 	class ULoaderNameEnter* LoaderNameEditor;
 
 	UPROPERTY()
 	ULevelIndex* LevelIndex;
+
+	UPROPERTY()
+	UActorIndex* ActorIndex;
 
 	UPROPERTY()
 	UPythonEditorHelper* Helper;

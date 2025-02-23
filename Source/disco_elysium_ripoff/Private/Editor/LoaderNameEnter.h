@@ -33,6 +33,9 @@ UFUNCTION()
 UFUNCTION()
 	void NameDoesNotExist();
 
+UFUNCTION()
+	void NameEmpty();
+
 private:
 
 UFUNCTION()
