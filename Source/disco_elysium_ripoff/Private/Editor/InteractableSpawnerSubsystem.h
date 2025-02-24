@@ -37,6 +37,9 @@ private:
 	UFUNCTION()
 	void CheckActorName(const FString& Name);
 
+	UFUNCTION()
+	void InitializeIndexes();
+
 private:
 	
 	UPROPERTY()

@@ -20,3 +20,12 @@ class InteractableConfigSpawner(unreal.PythonEditorHelper):
         with open(index_path, "r", encoding="utf8") as f:
             levels = [level.strip() for level in f.readlines()]
         return levels
+
+    @unreal.ufunction(override=True)
+    def get_actors_index(self, level):
+        actors = []
+        actors_dir = os.path.join(unreal.Paths.project_dir(), "Content", "Configs", "Levels", level)
+        index_path = os.path.join(actors_dir, INDEX)
+        with open(index_path, "r", encoding="utf8") as f:
+            actors = [actor.strip() for actor in f.readlines()]
+        return actors

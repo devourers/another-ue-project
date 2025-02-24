@@ -1,0 +1,4 @@
+TestPickableItem
+TestPickableItem2
+TestFlairItem
+Companion

@@ -27,5 +27,8 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = Python)
 	TArray<FString> GetLevelIndex() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Python)
+	TArray<FString> GetActorsIndex(const FString& level) const;
 	
 };
