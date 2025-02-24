@@ -32,6 +32,12 @@ private:
 	void OnInteractableActorDropped(const TArray<UObject*>& DroppedObjects, const TArray<AActor*>& DroppedActors);
 
 	UFUNCTION()
+	void OnMapOpened(const FString& Filename, bool bAsTemplate);
+
+	UFUNCTION()
+	void IndexCurrentLevelChanged(const FString& level_name);
+
+	UFUNCTION()
 	void CreateInteractableConfigs(const FString& name);
 
 	UFUNCTION()

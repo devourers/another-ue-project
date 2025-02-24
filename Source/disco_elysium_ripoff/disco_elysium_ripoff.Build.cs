@@ -10,7 +10,7 @@ public class disco_elysium_ripoff : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara", "AIModule", "NavigationSystem", "UMG"});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities", "UMGEditor" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities", "UMGEditor", "LevelEditor" });
 
 		// Uncomment if you are using Slate UI
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

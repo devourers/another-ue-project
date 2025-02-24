@@ -27,3 +27,12 @@ bool ULevelIndex::HasLevel(const FString& level) {
 bool ULevelIndex::IsInitialised() const{
 	return is_initialized;
 }
+
+const FString& ULevelIndex::GetCurrentLevel() const{
+	return CurrentLevel;
+}
+
+void ULevelIndex::SetCurrentLevel(const FString& level){
+	CurrentLevel = level;
+	OnCurrentLevelChanged.Broadcast(CurrentLevel);
+}

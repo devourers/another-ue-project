@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "LevelIndex.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCurrentLevelChanged, const FString&, Level);
+
 /**
  * 
  */
@@ -30,8 +32,18 @@ public:
 	UFUNCTION()
 	bool IsInitialised() const;
 
+	UFUNCTION()
+	const FString& GetCurrentLevel() const;
+
+	UFUNCTION()
+	void SetCurrentLevel(const FString& level);
+
+public:
+	FCurrentLevelChanged OnCurrentLevelChanged;
+
 private:
 	TSet<FString> Levels;
 	bool is_initialized = false;
+	FString CurrentLevel;
 	
 };
