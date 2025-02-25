@@ -3,13 +3,14 @@
 
 #include "Editor/ActorIndex.h"
 
-void UActorIndex::BuildIndex(const TArray<FString>& actors){
+void UActorIndex::BuildIndex(const TArray<FString>& actors, const FString& level_name){
 	Actors.Reset();
 	Actors.Reserve(actors.Num());
 	for (auto actor : actors) {
 		AddActor(actor);
 	}
 	is_initialized = true;
+	LevelName = level_name;
 }
 
 void UActorIndex::RemoveActor(const FString& actor){
@@ -28,4 +29,8 @@ bool UActorIndex::HasActor(const FString& actor)
 bool UActorIndex::IsInitialised() const
 {
 	return is_initialized;
+}
+
+const FString& UActorIndex::GetLevelName() const{
+	return LevelName;
 }

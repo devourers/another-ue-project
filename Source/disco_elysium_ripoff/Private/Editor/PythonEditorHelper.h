@@ -30,5 +30,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Python)
 	TArray<FString> GetActorsIndex(const FString& level) const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Python)
+	void InitLevelFolderStructure(const FString& level_name) const;
 	
 };

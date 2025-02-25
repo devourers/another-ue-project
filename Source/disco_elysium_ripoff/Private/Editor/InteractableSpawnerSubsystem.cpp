@@ -16,8 +16,15 @@ DEFINE_LOG_CATEGORY(InteractableSpawnerSubsystem);
 FString ParseFileName(const FString& filename) {
 	TArray<FString> Out;
 	filename.ParseIntoArray(Out, TEXT("/"), true);
-	if (Out.Num() > 0)
-		return Out[Out.Num() - 1];
+	if (Out.Num() > 0) {
+		FString level_with_umap = Out[Out.Num() - 1];
+		TArray<FString> Out_pt;
+		level_with_umap.ParseIntoArray(Out_pt, TEXT(".umap"), true);
+		if (Out_pt.Num() > 0)
+			return Out_pt[0];
+		else
+			return FString();
+	}
 	else
 		return FString();
 }
@@ -38,6 +45,8 @@ void UInteractableSpawnerSubsystem::Initialize(FSubsystemCollectionBase& Collect
 	ActorIndex = NewObject<UActorIndex>(this, UActorIndex::StaticClass());
 
 	LevelIndex->OnCurrentLevelChanged.AddUniqueDynamic(this, &UInteractableSpawnerSubsystem::IndexCurrentLevelChanged);
+
+	//run scripts insted of helper if we can't get it first time?
 }
 
 void UInteractableSpawnerSubsystem::Deinitialize(){
@@ -65,25 +74,33 @@ void UInteractableSpawnerSubsystem::OnInteractableActorDropped(const TArray<UObj
 			}
 		}
 	}
-	//GEditor->Exec(GetWorld(), TEXT("py test.py")); //todo -- create python bridge?
 }
 
 void UInteractableSpawnerSubsystem::OnMapOpened(const FString& Filename, bool bAsTemplate){
 	FString level_name = ParseFileName(Filename);
 	UE_LOGFMT(InteractableSpawnerSubsystem, Log, "Opened level {0}, is template {1}", level_name, bAsTemplate);
-	if (!Helper) {
+	if (!Helper) 
 		Helper = UPythonEditorHelper::Get();
+	if (Helper) 
 		InitializeIndexes();
+	if (LevelIndex->IsInitialised()) {
+		if (!LevelIndex->HasLevel(level_name)) {
+			Helper->InitLevelFolderStructure(level_name);
+			LevelIndex->AddLevel(level_name);
+		}
+		LevelIndex->SetCurrentLevel(level_name);
 	}
-	LevelIndex->SetCurrentLevel(level_name);
+
 }
 
 void UInteractableSpawnerSubsystem::IndexCurrentLevelChanged(const FString& level_name){
 	if (!Helper) {
 		Helper = UPythonEditorHelper::Get();
 	}
-	TArray<FString> actors = Helper->GetActorsIndex(level_name);
-	ActorIndex->BuildIndex(actors);
+	if (Helper) {
+		TArray<FString> actors = Helper->GetActorsIndex(level_name);
+		ActorIndex->BuildIndex(actors, level_name);
+	}
 }
 
 void UInteractableSpawnerSubsystem::CreateInteractableConfigs(const FString& name){
@@ -121,6 +138,6 @@ void UInteractableSpawnerSubsystem::InitializeIndexes(){
 	}
 	if (!ActorIndex->IsInitialised()) {
 		TArray<FString> actors = Helper->GetActorsIndex(LevelIndex->GetCurrentLevel()); //TODO -- get world name, check for world in index, etc.
-		ActorIndex->BuildIndex(actors); 
+		ActorIndex->BuildIndex(actors, LevelIndex->GetCurrentLevel());
 	}
 }

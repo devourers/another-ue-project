@@ -16,7 +16,7 @@ class UActorIndex : public UObject
 	
 public:
 	UFUNCTION()
-	void BuildIndex(const TArray<FString>& actors);
+	void BuildIndex(const TArray<FString>& actors, const FString& level_name);
 
 	UFUNCTION()
 	void RemoveActor(const FString& actor);
@@ -30,8 +30,12 @@ public:
 	UFUNCTION()
 	bool IsInitialised() const;
 
+	UFUNCTION()
+	const FString& GetLevelName() const;
+
 
 private:
 	TSet<FString> Actors;
 	bool is_initialized = false;
+	FString LevelName;
 };
