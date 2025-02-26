@@ -6,6 +6,7 @@
 #include "PythonEditorHelper.h"
 #include "EditorAssetLibrary.h"
 #include "EngineUtils.h"
+#include "IPythonScriptPlugin.h"
 #include "EditorUtilitySubsystem.h"
 #include "../../Public/Interactable.h"
 #include "Subsystems/EditorActorSubsystem.h"
@@ -79,10 +80,36 @@ void UInteractableSpawnerSubsystem::OnInteractableActorDropped(const TArray<UObj
 void UInteractableSpawnerSubsystem::OnMapOpened(const FString& Filename, bool bAsTemplate){
 	FString level_name = ParseFileName(Filename);
 	UE_LOGFMT(InteractableSpawnerSubsystem, Log, "Opened level {0}, is template {1}", level_name, bAsTemplate);
-	if (!Helper) 
+	if (!Helper) {
 		Helper = UPythonEditorHelper::Get();
-	if (Helper) 
-		InitializeIndexes();
+		if (!Helper) {
+			//Case where we start the editor -- we need to use 2 scripts to build index
+			FPythonCommandEx level_index_command;
+			level_index_command.Command = TEXT("get_levels_index.py");
+			IPythonScriptPlugin::Get()->ExecPythonCommandEx(level_index_command);
+			FString levels_res = level_index_command.LogOutput[0].Output;
+			levels_res.RemoveFromEnd(TEXT("\r\n"));
+			TArray<FString> levels;
+			levels_res.ParseIntoArray(levels, TEXT(" "));
+			LevelIndex->BuildIndex(levels);
+			LevelIndex->SetCurrentLevel(level_name);
+
+			FPythonCommandEx actor_index_command;
+			actor_index_command.Command = FString(TEXT("get_actors_index.py ")) + level_name;
+			IPythonScriptPlugin::Get()->ExecPythonCommandEx(actor_index_command);
+			FString actors_res = actor_index_command.LogOutput[0].Output;
+			actors_res.RemoveFromEnd(TEXT("\r\n"));
+
+			TArray<FString> actors;
+			actors_res.ParseIntoArray(actors, TEXT(" "));
+			ActorIndex->BuildIndex(actors, LevelIndex->GetCurrentLevel());
+			return;
+		}
+		else {
+			//Index is already intialised, so we continue?
+		}
+	}
+
 	if (LevelIndex->IsInitialised()) {
 		if (!LevelIndex->HasLevel(level_name)) {
 			Helper->InitLevelFolderStructure(level_name);
@@ -94,9 +121,6 @@ void UInteractableSpawnerSubsystem::OnMapOpened(const FString& Filename, bool bA
 }
 
 void UInteractableSpawnerSubsystem::IndexCurrentLevelChanged(const FString& level_name){
-	if (!Helper) {
-		Helper = UPythonEditorHelper::Get();
-	}
 	if (Helper) {
 		TArray<FString> actors = Helper->GetActorsIndex(level_name);
 		ActorIndex->BuildIndex(actors, level_name);
@@ -118,7 +142,6 @@ void UInteractableSpawnerSubsystem::CheckActorName(const FString& Name){
 	}
 	if (!Helper) {
 		Helper = UPythonEditorHelper::Get();
-		InitializeIndexes();
 	}
 	bool name_free = !ActorIndex->HasActor(Name);
 	if (name_free) {
@@ -126,18 +149,5 @@ void UInteractableSpawnerSubsystem::CheckActorName(const FString& Name){
 	}
 	else {
 		LoaderNameEditor->NameExists();
-	}
-}
-
-void UInteractableSpawnerSubsystem::InitializeIndexes(){
-	if (!LevelIndex->IsInitialised()) {
-		TArray<FString> levels = Helper->GetLevelIndex();
-		LevelIndex->BuildIndex(levels);
-		LevelIndex->SetCurrentLevel(GEditor->GetEditorWorldContext().World()->GetName());
-		UE_LOGFMT(InteractableSpawnerSubsystem, Log, "Index has level {0}", LevelIndex->HasLevel(levels[0]));
-	}
-	if (!ActorIndex->IsInitialised()) {
-		TArray<FString> actors = Helper->GetActorsIndex(LevelIndex->GetCurrentLevel()); //TODO -- get world name, check for world in index, etc.
-		ActorIndex->BuildIndex(actors, LevelIndex->GetCurrentLevel());
 	}
 }
