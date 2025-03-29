@@ -40,6 +40,10 @@ const FString& ULogicComponent::GetLoaderName() const {
 	return LoaderName;
 }
 
+void ULogicComponent::SetLoaderName(const FString& loader_name){
+	LoaderName = loader_name;
+}
+
 const FString& ULogicComponent::GetWorldName() const
 {
 	return WorldName;

@@ -20,7 +20,7 @@ public:
 	static UPythonEditorHelper* Get();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Python)
-	void CreateInteractableConfigs(const FString& LoaderName) const;
+	void CreateInteractableConfigs(const FString& LevelName, const FString& LoaderName) const;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Python)
 	void CreateLevelConfigStructure(const FString& LevelName) const;

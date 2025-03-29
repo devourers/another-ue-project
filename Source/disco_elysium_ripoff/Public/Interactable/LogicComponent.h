@@ -57,6 +57,9 @@ public:
 	const FString& GetLoaderName() const;
 
 	UFUNCTION()
+	void SetLoaderName(const FString& loader_name);
+
+	UFUNCTION()
 	const FString& GetWorldName() const;
 
 	UFUNCTION()

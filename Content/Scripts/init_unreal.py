@@ -9,8 +9,29 @@ LOCK = ".lock.txt"
 @unreal.uclass()
 class InteractableConfigSpawner(unreal.PythonEditorHelper):
     @unreal.ufunction(override=True)
-    def create_interactable_configs(self, loader_name):
-        unreal.log_warning("hello world but from python class")
+    def create_interactable_configs(self, level_name, loader_name):
+        level_dir = os.path.join(unreal.Paths.project_dir(), "Content", "Configs", "Levels", level_name)
+        level_index_path = os.path.join(level_dir, INDEX)
+        level_lock_path = os.path.join(level_dir, LOCK)
+
+        with open(level_lock_path, "w") as f:
+            f.write("ADD")
+
+        with open(level_index_path, "a") as f:
+            f.write(loader_name)
+            f.write("\n")
+
+        loader_dialogue_dir = os.path.join(level_dir, "Dialogue", loader_name + ".json")
+        with open(loader_dialogue_dir, "w") as f: pass
+
+        loader_inventory_dir = os.path.join(level_dir, "Inventory", loader_name + ".json")
+        with open(loader_inventory_dir, "w") as f: pass
+
+        loader_lore_dir = os.path.join(level_dir, "Lore", loader_name + ".json")
+        with open(loader_lore_dir, "w") as f: pass
+
+        loader_notes_dir = os.path.join(level_dir, "Notes", loader_name + ".json")
+        with open(loader_notes_dir, "w") as f: pass
 
     @unreal.ufunction(override=True)
     def get_level_index(self):
@@ -36,12 +57,13 @@ class InteractableConfigSpawner(unreal.PythonEditorHelper):
         index_path = os.path.join(levels_dir, INDEX)
         lock_path = os.path.join(levels_dir, LOCK)
 
+        with open(lock_path, "w") as f:
+            f.write("ADD")
+
         with open(index_path, "a") as f:
             f.write(level_name)
             f.write("\n")
 
-        with open(lock_path, "w") as f:
-            f.write("ADD")
 
         level_dir = os.path.join(levels_dir, level_name)
         os.mkdir(level_dir)

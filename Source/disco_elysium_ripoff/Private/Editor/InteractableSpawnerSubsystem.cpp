@@ -61,6 +61,7 @@ void UInteractableSpawnerSubsystem::OnInteractableActorDropped(const TArray<UObj
 	if (DroppedActors.Num() == 1) {
 		IInteractable* interactable = Cast<IInteractable>(DroppedActors[0]);
 		if (interactable) {
+			LastAddedActor = DroppedActors[0];
 			if (IsValid(LoaderNameEdtiorBleuprint)) {
 				LoaderNameEditorBlueprint = Cast<UEditorUtilityWidgetBlueprint>(LoaderNameEdtiorBleuprint);
 				if (IsValid(LoaderNameEditorBlueprint)) {
@@ -131,7 +132,12 @@ void UInteractableSpawnerSubsystem::CreateInteractableConfigs(const FString& nam
 	UEditorUtilitySubsystem* EditorUtilitySubsystem = GEditor->GetEditorSubsystem<UEditorUtilitySubsystem>();
 	EditorUtilitySubsystem->UnregisterTabByID(LoaderNameEditorBlueprint->GetRegistrationName());
 	if (Helper) {
-		Helper->CreateInteractableConfigs(FString());
+		Helper->CreateInteractableConfigs(LevelIndex->GetCurrentLevel(), name);
+		IInteractable* interactable = Cast<IInteractable>(LastAddedActor);
+		if (interactable) {
+			interactable->GetLogicComponent()->SetLoaderName(name);
+		}
+		LastAddedActor = nullptr;
 	}
 }
 

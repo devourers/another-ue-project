@@ -55,6 +55,9 @@ private:
 	class ULoaderNameEnter* LoaderNameEditor;
 
 	UPROPERTY()
+	AActor* LastAddedActor;
+
+	UPROPERTY()
 	ULevelIndex* LevelIndex;
 
 	UPROPERTY()
