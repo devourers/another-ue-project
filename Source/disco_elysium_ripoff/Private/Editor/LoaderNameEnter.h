@@ -2,12 +2,14 @@
 
 #pragma once
 
+#if WITH_EDITOR
 #include "CoreMinimal.h"
 #include "EditorUtilityWidget.h"
 #include "Logging/StructuredLog.h"
 #include "InputCoreTypes.h"
 #include "EditorUtilityWidgetComponents.h"
 #include "LoaderNameEnter.generated.h"
+#endif
 
 DECLARE_LOG_CATEGORY_EXTERN(LoaderNameEnterLog, Log, All);
 
@@ -21,6 +23,8 @@ UCLASS()
 class ULoaderNameEnter : public UEditorUtilityWidget
 {
 	GENERATED_BODY()
+
+#if WITH_EDITOR
 
 public:
 	virtual void NativeConstruct() override;
@@ -43,6 +47,9 @@ UFUNCTION()
 
 UFUNCTION()
 	void OnTextBoxTextChanged(const FText& Text);
+#endif
+
+#if WITH_EDITORONLY_DATA
 
 public:
 	UPROPERTY()
@@ -60,4 +67,7 @@ protected:
 
 private:
 	bool safe_to_create = false;
+
+#endif 
+
 };

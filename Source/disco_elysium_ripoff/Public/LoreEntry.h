@@ -20,7 +20,11 @@ public:
 
 	void LoadFromJson(const FString& path);
 
+	bool IsValid() const;
+
 private:
+	bool is_valid = true;
+
 	FName Title; //displayed
 	FName Subcategory;
 	FName Category;

@@ -94,21 +94,29 @@ void ULogicComponent::BeginPlay()
 	if (FPaths::FileExists(LoreEntryPath)) {
 		LoreEntry = NewObject<ULoreEntry>(this, TEXT("Lore Entry"));
 		LoreEntry->LoadFromJson(LoreEntryPath);
+		if (!LoreEntry->IsValid())
+			LoreEntry = nullptr;
 	}
 
 	if (FPaths::FileExists(InventoryEntryPath)) {
 		InventoryEntry = NewObject<UInventoryEntry>(this, TEXT("Inventory Entry"));
 		InventoryEntry->LoadFromJson(InventoryEntryPath);
+		if (!InventoryEntry->IsValid())
+			InventoryEntry = nullptr;
 	}
 
 	if (FPaths::FileExists(DialoguePath)) {
 		Dialogue = NewObject<UDialogue>(this, TEXT("Dialogue"));
 		Dialogue->LoadFromJson(DialoguePath);
+		if (!Dialogue->IsValid())
+			Dialogue = nullptr;
 	}
 
 	if (FPaths::FileExists(NoteEntryPath)) {
 		NoteEntry = NewObject<UNoteEntry>(this, TEXT("Note"));
 		NoteEntry->LoadFromJson(NoteEntryPath);
+		if (!NoteEntry->IsValid())
+			NoteEntry = nullptr;
 	}
 	
 }

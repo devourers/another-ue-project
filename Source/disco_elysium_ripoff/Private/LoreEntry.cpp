@@ -24,4 +24,11 @@ void ULoreEntry::LoadFromJson(const FString& path) {
 			Content.Add(TTuple<FName, FString>(value.Key, value.Get<FString>()));
 		}
 	}
+	else {
+		is_valid = false;
+	}
+}
+
+bool ULoreEntry::IsValid() const{
+	return is_valid;
 }

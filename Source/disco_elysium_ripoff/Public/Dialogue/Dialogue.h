@@ -130,7 +130,11 @@ public: //delegates
 	UPROPERTY(BlueprintAssignable, Category = Event)
 	FDialogueEnded DialogueEnded;
 
+	bool IsValid() const;
+
 private:
+	bool is_valid = true;
+
 	FName Title;
 	int CurrentStartingEntry = 0;
 	int CurrentEntry;

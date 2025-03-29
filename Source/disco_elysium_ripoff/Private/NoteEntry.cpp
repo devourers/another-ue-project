@@ -25,4 +25,11 @@ void UNoteEntry::LoadFromJson(const FString& path) {
 		}
 		Description = json_object->GetStringField("Description");
 	}
+	else {
+		is_valid = false;
+	}
+}
+
+bool UNoteEntry::IsValid() const{
+	return is_valid;
 }

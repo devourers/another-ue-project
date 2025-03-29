@@ -31,7 +31,11 @@ public:
 	void SetDescription(FString description) { Description = description; }
 	void SetImages(TMap<FName, UTexture2D*> images) { Image = images; }
 
+	bool IsValid() const;
+
 private:
+	bool is_valid = true;
+
 	FName Title; //displayed
 
 	TSet<FString> Keywords; //for searching

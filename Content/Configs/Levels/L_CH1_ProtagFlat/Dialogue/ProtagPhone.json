@@ -1,0 +1,48 @@
+{
+    "general":{
+        "title" : "InterpolPhoneCall",
+        "can_be_reinitiated" : true,
+        "re_enter_dialogue_starting_entry" : 2
+    },
+    "entries":[
+        {
+            "name" : "IPC_first_entry",
+            "character": "Huita",
+            "text" : "Phone rings with 3 sounds.",
+            "incoming_response" : -1,
+            "responses":[0]
+        },
+        {
+            "name" : "IPC_second_entry",
+            "character": "Huita",
+            "text" : "Gotta be nuts talking with me.",
+            "incoming_response" : 0,
+            "responses":[1]
+        },
+        {
+            "name": "IPC_reentry",
+            "character": "Huita",
+            "text": "Here again?",
+            "incoming_response" : -1,
+            "responses" : [0]
+        }
+    ],
+    "responses":[
+        {
+            "conditions" :{
+
+            },
+            "from": 0,
+            "to": 1,
+            "text": "Yeah, so what?"
+        },
+        {
+            "conditions" :{
+
+            },
+            "from" : 1,
+            "to" : -1,
+            "text" : "Figures."
+        }
+    ]
+}

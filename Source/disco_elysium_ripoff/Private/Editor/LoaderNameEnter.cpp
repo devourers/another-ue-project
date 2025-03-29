@@ -6,6 +6,8 @@
 
 DEFINE_LOG_CATEGORY(LoaderNameEnterLog);
 
+#if WITH_EDITOR
+
 void ULoaderNameEnter::NativeConstruct(){
 	Super::NativeConstruct();
 	SetIsFocusable(true);
@@ -55,3 +57,5 @@ void ULoaderNameEnter::OnTextBoxTextChanged(const FText& Text) {
 	UE_LOGFMT(LoaderNameEnterLog, Log, "Text changed");
 	LoaderNameChanged.Broadcast(Text.ToString());
 }
+
+#endif

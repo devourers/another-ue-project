@@ -2,6 +2,8 @@
 
 #pragma once
 
+#if WITH_EDITOR
+
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
 #include "EditorSubsystem.h"
@@ -12,6 +14,8 @@
 #include "LoaderNameEnter.h"
 #include "InteractableSpawnerSubsystem.generated.h"
 
+#endif
+
 DECLARE_LOG_CATEGORY_EXTERN(InteractableSpawnerSubsystem, Log, All);
 
 /**
@@ -21,6 +25,8 @@ UCLASS()
 class UInteractableSpawnerSubsystem : public UEditorSubsystem
 {
 	GENERATED_BODY()
+
+#if WITH_EDITOR
 
 public:
 
@@ -43,6 +49,9 @@ private:
 	UFUNCTION()
 	void CheckActorName(const FString& Name);
 
+#endif
+
+#if WITH_EDITORONLY_DATA
 private:
 	
 	UPROPERTY()
@@ -65,4 +74,6 @@ private:
 
 	UPROPERTY()
 	UPythonEditorHelper* Helper;
+
+#endif
 };

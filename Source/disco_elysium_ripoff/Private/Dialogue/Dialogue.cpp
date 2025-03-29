@@ -61,6 +61,9 @@ void UDialogue::LoadFromJson(const FString& path) {
 			wrapper->response_.Id = ReponseWrappers.Num() - 1;
 		}
 	}
+	else {
+		is_valid = false;
+	}
 }
 
 UDialogueResponseWrapper* UDialogue::GetResponse(int response_id) const {
@@ -77,6 +80,10 @@ const FDialogueHistory& UDialogue::GetHistory() const {
 
 const FDialogueResult& UDialogue::GetResult() const{
 	return Result;
+}
+
+bool UDialogue::IsValid() const{
+	return is_valid;
 }
 
 void UDialogue::StartDialogue(){

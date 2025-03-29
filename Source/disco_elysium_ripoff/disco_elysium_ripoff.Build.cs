@@ -10,10 +10,16 @@ public class disco_elysium_ripoff : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara", "AIModule", "NavigationSystem", "UMG"});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities", "UMGEditor", "LevelEditor", "PythonScriptPlugin" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities" });
 
-		// Uncomment if you are using Slate UI
-		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+        if (Target.bBuildEditor)
+        {
+            PrivateDependencyModuleNames.AddRange(new string[] { "PythonScriptPlugin", "UMGEditor", "LevelEditor" });
+            PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });
+        }
+
+        // Uncomment if you are using Slate UI
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");

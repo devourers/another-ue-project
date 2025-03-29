@@ -2,11 +2,12 @@
 
 #pragma once
 
+#if WITH_EDITOR
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine.h"
 #include "PythonEditorHelper.generated.h"
-
+#endif
 /**
  * 
  */

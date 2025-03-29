@@ -52,6 +52,9 @@ void AInteractiveItem::BeginPlay()
 	else if (Type == EItemType::eIT_Flair) {
 		Mesh->SetCustomDepthStencilValue(STENCIL_FLAIR_ITEM);
 	}
+	else if (Type == EItemType::eIT_Hidden){
+		Mesh->SetHiddenInGame(true);
+	}
 
 }
 
@@ -73,6 +76,9 @@ void AInteractiveItem::InternalInteract(AActor* other_actor) {
 	}
 	else if (Type == EItemType::eIT_Flair) {
 		//TODO
+	}
+	else if (Type == EItemType::eIT_Hidden) {
+		Destroy();
 	}
 }
 

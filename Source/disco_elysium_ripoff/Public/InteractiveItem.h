@@ -19,7 +19,8 @@
 UENUM(BlueprintType)
 enum EItemType{
 	eIT_Pickable = 0 UMETA(DisplayName = "Pickable"),
-	eIT_Flair = 1 UMETA(DisplayName = "Flair")
+	eIT_Flair = 1 UMETA(DisplayName = "Flair"),
+	eIT_Hidden = 2 UMETA(DisplayName = "Hidden")
 };
 
 

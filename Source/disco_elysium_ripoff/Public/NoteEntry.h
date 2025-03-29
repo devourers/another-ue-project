@@ -32,7 +32,11 @@ public:
 	FString GetDescription() { return Description; }
 	NoteType GetType() { return Type; }
 
+	bool IsValid() const;
+
 private:
+	bool is_valid = true;
+
 	FName Title;
 	TSet<FString> Keywords;
 	

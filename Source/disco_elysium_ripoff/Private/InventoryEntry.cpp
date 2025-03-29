@@ -26,4 +26,11 @@ void UInventoryEntry::LoadFromJson(const FString& path) {
 		}
 		Description = json_object->GetStringField("Description");
 	}
+	else {
+		is_valid = false;
+	}
+}
+
+bool UInventoryEntry::IsValid() const{
+	return is_valid;
 }
