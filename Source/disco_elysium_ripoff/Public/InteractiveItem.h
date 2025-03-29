@@ -54,6 +54,7 @@ public:
 
 	virtual USphereComponent* GetInteractionHitbox() override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual ULogicComponent* GetLogicComponent() override;
 
 	virtual UMainGameInstanceSubsystem* GetHandler() override;

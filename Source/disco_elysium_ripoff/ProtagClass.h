@@ -56,7 +56,7 @@ UFUNCTION()
 		class UPrimitiveComponent* OtherComp, 
 		int32 OtherBodyIndex);
 
-UFUNCTION()
+UFUNCTION(BlueprintCallable)
 	void CustomMoveToInteractable(AActor* actor);
 
 UFUNCTION()

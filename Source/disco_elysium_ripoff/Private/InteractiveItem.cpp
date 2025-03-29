@@ -97,9 +97,7 @@ void AInteractiveItem::OnInteractableSelectedAsDestination() {
 void AInteractiveItem::OnInteractableAsDestinationReached(AActor* other_actor) {
 	SetIsSelectedAsDestination(false);
 	Mesh->SetRenderCustomDepth(false);
-	if (InteractionHitbox->IsOverlappingActor(other_actor)) {
-		Interact(other_actor);
-	}
+	Interact(other_actor);
 }
 
 USphereComponent* AInteractiveItem::GetInteractionHitbox() {

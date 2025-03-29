@@ -121,13 +121,13 @@ public:
 	const FDialogueResult& GetResult() const;
 
 public: //delegates
-	UPROPERTY()
+	UPROPERTY(BlueprintAssignable, Category = Event)
 	FDialogueStarted DialogueStarted;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintAssignable, Category = Event)
 	FDialogueAdvanced DialogueAdvanced;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintAssignable, Category = Event)
 	FDialogueEnded DialogueEnded;
 
 private:
