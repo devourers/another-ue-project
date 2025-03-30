@@ -14,8 +14,14 @@ public class disco_elysium_ripoff : ModuleRules
 
         if (Target.bBuildEditor)
         {
-            PrivateDependencyModuleNames.AddRange(new string[] { "PythonScriptPlugin", "UMGEditor", "LevelEditor" });
-            PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });
+            PrivateDependencyModuleNames.AddRange(new string[] { 
+				"PythonScriptPlugin", 
+				"UMGEditor", 
+				"LevelEditor", 
+				"EditorSubsystem", 
+				"Blutility", 
+				"EditorScriptingUtilities", 
+				"UnrealEd" });
         }
 
         // Uncomment if you are using Slate UI

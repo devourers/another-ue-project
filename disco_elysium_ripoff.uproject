@@ -7,17 +7,7 @@
 		{
 			"Name": "disco_elysium_ripoff",
 			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine",
-				"UMG",
-				"CoreUObject",
-				"AIModule",
-				"UnrealEd",
-				"EditorSubsystem",
-				"Blutility",
-				"EditorScriptingUtilities"
-			]
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
@@ -31,6 +21,20 @@
 		{
 			"Name": "GeometryScripting",
 			"Enabled": true
+		},
+		{
+			"Name": "PythonScriptPlugin",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		},
+		{
+			"Name": "EditorScriptingUtilities",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
 		}
 	]
 }
