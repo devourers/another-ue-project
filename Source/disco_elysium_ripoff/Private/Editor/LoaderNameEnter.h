@@ -19,12 +19,13 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLoaderNameChanged, const FString&, 
 /**
  * 
  */
+
+#if WITH_EDITOR
+
 UCLASS()
 class ULoaderNameEnter : public UEditorUtilityWidget
 {
 	GENERATED_BODY()
-
-#if WITH_EDITOR
 
 public:
 	virtual void NativeConstruct() override;
@@ -47,7 +48,6 @@ UFUNCTION()
 
 UFUNCTION()
 	void OnTextBoxTextChanged(const FText& Text);
-#endif
 
 #if WITH_EDITORONLY_DATA
 
@@ -71,3 +71,5 @@ private:
 #endif 
 
 };
+
+#endif

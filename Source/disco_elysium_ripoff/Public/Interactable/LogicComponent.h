@@ -21,7 +21,7 @@ enum ELogicOrder {
 	eLO_DialogueAfter UMETA(DisplayName = "Dialogue after")
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DISCO_ELYSIUM_RIPOFF_API ULogicComponent : public UActorComponent
 {
 	GENERATED_BODY()

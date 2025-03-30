@@ -24,7 +24,7 @@ enum EItemType{
 };
 
 
-UCLASS()
+UCLASS(Blueprintable)
 class DISCO_ELYSIUM_RIPOFF_API AInteractiveItem : public AActor, public IInteractable
 {
 	GENERATED_BODY()

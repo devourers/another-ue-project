@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#if WITH_EDITOR
 
 #include "Editor/InteractableSpawnerSubsystem.h"
 #include "EditorUtilitySubsystem.h"
@@ -157,3 +158,5 @@ void UInteractableSpawnerSubsystem::CheckActorName(const FString& Name){
 		LoaderNameEditor->NameExists();
 	}
 }
+
+#endif

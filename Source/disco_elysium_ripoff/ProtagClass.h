@@ -16,7 +16,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerTeleported, const FVector&, TeleportLocation);
 
-UCLASS()
+UCLASS(Blueprintable)
 class DISCO_ELYSIUM_RIPOFF_API AProtagClass : public ACharacter
 {
 	GENERATED_BODY()

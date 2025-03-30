@@ -21,12 +21,14 @@ DECLARE_LOG_CATEGORY_EXTERN(InteractableSpawnerSubsystem, Log, All);
 /**
  * 
  */
+
+#if WITH_EDITOR
+
 UCLASS()
 class UInteractableSpawnerSubsystem : public UEditorSubsystem
 {
 	GENERATED_BODY()
 
-#if WITH_EDITOR
 
 public:
 
@@ -49,7 +51,6 @@ private:
 	UFUNCTION()
 	void CheckActorName(const FString& Name);
 
-#endif
 
 #if WITH_EDITORONLY_DATA
 private:
@@ -77,3 +78,5 @@ private:
 
 #endif
 };
+
+#endif
