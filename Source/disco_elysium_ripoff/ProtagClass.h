@@ -86,6 +86,12 @@ UFUNCTION()
 UFUNCTION()
 	void OnPlayerTargerLocationChanged(const FVector& NewLocation);
 
+UFUNCTION(BlueprintCallable)
+	void DisableProtagInput();
+	
+UFUNCTION(BlueprintCallable)
+	void EnableProtagInput();
+
 UPROPERTY()
 	FPlayerTeleported PlayerTeleported;
 

@@ -7,24 +7,31 @@
     "entries":[
         {
             "name" : "IPC_first_entry",
-            "character": "Huita",
-            "text" : "Phone rings with 3 sounds.",
+            "character": "",
+            "text" : "Phone rings with 3 sounds. It's been ringing for quite a while now.",
             "incoming_response" : -1,
             "responses":[0]
         },
         {
             "name" : "IPC_second_entry",
-            "character": "Huita",
-            "text" : "Gotta be nuts talking with me.",
+            "character": "Interpol Automatic Response System",
+            "text" : "Despite being answered, the ringing is still ongoing, right into the reciever's ear, with constant intervals. Between the rings entity on the other side of the call demands in the monotone, mechanic voice: \"PLEASE, STATE YOUR BADGE NUMBER TO RECIEVE THIS MESSAGE. THIS MESSAGE WILL REPEAT UNTIL IT WILL BE ANSWERED DUE TO IT'S URGENCY.\"",
             "incoming_response" : 0,
-            "responses":[1]
+            "responses":[2]
         },
         {
             "name": "IPC_reentry",
-            "character": "Huita",
-            "text": "Here again?",
+            "character": "Interpol Automatic Response System",
+            "text": "Phone was still cycling between rings and generated message.",
             "incoming_response" : -1,
-            "responses" : [0]
+            "responses" : [1, 2]
+        },
+        {
+            "name": "IPC_third_entry",
+            "character": "Interpol HQ",
+            "text": "Ringing stops, phone considers given information for a while. 3 seconds passes before you hear affirming *beep* sound, which is followed by hectic voice of HQ's current on-duty officer: \" Grisha, you there? Sorry for calling so early, I know that you still have a day more, but it's urgent.\"",
+            "incoming_response" : 1,
+            "responses" : [3]
         }
     ],
     "responses":[
@@ -34,15 +41,34 @@
             },
             "from": 0,
             "to": 1,
-            "text": "Yeah, so what?"
+            "text": "[Pick up]"
+        },
+        {
+            "conditions" :{
+                "needed_inventory":{
+                    "list": ["L_CH1_ProtagFlat_ProtagCredentials"],
+                    "mode": "any"
+                }
+            },
+            "from" : 1,
+            "to" : 3,
+            "text" : "Grigory Skameykin, Badge number 18964120-ГС"
         },
         {
             "conditions" :{
 
             },
             "from" : 1,
-            "to" : -1,
-            "text" : "Figures."
+            "to" : -2,
+            "text" : "Been a while. Badge's probably on the nightstand. [Go look for badge]"
+        },
+        {
+            "conditions":{
+
+            },
+            "from": 3,
+            "to": -1,
+            "text": "Yeah, no worries. So what's up?"
         }
     ]
 }

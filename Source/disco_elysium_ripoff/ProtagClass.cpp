@@ -97,7 +97,7 @@ void AProtagClass::CustomMoveToInteractable(AActor* actor) {
 			request.SetRequireNavigableEndLocation(true);
 			request.SetProjectGoalLocation(false);
 			cached_actor = casted_actor;
-			if (cached_actor) {
+			if (cached_actor && cached_actor->GetLogicComponent()->IsInteractionActive()) {
 				cached_actor->OnInteractableSelectedAsDestination();
 				FAIRequestID path_id = PathFinderComponent->RequestMove(request, u_path->GetPath());
 				TArray<FVector> pts = u_path->PathPoints;
@@ -260,7 +260,7 @@ bool AProtagClass::IsBehindWall() const {
 void AProtagClass::InitDialogueWindow(UDialogueUI* ui){
 	//todo: hide other Ui, or spawn at some point of main hud
 	ProtagHUD->SetVisibility(ESlateVisibility::Hidden);
-	DisableInput(Cast<APlayerController>(controller_));
+	DisableProtagInput();
 	ui->AddToPlayerScreen();
 	ui->SetFocus();
 }
@@ -270,4 +270,13 @@ void AProtagClass::UnhideHUD(){
 }
 
 void AProtagClass::OnPlayerTargerLocationChanged(const FVector& NewLocation){
+
+}
+
+void AProtagClass::DisableProtagInput(){
+	controller_->DisableInput(controller_);
+}
+
+void AProtagClass::EnableProtagInput(){
+	controller_->EnableInput(controller_);
 }

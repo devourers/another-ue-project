@@ -24,10 +24,26 @@ public:
 	bool IsSuccessful;
 };
 
+UENUM()
+enum EConditionType {
+	eCT_Any,
+	eCT_All
+};
+
 USTRUCT()
 struct DISCO_ELYSIUM_RIPOFF_API FDialogueResponseConditions {
 	GENERATED_BODY()
-	//conditions for unlocking response
+	TEnumAsByte<EConditionType> InventoryMode;
+	TArray<FString> NeededInventory;
+
+	TEnumAsByte<EConditionType> LoreMode;
+	TArray<FString> NeededLore;
+
+	TEnumAsByte<EConditionType> NoteMode;
+	TArray<FString> NeededNotes;
+
+	TEnumAsByte<EConditionType> ChecksMode;
+	TArray<FString> NeededChecks;
 };
 
 USTRUCT()

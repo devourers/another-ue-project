@@ -46,6 +46,9 @@ protected:
 	UFUNCTION()
 	void OnDialogueEnded();
 
+	UFUNCTION()
+	bool ConditionsMet(UDialogueResponseWrapper* response) const;
+
 private:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UListView* ResponsesListView;

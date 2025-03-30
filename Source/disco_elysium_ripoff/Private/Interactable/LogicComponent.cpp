@@ -73,6 +73,18 @@ void ULogicComponent::CloseDialogueUI() {
 	DialogueUI = nullptr;
 }
 
+bool ULogicComponent::IsInteractionActive() const{
+	return IsActivated;
+}
+
+void ULogicComponent::ActivateInteraction(){
+	IsActivated = true;
+}
+
+void ULogicComponent::DeactivateInteraction(){
+	IsActivated = false;
+}
+
 
 // Called when the game starts
 void ULogicComponent::BeginPlay()

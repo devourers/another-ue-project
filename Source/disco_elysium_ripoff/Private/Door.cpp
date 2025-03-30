@@ -93,8 +93,10 @@ void ADoor::Tick(float DeltaTime)
 
 
 void ADoor::ToggleHighlight(bool to_toggle) {
-	DoorMesh->SetRenderCustomDepth(to_toggle);
-	DoorFrameMesh->SetRenderCustomDepth(to_toggle);
+	if (GetLogicComponent()->IsInteractionActive()) {
+		DoorMesh->SetRenderCustomDepth(to_toggle);
+		DoorFrameMesh->SetRenderCustomDepth(to_toggle);
+	}
 }
 
 void ADoor::OpenDoor(float Value) {

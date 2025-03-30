@@ -25,6 +25,15 @@ FDialogueResponse::FDialogueResponse(TSharedPtr<FJsonObject> obj) {
 	if (ToEntry == -1)
 		ResponseString += "\t [End]";
 	ResponseText = FText::FromString(ResponseString);
+	TSharedPtr<FJsonObject> conditions_obj = obj->GetObjectField("conditions");
+	if (conditions_obj->HasField("needed_inventory")) {
+		TSharedPtr<FJsonObject> inv_conds_obj = conditions_obj->GetObjectField("needed_inventory");
+		TArray<TSharedPtr<FJsonValue>> list_conds = inv_conds_obj->GetArrayField("list");
+		for (size_t i = 0; i < list_conds.Num(); ++i) {
+			Conditions.NeededInventory.Add(list_conds[i]->AsString());
+		}
+		Conditions.InventoryMode = EConditionType::eCT_Any; //TODO
+	}
 }
 
 void UDialogue::LoadFromJson(const FString& path) {

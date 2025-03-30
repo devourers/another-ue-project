@@ -7,6 +7,42 @@
 #include "Components/TextBlock.h"
 #include "../../ProtagClass.h"
 
+
+bool UDialogueUI::ConditionsMet(UDialogueResponseWrapper* response) const {
+	FDialogueResponseConditions& Conditions = response->response_.Conditions;
+	bool answer = true;
+	if (Conditions.NeededInventory.Num()) {
+		UMainGameInstanceSubsystem* handler = protag_->GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
+		int checked_count = 0;
+		for (size_t i = 0; i < Conditions.NeededInventory.Num(); ++i) {
+			if (!handler->CheckInventoryForItem(FName(Conditions.NeededInventory[i]))) {
+				if (Conditions.InventoryMode == EConditionType::eCT_All) {
+					answer = false;
+					break;
+				}
+			}
+			else {
+				++checked_count;
+				if (Conditions.InventoryMode == EConditionType::eCT_Any) {
+					break;
+				}
+			}
+		}
+		if (checked_count == 0 || (checked_count < Conditions.NeededInventory.Num() && Conditions.InventoryMode == EConditionType::eCT_All))
+			answer = false;
+	}
+	if (Conditions.NeededChecks.Num()) {
+
+	}
+	if (Conditions.NeededLore.Num()) {
+
+	}
+	if (Conditions.NeededNotes.Num()) {
+
+	}
+	return answer;
+}
+
 void UDialogueUI::NativeConstruct(){
 	Super::NativeConstruct();
 	ResponsesListView->OnItemSelectionChanged().AddUFunction(this, FName("OnResponseSelectionChanged"));
@@ -60,7 +96,8 @@ void UDialogueUI::OnDialogueStarted(UDialogueEntryWrapper* entry) {
 	EntryTextBlock->SetText(entry->entry_.EntryText);
 	for (int response_id : entry->entry_.Responses) {
 		UDialogueResponseWrapper* response = dialogue_->GetResponse(response_id);
-		ResponsesListView->AddItem(response);
+		if (ConditionsMet(response))
+			ResponsesListView->AddItem(response);
 	}
 }
 
@@ -70,7 +107,8 @@ void UDialogueUI::OnDialogueAdvanced(UDialogueEntryWrapper* entry) {
 	ResponsesListView->ClearListItems();
 	for (int response_id : entry->entry_.Responses) {
 		UDialogueResponseWrapper* response = dialogue_->GetResponse(response_id);
-		ResponsesListView->AddItem(response);
+		if (ConditionsMet(response))
+			ResponsesListView->AddItem(response);
 	}
 }
 
@@ -78,6 +116,7 @@ void UDialogueUI::OnDialogueEnded() {
 	dialogue_->DialogueStarted.RemoveAll(this);
 	dialogue_->DialogueAdvanced.RemoveAll(this);
 	dialogue_->DialogueEnded.RemoveAll(this);
+	protag_->EnableProtagInput();
 	LogConversation();
 	if (logic_) {
 		protag_->UnhideHUD();

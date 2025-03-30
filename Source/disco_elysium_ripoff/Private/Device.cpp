@@ -34,7 +34,8 @@ ADevice::ADevice()
 }
 
 void ADevice::ToggleHighlight(bool to_toggle) {
-	Mesh->SetRenderCustomDepth(to_toggle);
+	if (GetLogicComponent()->IsInteractionActive())
+		Mesh->SetRenderCustomDepth(to_toggle);
 }
 
 void ADevice::CloseUI() {

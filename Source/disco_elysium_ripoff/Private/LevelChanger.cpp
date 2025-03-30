@@ -44,7 +44,8 @@ void ALevelChanger::Tick(float DeltaTime)
 }
 
 void ALevelChanger::ToggleHighlight(bool to_toggle) {
-	Mesh->SetRenderCustomDepth(to_toggle);
+	if (GetLogicComponent()->IsInteractionActive())
+		Mesh->SetRenderCustomDepth(to_toggle);
 }
 
 void ALevelChanger::TeleportTimerElapsed() {

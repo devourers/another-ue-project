@@ -71,6 +71,15 @@ public:
 	UFUNCTION()
 	void CloseDialogueUI();
 
+	UFUNCTION(BlueprintCallable)
+	bool IsInteractionActive() const;
+
+	UFUNCTION(BlueprintCallable)
+	void ActivateInteraction();
+
+	UFUNCTION(BlueprintCallable)
+	void DeactivateInteraction();
+
 private:
 	UPROPERTY()
 	UDialogue* Dialogue;
@@ -114,4 +123,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	FString WorldName;
+
+	UPROPERTY(EditAnywhere)
+	bool IsActivated = true;
 };

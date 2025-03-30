@@ -67,7 +67,8 @@ void AInteractiveItem::Tick(float DeltaTime)
 
 
 void AInteractiveItem::ToggleHighlight(bool to_toggle) {
-	Mesh->SetRenderCustomDepth(to_toggle);
+	if (GetLogicComponent()->IsInteractionActive())
+		Mesh->SetRenderCustomDepth(to_toggle);
 }
 
 void AInteractiveItem::InternalInteract(AActor* other_actor) {

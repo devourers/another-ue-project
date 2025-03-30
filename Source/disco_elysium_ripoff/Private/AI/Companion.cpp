@@ -47,7 +47,8 @@ void ACompanion::BeginPlay()
 }
 
 void ACompanion::ToggleHighlight(bool to_toggle){
-	GetMesh()->SetRenderCustomDepth(to_toggle);
+	if (GetLogicComponent()->IsInteractionActive())
+		GetMesh()->SetRenderCustomDepth(to_toggle);
 }
 
 void ACompanion::InternalInteract(AActor* other_actor){
