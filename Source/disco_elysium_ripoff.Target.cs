@@ -11,5 +11,13 @@ public class disco_elysium_ripoffTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
 		ExtraModuleNames.Add("disco_elysium_ripoff");
-	}
+        if (Type == TargetType.Editor)
+        {
+            ExtraModuleNames.AddRange(
+                new string[]
+                {
+                    "disco_elysium_ripoffEditor"
+                });
+        }
+    }
 }

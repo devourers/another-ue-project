@@ -10,6 +10,6 @@ public class disco_elysium_ripoffEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
-		ExtraModuleNames.Add("disco_elysium_ripoff");
+		ExtraModuleNames.Add("disco_elysium_ripoffEditor");
 	}
 }

@@ -8,6 +8,11 @@
 			"Name": "disco_elysium_ripoff",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "disco_elysium_ripoffEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
 		}
 	],
 	"Plugins": [
