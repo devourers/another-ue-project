@@ -14,6 +14,9 @@
 #include "GameFramework/Actor.h"
 #include "Door.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorOpened);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorClosed);
+
 UENUM(BlueprintType)
 enum EUnlockType {
 	eUT_NotLocked = 0 UMETA(DisplayName = "Not locked"),
@@ -96,6 +99,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* InteractionHitbox;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
+	USphereComponent* OtherInteractionHitbox;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
 	ULogicComponent* LogicComponent;
 
@@ -116,6 +122,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = true))
 	FLockInfo LockInfo;
+
+	UPROPERTY(BlueprintAssignable, Category = Event)
+	FDoorOpened OnDoorOpened;
+
+	UPROPERTY(BlueprintAssignable, Category = Event)
+	FDoorClosed OnDoorClosed;
 
 private:
 	FTimeline OpeningTimeline;

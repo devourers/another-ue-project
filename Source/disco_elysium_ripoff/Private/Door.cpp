@@ -43,6 +43,13 @@ ADoor::ADoor()
 	InteractionHitbox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	InteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
+	OtherInteractionHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("Other Interaction Collision"));
+	OtherInteractionHitbox->SetupAttachment(DoorFrameMesh);
+	OtherInteractionHitbox->SetGenerateOverlapEvents(true);
+	OtherInteractionHitbox->SetCollisionProfileName("NoCollision");
+	OtherInteractionHitbox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	OtherInteractionHitbox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+
 	OpeningCurve = CreateDefaultSubobject<UCurveFloat>(TEXT("Opening Curve"));
 
 	LogicComponent = CreateDefaultSubobject<ULogicComponent>(TEXT("Logic Component"));
@@ -192,7 +199,23 @@ void ADoor::OnInteractableSelectedAsDestination() {
 }
 
 USphereComponent* ADoor::GetInteractionHitbox() {
-	return InteractionHitbox;
+	if (!protag_){
+		//here we assume that we've never interacted with the door, 
+		//hence we need to place interaction hitbox right way
+		return InteractionHitbox;
+	}
+	else {
+		FVector protag_location = protag_->GetActorLocation();
+		FVector interaction_hitbox_location = InteractionHitbox->GetComponentLocation();
+		FVector other_interaction_hitbox_location = OtherInteractionHitbox->GetComponentLocation();
+		double dist_int = FVector::Distance(protag_location, interaction_hitbox_location);
+		double dist_other_int = FVector::Distance(protag_location, other_interaction_hitbox_location);
+		if (dist_int <= dist_other_int)
+			return InteractionHitbox;
+		else
+			return OtherInteractionHitbox;
+	}
+
 }
 
 ULogicComponent* ADoor::GetLogicComponent()
