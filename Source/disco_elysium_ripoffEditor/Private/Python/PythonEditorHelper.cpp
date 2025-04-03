@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Editor/PythonEditorHelper.h"
+#include "PythonEditorHelper.h"
 
 UPythonEditorHelper* UPythonEditorHelper::Get(){
 	TArray<UClass*> PythonEditorHelpers;

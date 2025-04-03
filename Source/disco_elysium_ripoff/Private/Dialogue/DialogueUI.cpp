@@ -112,7 +112,7 @@ void UDialogueUI::OnDialogueAdvanced(UDialogueEntryWrapper* entry) {
 	}
 }
 
-void UDialogueUI::OnDialogueEnded() {
+void UDialogueUI::OnDialogueEnded(int LastEntryValue) {
 	dialogue_->DialogueStarted.RemoveAll(this);
 	dialogue_->DialogueAdvanced.RemoveAll(this);
 	dialogue_->DialogueEnded.RemoveAll(this);

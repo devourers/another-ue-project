@@ -105,7 +105,7 @@ public:
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueStarted, class UDialogueEntryWrapper*, StartingEntry);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueAdvanced, class UDialogueEntryWrapper*, NextEntry);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDialogueEnded);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueEnded, int, LastEntryValue);
 
 /**
  * 

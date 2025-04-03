@@ -124,7 +124,7 @@ void UDialogue::EndDialogue(int FinalResponse){
 	else if (FinalResponse == -2) {
 		Result.IsSuccessful = false;
 	}
-	DialogueEnded.Broadcast();
+	DialogueEnded.Broadcast(FinalResponse);
 }
 
 

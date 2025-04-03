@@ -12,18 +12,6 @@ public class disco_elysium_ripoff : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities" });
 
-        if (Target.bBuildEditor)
-        {
-            PrivateDependencyModuleNames.AddRange(new string[] { 
-				"PythonScriptPlugin", 
-				"UMGEditor", 
-				"LevelEditor", 
-				"EditorSubsystem", 
-				"Blutility", 
-				"EditorScriptingUtilities", 
-				"UnrealEd" });
-        }
-
         // Uncomment if you are using Slate UI
         PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		

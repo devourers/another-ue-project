@@ -44,7 +44,7 @@ protected:
 	void OnDialogueAdvanced(UDialogueEntryWrapper* entry);
 
 	UFUNCTION()
-	void OnDialogueEnded();
+	void OnDialogueEnded(int LastEntryValue);
 
 	UFUNCTION()
 	bool ConditionsMet(UDialogueResponseWrapper* response) const;

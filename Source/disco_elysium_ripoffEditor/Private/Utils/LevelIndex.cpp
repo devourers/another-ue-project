@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Editor/LevelIndex.h"
+#include "LevelIndex.h"
 
 void ULevelIndex::BuildIndex(const TArray<FString>& levels){
 	Levels.Reset();

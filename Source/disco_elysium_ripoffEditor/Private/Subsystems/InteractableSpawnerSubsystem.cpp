@@ -2,14 +2,13 @@
 
 #if WITH_EDITOR
 
-#include "Editor/InteractableSpawnerSubsystem.h"
+#include "InteractableSpawnerSubsystem.h"
 #include "EditorUtilitySubsystem.h"
-#include "PythonEditorHelper.h"
-#include "EditorAssetLibrary.h"
+#include "../Python/PythonEditorHelper.h"
 #include "EngineUtils.h"
 #include "IPythonScriptPlugin.h"
-#include "EditorUtilitySubsystem.h"
-#include "../../Public/Interactable.h"
+#include "disco_elysium_ripoff/Public/Interactable.h"
+#include "./../Plugins/Editor/EditorScriptingUtilities/Source/EditorScriptingUtilities/Public/EditorAssetLibrary.h"
 #include "Subsystems/EditorActorSubsystem.h"
 #include "LevelEditorSubsystem.h"
 

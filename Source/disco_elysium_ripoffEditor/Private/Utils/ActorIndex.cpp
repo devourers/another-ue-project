@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Editor/ActorIndex.h"
+#include "ActorIndex.h"
 
 void UActorIndex::BuildIndex(const TArray<FString>& actors, const FString& level_name){
 	Actors.Reset();

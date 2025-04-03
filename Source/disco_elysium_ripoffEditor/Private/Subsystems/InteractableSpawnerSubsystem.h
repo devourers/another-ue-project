@@ -7,11 +7,11 @@
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
 #include "EditorSubsystem.h"
-#include "LevelIndex.h"
-#include "ActorIndex.h"
+#include "../Utils/LevelIndex.h"
+#include "../Utils/ActorIndex.h"
 #include "EditorUtilityWidgetBlueprint.h"
-#include "PythonEditorHelper.h"
-#include "LoaderNameEnter.h"
+#include "../Python/PythonEditorHelper.h"
+#include "../UI/LoaderNameEnter.h"
 #include "InteractableSpawnerSubsystem.generated.h"
 
 #endif

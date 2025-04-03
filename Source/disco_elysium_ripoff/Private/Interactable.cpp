@@ -10,7 +10,7 @@
 
 // Add default functionality here for any IInteractable functions that are not pure virtual.
 
-void IInteractable::OnDialogueEnded() {
+void IInteractable::OnDialogueEnded(int LastEntryValue) {
 	ULogicComponent* logic = GetLogicComponent();
 	const FDialogueResult& result = logic->GetDialogue()->GetResult();
 	if (result.IsSuccessful) {

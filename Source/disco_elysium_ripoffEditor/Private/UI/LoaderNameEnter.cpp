@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Editor/LoaderNameEnter.h"
+#include "LoaderNameEnter.h"
 #include "Components/TextBlock.h"
 
 DEFINE_LOG_CATEGORY(LoaderNameEnterLog);

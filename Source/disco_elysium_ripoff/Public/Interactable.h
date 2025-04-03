@@ -32,7 +32,7 @@ public:
 	virtual void ToggleHighlight(bool to_toggle) = 0;
 
 	UFUNCTION()
-	virtual void OnDialogueEnded();
+	virtual void OnDialogueEnded(int LastEntryValue);
 
 	UFUNCTION()
 	virtual void ProcessDialogue();

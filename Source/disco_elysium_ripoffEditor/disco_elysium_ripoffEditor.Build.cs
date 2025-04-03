@@ -24,12 +24,22 @@ public class disco_elysium_ripoffEditor : ModuleRules
                 "Core", 
                 "CoreUObject", 
                 "Engine",
+                "UMG",
                 "disco_elysium_ripoff"
             });
         PrivateDependencyModuleNames.AddRange(
             new string[] 
             {
-                "UnrealEd"
+                "PythonScriptPlugin",
+                "UMGEditor",
+                "LevelEditor",
+                "EditorFramework",
+                "EditorSubsystem",
+                "Blutility",
+                "EditorScriptingUtilities",
+                "UnrealEd",
+                "Slate",
+                "SlateCore"
             });
 
         PrivateIncludePathModuleNames.AddRange(
