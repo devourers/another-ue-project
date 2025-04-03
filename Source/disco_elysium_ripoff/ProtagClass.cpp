@@ -262,7 +262,6 @@ void AProtagClass::InitDialogueWindow(UDialogueUI* ui){
 	ProtagHUD->SetVisibility(ESlateVisibility::Hidden);
 	DisableProtagInput();
 	ui->AddToPlayerScreen();
-	ui->SetFocus();
 }
 
 void AProtagClass::UnhideHUD(){

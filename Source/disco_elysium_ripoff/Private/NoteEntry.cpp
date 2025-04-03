@@ -11,7 +11,8 @@ UNoteEntry::UNoteEntry(UNoteEntry* other) {
 
 void UNoteEntry::LoadFromJson(const FString& path) {
 	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Loading Note"));
-
+	if (is_initialised)
+		return;
 	FString loaded_file;
 	FFileHelper::LoadFileToString(loaded_file, *path);
 	TSharedRef<TJsonReader<>> json_reader = TJsonReaderFactory<>::Create(loaded_file);
@@ -28,6 +29,7 @@ void UNoteEntry::LoadFromJson(const FString& path) {
 	else {
 		is_valid = false;
 	}
+	is_initialised = true;
 }
 
 bool UNoteEntry::IsValid() const{

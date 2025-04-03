@@ -12,7 +12,47 @@ ULogicComponent::ULogicComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	if (GetWorld()) {
+		WorldName = GetWorld()->GetName();
+
+		if (LoaderName.IsEmpty())
+			return;
+
+		FString RootDir = FPaths::Combine(FPaths::ProjectContentDir(), *FString("Configs/Levels"));
+
+		LoreEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Lore/" + LoaderName + ".json");
+		InventoryEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Inventory/" + LoaderName + ".json");
+		NoteEntryPath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Notes/" + LoaderName + ".json");
+		DialoguePath = FPaths::Combine(RootDir, GetWorld()->GetFName().ToString() + "/Dialogue/" + LoaderName + ".json");
+
+		if (FPaths::FileExists(LoreEntryPath)) {
+			LoreEntry = NewObject<ULoreEntry>(this, TEXT("Lore Entry"));
+			LoreEntry->LoadFromJson(LoreEntryPath);
+			if (!LoreEntry->IsValid())
+				LoreEntry = nullptr;
+		}
+
+		if (FPaths::FileExists(InventoryEntryPath)) {
+			InventoryEntry = NewObject<UInventoryEntry>(this, TEXT("Inventory Entry"));
+			InventoryEntry->LoadFromJson(InventoryEntryPath);
+			if (!InventoryEntry->IsValid())
+				InventoryEntry = nullptr;
+		}
+
+		if (FPaths::FileExists(DialoguePath)) {
+			Dialogue = NewObject<UDialogue>(this, TEXT("Dialogue"));
+			Dialogue->LoadFromJson(DialoguePath);
+			if (!Dialogue->IsValid())
+				Dialogue = nullptr;
+		}
+
+		if (FPaths::FileExists(NoteEntryPath)) {
+			NoteEntry = NewObject<UNoteEntry>(this, TEXT("Note"));
+			NoteEntry->LoadFromJson(NoteEntryPath);
+			if (!NoteEntry->IsValid())
+				NoteEntry = nullptr;
+		}
+	}
 }
 
 

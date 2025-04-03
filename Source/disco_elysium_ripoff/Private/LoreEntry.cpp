@@ -6,6 +6,9 @@
 void ULoreEntry::LoadFromJson(const FString& path) {
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Loading Lore"));
 
+	if (is_initialised)
+		return;
+
 	FString loaded_file;
 	FFileHelper::LoadFileToString(loaded_file, *path);
 	TSharedRef<TJsonReader<>> json_reader = TJsonReaderFactory<>::Create(loaded_file);
@@ -27,6 +30,7 @@ void ULoreEntry::LoadFromJson(const FString& path) {
 	else {
 		is_valid = false;
 	}
+	is_initialised = true;
 }
 
 bool ULoreEntry::IsValid() const{

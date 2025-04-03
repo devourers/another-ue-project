@@ -37,6 +37,8 @@ FDialogueResponse::FDialogueResponse(TSharedPtr<FJsonObject> obj) {
 }
 
 void UDialogue::LoadFromJson(const FString& path) {
+	if (is_initialised)
+		return;
 	FString loaded_file;
 	FFileHelper::LoadFileToString(loaded_file, *path);
 	TSharedRef<TJsonReader<>> json_reader = TJsonReaderFactory<>::Create(loaded_file);
@@ -73,6 +75,7 @@ void UDialogue::LoadFromJson(const FString& path) {
 	else {
 		is_valid = false;
 	}
+	is_initialised = true;
 }
 
 UDialogueResponseWrapper* UDialogue::GetResponse(int response_id) const {

@@ -34,6 +34,7 @@ public:
 	bool IsValid() const;
 
 private:
+	bool is_initialised = false;
 	bool is_valid = true;
 
 	FName Title; //displayed
