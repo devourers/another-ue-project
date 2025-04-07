@@ -264,6 +264,10 @@ void AProtagClass::InitDialogueWindow(UDialogueUI* ui){
 	ui->AddToPlayerScreen();
 }
 
+void AProtagClass::HideHUD() {
+	ProtagHUD->SetVisibility(ESlateVisibility::Hidden);
+}
+
 void AProtagClass::UnhideHUD(){
 	ProtagHUD->SetVisibility(ESlateVisibility::Visible);
 }

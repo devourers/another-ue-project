@@ -38,6 +38,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAcess = "true"))
 	UInputAction* DoubleClick;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAcess = "true"))
+	UInputAction* PausePress;
+
 	UPROPERTY()
 	FPlayerTargetLocationChanged PlayerTargetLocationChanged;
 	
@@ -61,6 +64,7 @@ protected:
 	void OnHighlightAllIntercatbleActors();
 	void OnEndHighlightAllIntercatbleActors();
 	void OnDoubleClickTriggered();
+	void OnPausePressed();
 
 private:
 	double distance_update_threshold_ = 300.0f;

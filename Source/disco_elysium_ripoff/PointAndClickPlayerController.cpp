@@ -49,6 +49,7 @@ void APointAndClickPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &APointAndClickPlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(DoubleClick, ETriggerEvent::Completed, this, &APointAndClickPlayerController::OnDoubleClickTriggered);
+		EnhancedInputComponent->BindAction(PausePress, ETriggerEvent::Triggered, this, &APointAndClickPlayerController::OnPausePressed);
 	}
 }
 
@@ -168,4 +169,19 @@ void APointAndClickPlayerController::OnDoubleClickTriggered() {
 	PlayerDoubleClicked.Broadcast(true);
 	DoubleClicked = true;
 	OnSetDestinationReleased();
+}
+
+void APointAndClickPlayerController::OnPausePressed() {
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Game Paused"));
+	APawn* ControlledPawn = GetPawn();
+	AProtagClass* protag = Cast<AProtagClass>(ControlledPawn); //TODO -- make it single cast at approiate time keen to other stuff in code -- this is fucking stupid tbh
+	if (!IsPaused()) {
+		SetPause(true);
+		protag->HideHUD();
+	}
+		
+	else {
+		SetPause(false);
+		protag->UnhideHUD();
+	}
 }

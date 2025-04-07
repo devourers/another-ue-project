@@ -84,6 +84,9 @@ UFUNCTION()
 	void UnhideHUD();
 
 UFUNCTION()
+	void HideHUD();
+
+UFUNCTION()
 	void OnPlayerTargerLocationChanged(const FVector& NewLocation);
 
 UFUNCTION(BlueprintCallable)
