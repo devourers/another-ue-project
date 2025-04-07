@@ -88,23 +88,25 @@ void UInteractableSpawnerSubsystem::OnMapOpened(const FString& Filename, bool bA
 			FPythonCommandEx level_index_command;
 			level_index_command.Command = TEXT("get_levels_index.py");
 			IPythonScriptPlugin::Get()->ExecPythonCommandEx(level_index_command);
-			FString levels_res = level_index_command.LogOutput[0].Output;
-			levels_res.RemoveFromEnd(TEXT("\r\n"));
-			TArray<FString> levels;
-			levels_res.ParseIntoArray(levels, TEXT(" "));
-			LevelIndex->BuildIndex(levels);
-			LevelIndex->SetCurrentLevel(level_name);
+			if (level_index_command.LogOutput.Num()) {
+				FString levels_res = level_index_command.LogOutput[0].Output;
+				levels_res.RemoveFromEnd(TEXT("\r\n"));
+				TArray<FString> levels;
+				levels_res.ParseIntoArray(levels, TEXT(" "));
+				LevelIndex->BuildIndex(levels);
+				LevelIndex->SetCurrentLevel(level_name);
 
-			FPythonCommandEx actor_index_command;
-			actor_index_command.Command = FString(TEXT("get_actors_index.py ")) + level_name;
-			IPythonScriptPlugin::Get()->ExecPythonCommandEx(actor_index_command);
-			FString actors_res = actor_index_command.LogOutput[0].Output;
-			actors_res.RemoveFromEnd(TEXT("\r\n"));
+				FPythonCommandEx actor_index_command;
+				actor_index_command.Command = FString(TEXT("get_actors_index.py ")) + level_name;
+				IPythonScriptPlugin::Get()->ExecPythonCommandEx(actor_index_command);
+				FString actors_res = actor_index_command.LogOutput[0].Output;
+				actors_res.RemoveFromEnd(TEXT("\r\n"));
 
-			TArray<FString> actors;
-			actors_res.ParseIntoArray(actors, TEXT(" "));
-			ActorIndex->BuildIndex(actors, LevelIndex->GetCurrentLevel());
-			return;
+				TArray<FString> actors;
+				actors_res.ParseIntoArray(actors, TEXT(" "));
+				ActorIndex->BuildIndex(actors, LevelIndex->GetCurrentLevel());
+				return;
+			}
 		}
 		else {
 			//Index is already intialised, so we continue?
