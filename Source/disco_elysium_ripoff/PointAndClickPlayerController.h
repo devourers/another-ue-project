@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Public/Interactable.h"
+
+#include "Public/UI/PauseMenuUI.h"
+
 #include "PointAndClickPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -65,6 +68,16 @@ protected:
 	void OnEndHighlightAllIntercatbleActors();
 	void OnDoubleClickTriggered();
 	void OnPausePressed();
+
+	UFUNCTION()
+	void HandleMenuPress(const FString& key);
+
+private:
+	UPROPERTY()
+	class UPauseMenuUI* PauseMenuUI;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UPauseMenuUI> PauseMenuUIClass;
 
 private:
 	double distance_update_threshold_ = 300.0f;

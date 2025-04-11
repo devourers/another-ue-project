@@ -26,6 +26,13 @@ void APointAndClickPlayerController::BeginPlay()
 	if (ControlledPawn) {
 		LastBroadcastedLocation = ControlledPawn->GetActorLocation();
 	}
+	PauseMenuUI = CreateWidget<UPauseMenuUI>(this, PauseMenuUIClass);
+	if (PauseMenuUI) {
+		PauseMenuUI->BindController(this);
+		PauseMenuUI->AddToViewport();
+		PauseMenuUI->SetVisibility(ESlateVisibility::Hidden);
+		PauseMenuUI->PauseMenuUIButtonPressed.AddUniqueDynamic(this, &APointAndClickPlayerController::HandleMenuPress);
+	}
 }
 
 void APointAndClickPlayerController::SetupInputComponent()
@@ -178,10 +185,27 @@ void APointAndClickPlayerController::OnPausePressed() {
 	if (!IsPaused()) {
 		SetPause(true);
 		protag->HideHUD();
+		PauseMenuUI->SetVisibility(ESlateVisibility::Visible);
 	}
 		
 	else {
 		SetPause(false);
 		protag->UnhideHUD();
+		PauseMenuUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
+void APointAndClickPlayerController::HandleMenuPress(const FString& key) {
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, key);
+	APawn* ControlledPawn = GetPawn();
+	AProtagClass* protag = Cast<AProtagClass>(ControlledPawn); //TODO -- make it single cast at approiate time (on posses?) 
+	//keen to other stuff in code -- this is fucking stupid tbh for real now
+	if (key.Equals(FString("Continue"))) {
+		SetPause(false);
+		protag->UnhideHUD();
+		PauseMenuUI->SetVisibility(ESlateVisibility::Hidden); //TODO
+	}
+	else if (key.Equals(FString("MainMenu"))){
+		UGameplayStatics::OpenLevel(GetWorld(), FName("/Game/Levels/MainMenu/L_MainMenu1"));
 	}
 }
