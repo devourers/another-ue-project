@@ -5,6 +5,7 @@
 
 #include "InventoryEntry.h"
 #include "../MainGameInstanceSubsystem.h"
+#include "../ProtagClass.h"
 #include "Components/ListView.h"
 
 void UMainHUD::NativeConstruct() {
@@ -39,11 +40,15 @@ void UMainHUD::AddLogEntry(const FString& log_entry) {
 
 void UMainHUD::OnInventoryButtonClicked() {
 	if (ActiveWidget != EActiveWidget::eAW_Inventory) {
+		if (protag_)
+			protag_->DisableProtagInput();
 		ActiveWidget = EActiveWidget::eAW_Inventory;
 		EntryTabs->SetVisibility(ESlateVisibility::Visible);
 		EntryTabs->SetActiveWidget(InventoryPanel);
 	}
 	else {
+		if (protag_)
+			protag_->EnableProtagInput();
 		ActiveWidget = EActiveWidget::eAW_Hidden;
 		EntryTabs->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -51,11 +56,15 @@ void UMainHUD::OnInventoryButtonClicked() {
 
 void UMainHUD::OnLoreButtonClicked() {
 	if (ActiveWidget != EActiveWidget::eAW_Lore) {
+		if (protag_)
+			protag_->DisableProtagInput();
 		ActiveWidget = EActiveWidget::eAW_Lore;
 		EntryTabs->SetVisibility(ESlateVisibility::Visible);
 		EntryTabs->SetActiveWidget(LorePanel);
 	}
 	else {
+		if (protag_)
+			protag_->EnableProtagInput();
 		ActiveWidget = EActiveWidget::eAW_Hidden;
 		EntryTabs->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -63,11 +72,15 @@ void UMainHUD::OnLoreButtonClicked() {
 
 void UMainHUD::OnNotesButtonClicked() {
 	if (ActiveWidget != EActiveWidget::eAW_Notes) {
+		if (protag_)
+			protag_->DisableProtagInput();
 		ActiveWidget = EActiveWidget::eAW_Notes;
 		EntryTabs->SetVisibility(ESlateVisibility::Visible);
 		EntryTabs->SetActiveWidget(NotesPanel);
 	}
 	else {
+		if (protag_)
+			protag_->EnableProtagInput();
 		ActiveWidget = EActiveWidget::eAW_Hidden;
 		EntryTabs->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -87,4 +100,8 @@ void UMainHUD::OnInventotyEntrySelected(UObject* SelectedObject) {
 void UMainHUD::UpdateInventoryDetailsScreen(UInventoryEntry* entry) {
 	InventoryListEntryTitle->SetText(FText::FromName(entry->GetTitle()));
 	InventoryLineEntryDescription->SetText(FText::FromString(entry->GetDescription()));
+}
+
+void UMainHUD::BindProtag(AProtagClass* protag){
+	protag_ = protag;
 }

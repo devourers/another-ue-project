@@ -206,6 +206,7 @@ void AProtagClass::BeginPlay()
 	if (ProtagHUDClass) {
 		APointAndClickPlayerController* PCC = GetController<APointAndClickPlayerController>();
 		ProtagHUD = CreateWidget<UMainHUD>(PCC, ProtagHUDClass);
+		ProtagHUD->BindProtag(this);
 		ProtagHUD->AddToPlayerScreen();
 	}
 	
@@ -251,6 +252,7 @@ void AProtagClass::FadeCamera(bool FadeIn) {
 
 void AProtagClass::FadeOutAfterTeleport() {
 	FadeCamera(false);
+	EnableProtagInput();
 }
 
 bool AProtagClass::IsBehindWall() const {

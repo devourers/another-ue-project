@@ -57,6 +57,8 @@ protected:
 
 	virtual void SetupInputComponent() override;
 
+	virtual void OnPossess(APawn* aPawn) override;
+
 	// To add mapping context
 	virtual void BeginPlay();
 
@@ -78,6 +80,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UPauseMenuUI> PauseMenuUIClass;
+
+	UPROPERTY()
+	AProtagClass* protag_;
 
 private:
 	double distance_update_threshold_ = 300.0f;

@@ -60,6 +60,7 @@ void ALevelChanger::TeleportTimerElapsed() {
 void ALevelChanger::InternalInteract(AActor* other_actor){
 	if (Configuration.Type == ELevelChangerType::ELCT_InLevelTeleporter) {
 		if (Configuration.OtherTeleport) {
+			protag_->DisableProtagInput();
 			protag_->FadeCamera(true);
 			GetWorldTimerManager().SetTimer(
 				UnusedHandle, this, &ALevelChanger::TeleportTimerElapsed, 1.0f, false);

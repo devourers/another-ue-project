@@ -60,6 +60,11 @@ void APointAndClickPlayerController::SetupInputComponent()
 	}
 }
 
+void APointAndClickPlayerController::OnPossess(APawn* aPawn){
+	Super::OnPossess(aPawn);
+	protag_ = Cast<AProtagClass>(aPawn); //this should never fail, if it did something really bad happened
+}
+
 void APointAndClickPlayerController::OnInputStarted()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Started"));
@@ -103,9 +108,8 @@ void APointAndClickPlayerController::OnSetDestinationTriggered()
 		clickedOnWall = false;
 	if (ControlledPawn != nullptr && !clickedOnWall)
 	{
-		AProtagClass * protag = Cast<AProtagClass>(ControlledPawn);
 		if (FollowTime <= ShortPressThreshold) {
-			protag->StopPathfinderMovement();
+			protag_->StopPathfinderMovement();
 		}
 		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
@@ -119,22 +123,20 @@ void APointAndClickPlayerController::OnSetDestinationReleased()
 
 	if (FollowTime <= ShortPressThreshold)
 	{
-		APawn* ControlledPawn = GetPawn();
-		AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
 		if (DoubleClicked) {
-			protag->GetCharacterMovement()->MaxWalkSpeed = 600;
+			protag_->GetCharacterMovement()->MaxWalkSpeed = 600;
 			DoubleClicked = false;
 		}
 		else {
-			protag->GetCharacterMovement()->MaxWalkSpeed = 300;
+			protag_->GetCharacterMovement()->MaxWalkSpeed = 300;
 			PlayerDoubleClicked.Broadcast(false);
 		}
 		// We move there and spawn some particles
 		if (isCachedActorInteractible) {
-			protag->CustomMoveToInteractable(CachedActor);
+			protag_->CustomMoveToInteractable(CachedActor);
 		}
 		else if (!clickedOnWall){
-			protag->CustomMoveToLocation(CachedDestination);
+			protag_->CustomMoveToLocation(CachedDestination);
 		}
 		if ((CachedDestination - LastBroadcastedLocation).Length() > distance_update_threshold_) {
 			PlayerTargetLocationChanged.Broadcast(CachedDestination);
@@ -168,10 +170,8 @@ void APointAndClickPlayerController::OnDoubleClickTriggered() {
 	//GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Double click"));
 
 	//FollowTime += GetWorld()->GetDeltaSeconds();
-	APawn* ControlledPawn = GetPawn();
-	AProtagClass* protag = Cast<AProtagClass>(ControlledPawn);
 	if (FollowTime <= ShortPressThreshold) {
-		protag->StopPathfinderMovement();
+		protag_->StopPathfinderMovement();
 	}
 	PlayerDoubleClicked.Broadcast(true);
 	DoubleClicked = true;
@@ -179,30 +179,24 @@ void APointAndClickPlayerController::OnDoubleClickTriggered() {
 }
 
 void APointAndClickPlayerController::OnPausePressed() {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString("Game Paused"));
-	APawn* ControlledPawn = GetPawn();
-	AProtagClass* protag = Cast<AProtagClass>(ControlledPawn); //TODO -- make it single cast at approiate time keen to other stuff in code -- this is fucking stupid tbh
 	if (!IsPaused()) {
 		SetPause(true);
-		protag->HideHUD();
+		protag_->HideHUD();
 		PauseMenuUI->SetVisibility(ESlateVisibility::Visible);
 	}
 		
 	else {
 		SetPause(false);
-		protag->UnhideHUD();
+		protag_->UnhideHUD();
 		PauseMenuUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
 void APointAndClickPlayerController::HandleMenuPress(const FString& key) {
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, key);
-	APawn* ControlledPawn = GetPawn();
-	AProtagClass* protag = Cast<AProtagClass>(ControlledPawn); //TODO -- make it single cast at approiate time (on posses?) 
-	//keen to other stuff in code -- this is fucking stupid tbh for real now
 	if (key.Equals(FString("Continue"))) {
 		SetPause(false);
-		protag->UnhideHUD();
+		protag_->UnhideHUD();
 		PauseMenuUI->SetVisibility(ESlateVisibility::Hidden); //TODO
 	}
 	else if (key.Equals(FString("MainMenu"))){

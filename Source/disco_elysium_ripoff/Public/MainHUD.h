@@ -11,6 +11,7 @@
 #include "Components/CanvasPanel.h"
 #include "MainHUD.generated.h"
 
+class AProtagClass;
 
 UENUM()
 enum EActiveWidget {
@@ -35,6 +36,8 @@ public:
 
 	void AddLogEntry(const FString& log_entry);
 
+	friend class AProtagClass;
+
 protected:
 	UFUNCTION()
 	void OnInventoryButtonClicked();
@@ -53,6 +56,9 @@ protected:
 
 	UFUNCTION()
 	void UpdateInventoryDetailsScreen(UInventoryEntry* entry);
+
+	UFUNCTION()
+	void BindProtag(AProtagClass* protag);
 
 protected:
 
@@ -96,6 +102,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UCanvasPanel* NotesPanel;
+
+	UPROPERTY()
+	AProtagClass* protag_;
 
 private:
 	TEnumAsByte<EActiveWidget> ActiveWidget;
