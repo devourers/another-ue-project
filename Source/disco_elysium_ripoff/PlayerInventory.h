@@ -33,6 +33,9 @@ public:
 	UFUNCTION()
 	TArray<UInventoryEntry*> GetAllItems();
 
+	UFUNCTION()
+	TSet<FName> GetAllItemsNames();
+
 	FInventoryEntryAdded OnInventoryItemAdded;
 
 private:

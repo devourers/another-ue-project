@@ -25,3 +25,9 @@ TArray<UInventoryEntry*> UPlayerInventory::GetAllItems() {
 	}
 	return res;
 }
+
+TSet<FName> UPlayerInventory::GetAllItemsNames() {
+	TSet<FName> res;
+	Inventory.GetKeys(res);
+	return res;
+}
