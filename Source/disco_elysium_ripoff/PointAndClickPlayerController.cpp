@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProtagClass.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Utils/DERSaveGame.h"
 
 APointAndClickPlayerController::APointAndClickPlayerController() {
 	bShowMouseCursor = true;
@@ -201,5 +202,16 @@ void APointAndClickPlayerController::HandleMenuPress(const FString& key) {
 	}
 	else if (key.Equals(FString("MainMenu"))){
 		UGameplayStatics::OpenLevel(GetWorld(), FName("/Game/Levels/MainMenu/L_MainMenu1"));
+	}
+	else if (key.Equals(FString("SaveGame"))) {
+		if (UDERSaveGame* SaveGameInstance = Cast<UDERSaveGame>(UGameplayStatics::CreateSaveGameObject(UDERSaveGame::StaticClass()))) {
+			SaveGameInstance->SaveSlotName = "TestFromPause";
+			FString SlotNameString = "TestFromPause";
+			if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, SlotNameString, 0))
+			{
+				protag_->UpdateLog("Game saved.");
+			}
+		}
+
 	}
 }
