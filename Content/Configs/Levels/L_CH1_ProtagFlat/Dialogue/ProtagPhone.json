@@ -46,7 +46,7 @@
         {
             "conditions" :{
                 "needed_inventory":{
-                    "list": ["L_CH1_ProtagFlat_ProtagCredentials"],
+                    "list": ["L_CH1_ProtagFlat|ProtagCredentials"],
                     "mode": "any"
                 }
             },

@@ -47,7 +47,7 @@ void IInteractable::ProcessInventoryEntry() {
 			entry->SetKeywords(logic_entry->GetKeywords());
 			entry->SetDescription(logic_entry->GetDescription());
 			entry->SetImages(logic_entry->GetImages());
-			FName entry_name = FName(logic->GetWorldName() + "_" + logic->GetLoaderName());
+			FName entry_name = FName(logic->GetWorldName() + "|" + logic->GetLoaderName());
 			handler->AddItemToInventory(entry_name, entry);
 			if (protag) {
 				FString log_entry = FString("Item picked up: ") + logic->GetDisplayedName();
