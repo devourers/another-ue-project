@@ -5,6 +5,7 @@
 
 #include <Kismet/KismetSystemLibrary.h>
 #include <Kismet/GameplayStatics.h>
+#include <Utils/DERSaveGame.h>
 
 #include "Components/Button.h"
 
@@ -32,6 +33,9 @@ void UMainMenuUI::OnNewGameButtonClicked() {
 
 void UMainMenuUI::OnLoadGameButtonPressed() {
 	MainMenuUIButtonPressed.Broadcast("LoadGame");
+	if (UDERSaveGame* LoadedGame = Cast<UDERSaveGame>(UGameplayStatics::LoadGameFromSlot("TestFromPause", 0))) {
+		UE_LOG(LogTemp, Warning, TEXT("LOADED: %s"), *FString("game"));
+	}
 }
 
 void UMainMenuUI::OnOptionsButtonPressed() {

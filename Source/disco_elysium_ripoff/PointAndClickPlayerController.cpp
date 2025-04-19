@@ -10,7 +10,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProtagClass.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Utils/DERSaveGame.h"
+#include <Utils/DERSaveGame.h>
+#include <Utils/SaveLoadGameInstanceSubsystem.h>
 
 APointAndClickPlayerController::APointAndClickPlayerController() {
 	bShowMouseCursor = true;
@@ -204,6 +205,8 @@ void APointAndClickPlayerController::HandleMenuPress(const FString& key) {
 		UGameplayStatics::OpenLevel(GetWorld(), FName("/Game/Levels/MainMenu/L_MainMenu1"));
 	}
 	else if (key.Equals(FString("SaveGame"))) {
+		USaveLoadGameInstanceSubsystem* SGS = GetGameInstance()->GetSubsystem<USaveLoadGameInstanceSubsystem>();
+		SGS->WriteSaveGame("TestFromPause");
 		if (UDERSaveGame* SaveGameInstance = Cast<UDERSaveGame>(UGameplayStatics::CreateSaveGameObject(UDERSaveGame::StaticClass()))) {
 			SaveGameInstance->SaveSlotName = "TestFromPause";
 			FString SlotNameString = "TestFromPause";
@@ -213,5 +216,12 @@ void APointAndClickPlayerController::HandleMenuPress(const FString& key) {
 			}
 		}
 
+	}
+	else if (key.Equals(FString("LoadGame"))) {
+		USaveLoadGameInstanceSubsystem* SGS = GetGameInstance()->GetSubsystem<USaveLoadGameInstanceSubsystem>();
+		SGS->LoadSaveGame("TestFromPause");
+		if (UDERSaveGame* LoadedGame = Cast<UDERSaveGame>(UGameplayStatics::LoadGameFromSlot("TestFromPause", 0))) {
+			UE_LOG(LogTemp, Warning, TEXT("LOADED: %s"), *FString("game"));
+		}
 	}
 }

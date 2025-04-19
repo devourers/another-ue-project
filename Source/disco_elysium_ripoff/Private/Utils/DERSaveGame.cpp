@@ -7,11 +7,4 @@
 
 UDERSaveGame::UDERSaveGame(){
 	SaveSlotName = TEXT("TestSaveSlot");
-	UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld());
-	if (GI) {
-		UMainGameInstanceSubsystem* handler = GI->GetSubsystem<UMainGameInstanceSubsystem>();
-		if (handler) {
-			InventoryEntries = handler->GetInventory()->GetAllItemsNames();
-		}
-	}
 }
