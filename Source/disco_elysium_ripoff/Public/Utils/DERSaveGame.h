@@ -33,6 +33,7 @@ struct FProtagSaveData {
 
 public:
 
+	UPROPERTY()
 	FTransform ProtagTransform;
 
 	UPROPERTY()

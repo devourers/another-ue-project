@@ -195,7 +195,6 @@ void APointAndClickPlayerController::OnPausePressed() {
 }
 
 void APointAndClickPlayerController::HandleMenuPress(const FString& key) {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, key);
 	if (key.Equals(FString("Continue"))) {
 		SetPause(false);
 		protag_->UnhideHUD();
@@ -207,21 +206,11 @@ void APointAndClickPlayerController::HandleMenuPress(const FString& key) {
 	else if (key.Equals(FString("SaveGame"))) {
 		USaveLoadGameInstanceSubsystem* SGS = GetGameInstance()->GetSubsystem<USaveLoadGameInstanceSubsystem>();
 		SGS->WriteSaveGame("TestFromPause");
-		if (UDERSaveGame* SaveGameInstance = Cast<UDERSaveGame>(UGameplayStatics::CreateSaveGameObject(UDERSaveGame::StaticClass()))) {
-			SaveGameInstance->SaveSlotName = "TestFromPause";
-			FString SlotNameString = "TestFromPause";
-			if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, SlotNameString, 0))
-			{
-				protag_->UpdateLog("Game saved.");
-			}
-		}
-
+		protag_->UpdateLog("Game saved.");
 	}
 	else if (key.Equals(FString("LoadGame"))) {
 		USaveLoadGameInstanceSubsystem* SGS = GetGameInstance()->GetSubsystem<USaveLoadGameInstanceSubsystem>();
 		SGS->LoadSaveGame("TestFromPause");
-		if (UDERSaveGame* LoadedGame = Cast<UDERSaveGame>(UGameplayStatics::LoadGameFromSlot("TestFromPause", 0))) {
-			UE_LOG(LogTemp, Warning, TEXT("LOADED: %s"), *FString("game"));
-		}
+		protag_->UpdateLog("Game Loaded");
 	}
 }
