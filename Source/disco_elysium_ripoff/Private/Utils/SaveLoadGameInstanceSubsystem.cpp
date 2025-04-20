@@ -16,6 +16,7 @@ DEFINE_LOG_CATEGORY(SaveLoadGameInstanceSubsystem);
 void USaveLoadGameInstanceSubsystem::WriteSaveGame(FString SlotName){
 	UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld());
 	if (UDERSaveGame* SaveGameInstance = Cast<UDERSaveGame>(UGameplayStatics::CreateSaveGameObject(UDERSaveGame::StaticClass()))) {
+		SaveGameInstance->LevelName = GetWorld()->GetName();
 		SaveGameInstance->SaveSlotName = "TestFromPause";
 		for (AActor* Actor : TActorRange<AActor>(GetWorld())){
 			if (!Actor->Implements<UInteractable>()) {
@@ -25,7 +26,7 @@ void USaveLoadGameInstanceSubsystem::WriteSaveGame(FString SlotName){
 			FInteractableSaveData InteractableSaveData;
 			InteractableSaveData.InteractableTransform = Actor->GetActorTransform();
 			InteractableSaveData.InteractableSubClass = Actor->StaticClass()->GetName();
-			UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor  Class %s"), *(InteractableSaveData.InteractableSubClass));
+			UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor  Class %s"), *(InteractableSaveData.InteractableSubClass)); //TODO
 			SaveGameInstance->InteractableSaveData.Add(TTuple<FName, FInteractableSaveData>(Actor->GetFName(), InteractableSaveData));
 
 			//TODO
@@ -43,7 +44,7 @@ void USaveLoadGameInstanceSubsystem::WriteSaveGame(FString SlotName){
 		}
 		FString SlotNameString = "TestFromPause";
 		if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, SlotNameString, 0)){
-			UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game Saved");
+			UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game Saved on level {0}", SaveGameInstance->LevelName);
 		}
 		else {
 			UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game failed to save");
@@ -54,10 +55,11 @@ void USaveLoadGameInstanceSubsystem::WriteSaveGame(FString SlotName){
 void USaveLoadGameInstanceSubsystem::LoadSaveGame(FString SlotName){
 	UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld());
 	if (UDERSaveGame* LoadedGame = Cast<UDERSaveGame>(UGameplayStatics::LoadGameFromSlot("TestFromPause", 0))) {
-		UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game loaded");
 		UMainGameInstanceSubsystem* handler = GI->GetSubsystem<UMainGameInstanceSubsystem>();
-		AProtagClass* protag = Cast<AProtagClass>(GetWorld()->GetFirstPlayerController()->GetPawn());
 		handler->GetInventory()->ClearInventory();
+		UGameplayStatics::OpenLevel(GetWorld(), FName(LoadedGame->LevelName));
+		AProtagClass* protag = Cast<AProtagClass>(GetWorld()->GetFirstPlayerController()->GetPawn());
+
 		protag->SetActorTransform(LoadedGame->ProtagSaveData.ProtagTransform);
 		for (auto& name : LoadedGame->ProtagSaveData.InventoryEntries) {
 			TArray<FString> splitted_name;
@@ -77,11 +79,19 @@ void USaveLoadGameInstanceSubsystem::LoadSaveGame(FString SlotName){
 		for (auto actor : actors) {
 			if (LoadedGame->InteractableSaveData.Contains(FName(actor->GetName()))) {
 				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor present %s"), *actor->GetName());
+				//TODO actor restore dialogue too?
 			}
 			else {
-				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor not present %s"), *actor->GetName());
+				bool actor_destroyed = actor->Destroy();
+				FString res = "";
+				if (actor_destroyed)
+					res = "true";
+				else
+					res = "false";
+				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor %s not present, destroy = %s"), *actor->GetName(), *res);
 			}
 		}
+		UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game loaded");
 	}
 }
 

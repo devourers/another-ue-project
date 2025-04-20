@@ -34,14 +34,24 @@ public:
 	bool IsValid() const;
 
 private:
+	UPROPERTY()
 	bool is_initialised = false;
+
+	UPROPERTY()
 	bool is_valid = true;
 
+	UPROPERTY()
 	FName Title; //displayed
 
+	UPROPERTY()
 	TSet<FString> Keywords; //for searching
+
+	UPROPERTY()
 	FString JsonPath;
 
+	UPROPERTY()
 	FString Description; //header->name
+
+	UPROPERTY()
 	TMap<FName, UTexture2D*> Image; //header->illustation
 };

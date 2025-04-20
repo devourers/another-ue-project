@@ -42,11 +42,14 @@ public:
 	UFUNCTION()
 	TSet<FName> GetAllItemsNames();
 
+	UPROPERTY(BlueprintAssignable)
 	FInventoryChanged OnInventoryItemAdded;
 
+	UPROPERTY(BlueprintAssignable)
 	FInventoryChanged OnInventoryItemRemoved;
 
 private:
+	UPROPERTY()
 	TMap<FName, UInventoryEntry*> Inventory;
 	
 };
