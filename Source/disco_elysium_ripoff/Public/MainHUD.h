@@ -52,6 +52,9 @@ protected:
 	void OnInventotyEntryAdded(UInventoryEntry* entry);
 
 	UFUNCTION()
+	void OnInventoryEntryRemoved(UInventoryEntry* entry);
+
+	UFUNCTION()
 	void OnInventotyEntrySelected(UObject* SelectedObject);
 
 	UFUNCTION()

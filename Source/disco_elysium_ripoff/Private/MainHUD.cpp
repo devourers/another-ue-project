@@ -20,6 +20,10 @@ void UMainHUD::NativeConstruct() {
 	UMainGameInstanceSubsystem* handler = GetOwningPlayerPawn()->GetGameInstance()->GetSubsystem<UMainGameInstanceSubsystem>();
 	TArray<UInventoryEntry*> entries = handler->GetInventory()->GetAllItems();
 	handler->GetInventory()->OnInventoryItemAdded.AddUniqueDynamic(this, &UMainHUD::OnInventotyEntryAdded);
+
+	handler->GetInventory()->OnInventoryItemAdded.AddUniqueDynamic(this, &UMainHUD::OnInventotyEntryAdded);
+	handler->GetInventory()->OnInventoryItemRemoved.AddUniqueDynamic(this, &UMainHUD::OnInventoryEntryRemoved);
+
 	InventoryListView->SetVisibility(ESlateVisibility::Visible);
 	InventoryListView->SetListItems(entries);
 	InventoryListView->OnItemSelectionChanged().AddUFunction(this, FName("OnInventotyEntrySelected"));
@@ -88,6 +92,14 @@ void UMainHUD::OnNotesButtonClicked() {
 
 void UMainHUD::OnInventotyEntryAdded(UInventoryEntry* entry) {
 	InventoryListView->AddItem(entry);
+}
+
+void UMainHUD::OnInventoryEntryRemoved(UInventoryEntry* entry){
+	if (InventoryListView->GetSelectedItem() == entry) {
+		InventoryListEntryTitle->SetText(FText());
+		InventoryLineEntryDescription->SetText(FText());
+	}
+	InventoryListView->RemoveItem(entry);
 }
 
 void UMainHUD::OnInventotyEntrySelected(UObject* SelectedObject) {

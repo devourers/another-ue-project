@@ -14,7 +14,7 @@
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryEntryAdded, class UInventoryEntry*, Entry);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryChanged, class UInventoryEntry*, Entry);
 
 UCLASS()
 class DISCO_ELYSIUM_RIPOFF_API UPlayerInventory : public UObject
@@ -25,7 +25,13 @@ public:
 	UPlayerInventory();
 
 	UFUNCTION()
+	void ClearInventory();
+
+	UFUNCTION()
 	void AddItemToInventory(const FName& name, UInventoryEntry* entry);
+
+	UFUNCTION()
+	void RemoveItemFromInventory(const FName& name);
 
 	UFUNCTION()
 	bool HasItem(const FName& name);
@@ -36,7 +42,9 @@ public:
 	UFUNCTION()
 	TSet<FName> GetAllItemsNames();
 
-	FInventoryEntryAdded OnInventoryItemAdded;
+	FInventoryChanged OnInventoryItemAdded;
+
+	FInventoryChanged OnInventoryItemRemoved;
 
 private:
 	TMap<FName, UInventoryEntry*> Inventory;

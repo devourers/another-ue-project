@@ -55,8 +55,9 @@ void USaveLoadGameInstanceSubsystem::LoadSaveGame(FString SlotName){
 	UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld());
 	if (UDERSaveGame* LoadedGame = Cast<UDERSaveGame>(UGameplayStatics::LoadGameFromSlot("TestFromPause", 0))) {
 		UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game loaded");
-		
+		UMainGameInstanceSubsystem* handler = GI->GetSubsystem<UMainGameInstanceSubsystem>();
 		AProtagClass* protag = Cast<AProtagClass>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		handler->GetInventory()->ClearInventory();
 		protag->SetActorTransform(LoadedGame->ProtagSaveData.ProtagTransform);
 		for (auto& name : LoadedGame->ProtagSaveData.InventoryEntries) {
 			TArray<FString> splitted_name;
@@ -67,9 +68,19 @@ void USaveLoadGameInstanceSubsystem::LoadSaveGame(FString SlotName){
 			FString inventory_entry_path = FPaths::Combine(root_dir, GetWorld()->GetFName().ToString() + "/Inventory/" + interactable_name + ".json");
 			UInventoryEntry* InventoryEntry = NewObject<UInventoryEntry>(this, TEXT("Inventory Entry"));
 			InventoryEntry->LoadFromJson(inventory_entry_path);
-			UMainGameInstanceSubsystem* handler = GI->GetSubsystem<UMainGameInstanceSubsystem>();
+			
 			handler->AddItemToInventory(name, InventoryEntry);
 			UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("inventory entry %s"), *(name.ToString()));
+		}
+		TArray<AActor*> actors;
+		UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UInteractable::StaticClass(), actors);
+		for (auto actor : actors) {
+			if (LoadedGame->InteractableSaveData.Contains(FName(actor->GetName()))) {
+				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor present %s"), *actor->GetName());
+			}
+			else {
+				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor not present %s"), *actor->GetName());
+			}
 		}
 	}
 }
