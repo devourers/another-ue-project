@@ -29,3 +29,11 @@ bool UMainGameInstanceSubsystem::CheckInventoryForItem(const FName& name) {
 UPlayerInventory* UMainGameInstanceSubsystem::GetInventory() {
 	return Inventory;
 }
+
+int UMainGameInstanceSubsystem::GetCurrentLevelPhase() const{
+	return CurrentLevelPhase;
+}
+
+void UMainGameInstanceSubsystem::SetCurrentLevelPhase(int current_level_phase) {
+	CurrentLevelPhase = current_level_phase;
+}

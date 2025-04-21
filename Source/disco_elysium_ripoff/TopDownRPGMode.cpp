@@ -4,6 +4,7 @@
 #include "TopDownRPGMode.h"
 #include "ProtagClass.h"
 #include "PointAndClickPlayerController.h"
+#include <Utils/SaveLoadGameInstanceSubsystem.h>
 
 
 ATopDownRPGMode::ATopDownRPGMode() {
@@ -19,4 +20,15 @@ ATopDownRPGMode::ATopDownRPGMode() {
 	{
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
+}
+
+void ATopDownRPGMode::BeginPlay(){
+
+	USaveLoadGameInstanceSubsystem* saveload_handler = GetWorld()->GetGameInstance()->GetSubsystem<USaveLoadGameInstanceSubsystem>();
+
+	if (saveload_handler) {
+		saveload_handler->FinishSaveLoading(); //TODO logic for loading screens
+	}
+
+	Super::BeginPlay();
 }

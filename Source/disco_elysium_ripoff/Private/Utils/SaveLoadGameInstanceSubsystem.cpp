@@ -35,8 +35,10 @@ void USaveLoadGameInstanceSubsystem::WriteSaveGame(FString SlotName){
 
 		AProtagClass* protag = Cast<AProtagClass>(GetWorld()->GetFirstPlayerController()->GetPawn());
 		SaveGameInstance->ProtagSaveData.ProtagTransform = protag->GetTransform();
+
 		UMainGameInstanceSubsystem* handler = GI->GetSubsystem<UMainGameInstanceSubsystem>();
 		if (handler) {
+			SaveGameInstance->CurrentLevelPhase = handler->GetCurrentLevelPhase();
 			SaveGameInstance->ProtagSaveData.InventoryEntries = handler->GetInventory()->GetAllItemsNames();
 			for (auto& name : SaveGameInstance->ProtagSaveData.InventoryEntries) {
 				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("inventory entry %s"), *name.ToString());
@@ -74,10 +76,18 @@ void USaveLoadGameInstanceSubsystem::LoadSaveGame(FString SlotName){
 			handler->AddItemToInventory(name, InventoryEntry);
 			UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("inventory entry %s"), *(name.ToString()));
 		}
+		UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game loaded");
+		LastLoadedSave = LoadedGame;
+	}
+}
+
+void USaveLoadGameInstanceSubsystem::FinishSaveLoading() const{
+	if (LastLoadedSave) {
+		UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld());
 		TArray<AActor*> actors;
 		UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UInteractable::StaticClass(), actors);
 		for (auto actor : actors) {
-			if (LoadedGame->InteractableSaveData.Contains(FName(actor->GetName()))) {
+			if (LastLoadedSave->InteractableSaveData.Contains(FName(actor->GetName()))) {
 				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor present %s"), *actor->GetName());
 				//TODO actor restore dialogue too?
 			}
@@ -91,7 +101,8 @@ void USaveLoadGameInstanceSubsystem::LoadSaveGame(FString SlotName){
 				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor %s not present, destroy = %s"), *actor->GetName(), *res);
 			}
 		}
-		UE_LOGFMT(SaveLoadGameInstanceSubsystem, Log, "Game loaded");
+		UMainGameInstanceSubsystem* handler = GI->GetSubsystem<UMainGameInstanceSubsystem>();
+		handler->SetCurrentLevelPhase(LastLoadedSave->CurrentLevelPhase);
 	}
 }
 

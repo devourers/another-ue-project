@@ -29,6 +29,9 @@ public:
 	UFUNCTION()
 	void LoadSaveGame(FString SlotName);
 
+	UFUNCTION()
+	void FinishSaveLoading() const;
+
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	UPROPERTY(BlueprintAssignable)
@@ -36,4 +39,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnSaveGameSignature OnGameLoaded;
+
+private:
+	UPROPERTY()
+	UDERSaveGame* LastLoadedSave;
 };

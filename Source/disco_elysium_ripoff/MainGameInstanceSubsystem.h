@@ -28,8 +28,15 @@ public:
 
 	UPlayerInventory* GetInventory();
 
+	int GetCurrentLevelPhase() const;
+
+	void SetCurrentLevelPhase(int current_level_phase);
+
 private:
 	UPROPERTY()
 	UPlayerInventory* Inventory;
 	
+	UPROPERTY()
+	int CurrentLevelPhase = 0;
+
 };

@@ -68,6 +68,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Basic)
 	FString SaveSlotName;
 
+	UPROPERTY()
+	int CurrentLevelPhase;
+
 	UDERSaveGame();
 	
 };

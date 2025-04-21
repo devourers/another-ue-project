@@ -15,4 +15,7 @@ class DISCO_ELYSIUM_RIPOFF_API ATopDownRPGMode : public AGameModeBase
 	GENERATED_BODY()
 public:
 	ATopDownRPGMode();
+
+
+	void BeginPlay() override;
 };
