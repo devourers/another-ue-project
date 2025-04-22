@@ -22,14 +22,19 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
+	UFUNCTION()
 	void AddItemToInventory(const FName& name, UInventoryEntry* item);
 
+	UFUNCTION()
 	bool CheckInventoryForItem(const FName& name);
 
+	UFUNCTION()
 	UPlayerInventory* GetInventory();
 
+	UFUNCTION(BlueprintCallable)
 	int GetCurrentLevelPhase() const;
 
+	UFUNCTION(BlueprintCallable)
 	void SetCurrentLevelPhase(int current_level_phase);
 
 private:
