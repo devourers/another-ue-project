@@ -5,6 +5,10 @@
 #include "ProtagClass.h"
 #include "PointAndClickPlayerController.h"
 #include <Utils/SaveLoadGameInstanceSubsystem.h>
+#include <Utils/LevelLoaderInterface.h>
+#include <Engine/LevelScriptActor.h>
+
+DEFINE_LOG_CATEGORY(TopDownRpgMode);
 
 
 ATopDownRPGMode::ATopDownRPGMode() {
@@ -23,6 +27,12 @@ ATopDownRPGMode::ATopDownRPGMode() {
 }
 
 void ATopDownRPGMode::BeginPlay(){
+	UE_LOGFMT(TopDownRpgMode, Log, "Pre BeginPlay() stuff...");
+	bool act =  GetWorld()->GetLevelScriptActor()->Implements<ULevelLoaderInterface>();
+	if (act) {
+		UE_LOGFMT(TopDownRpgMode, Log, "Level {0} is impelemneting ILevelLoaderInterface, calling BindActors...", GetWorld()->GetName());
+		ILevelLoaderInterface::Execute_BindActors(GetWorld()->GetLevelScriptActor());
+	}
 
 	USaveLoadGameInstanceSubsystem* saveload_handler = GetWorld()->GetGameInstance()->GetSubsystem<USaveLoadGameInstanceSubsystem>();
 

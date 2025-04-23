@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "TopDownRPGMode.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(TopDownRpgMode, Log, All);
+
 /**
  * 
  */
