@@ -75,7 +75,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interaction, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* InteractionHitbox;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Logic, meta = (AllowPrivateAccess = "true"), SaveGame)
 	ULogicComponent* LogicComponent;
 
 	UPROPERTY()

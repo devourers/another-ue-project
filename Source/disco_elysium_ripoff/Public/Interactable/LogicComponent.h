@@ -83,7 +83,7 @@ public:
 	void DeactivateInteraction();
 
 private:
-	UPROPERTY()
+	UPROPERTY(SaveGame)
 	UDialogue* Dialogue;
 
 	UPROPERTY(EditAnywhere)

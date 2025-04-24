@@ -27,8 +27,14 @@ void USaveLoadGameInstanceSubsystem::WriteSaveGame(FString SlotName){
 			InteractableSaveData.InteractableTransform = Actor->GetActorTransform();
 			InteractableSaveData.InteractableSubClass = Actor->StaticClass()->GetName();
 			UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor  Class %s"), *(InteractableSaveData.InteractableSubClass)); //TODO
-			SaveGameInstance->InteractableSaveData.Add(TTuple<FName, FInteractableSaveData>(Actor->GetFName(), InteractableSaveData));
 
+
+			FMemoryWriter MemWriter(InteractableSaveData.ByteData);
+			FObjectAndNameAsStringProxyArchive Ar(MemWriter, true);
+			Ar.ArIsSaveGame = true;
+			Actor->Serialize(Ar);
+
+			SaveGameInstance->InteractableSaveData.Add(TTuple<FName, FInteractableSaveData>(Actor->GetFName(), InteractableSaveData));
 			//TODO
 
 		}
@@ -89,7 +95,15 @@ void USaveLoadGameInstanceSubsystem::FinishSaveLoading() const{
 		for (auto actor : actors) {
 			if (LastLoadedSave->InteractableSaveData.Contains(FName(actor->GetName()))) {
 				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor present %s"), *actor->GetName());
-				//TODO actor restore dialogue too?
+				FInteractableSaveData* FoundData = LastLoadedSave->InteractableSaveData.Find(FName(actor->GetName()));
+				FMemoryReader MemReader(FoundData->ByteData);
+
+				FObjectAndNameAsStringProxyArchive Ar(MemReader, true);
+				Ar.ArIsSaveGame = true;
+				// Convert binary array back into actor's variables
+				actor->Serialize(Ar);
+
+				//IRogueGameplayInterface::Execute_OnActorLoaded(Actor);
 			}
 			else {
 				bool actor_destroyed = actor->Destroy();
@@ -103,6 +117,13 @@ void USaveLoadGameInstanceSubsystem::FinishSaveLoading() const{
 		}
 		UMainGameInstanceSubsystem* handler = GI->GetSubsystem<UMainGameInstanceSubsystem>();
 		handler->SetCurrentLevelPhase(LastLoadedSave->CurrentLevelPhase);
+	}
+}
+
+void USaveLoadGameInstanceSubsystem::PostBeginPlay() const {
+	if (LastLoadedSave) {
+		AProtagClass* protag = Cast<AProtagClass>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		protag->SetActorTransform(LastLoadedSave->ProtagSaveData.ProtagTransform);
 	}
 }
 

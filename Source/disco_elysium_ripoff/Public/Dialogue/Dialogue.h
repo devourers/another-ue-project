@@ -153,7 +153,11 @@ private:
 	bool is_valid = true;
 
 	FName Title;
+
+	UPROPERTY(SaveGame)
 	int CurrentStartingEntry = 0;
+	
+	UPROPERTY()
 	int CurrentEntry;
 	
 	UPROPERTY()

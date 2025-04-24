@@ -41,4 +41,6 @@ void ATopDownRPGMode::BeginPlay(){
 	}
 
 	Super::BeginPlay();
+
+	saveload_handler->PostBeginPlay();
 }

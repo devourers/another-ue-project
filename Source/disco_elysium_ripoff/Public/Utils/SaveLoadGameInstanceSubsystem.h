@@ -32,6 +32,9 @@ public:
 	UFUNCTION()
 	void FinishSaveLoading() const;
 
+	UFUNCTION()
+	void PostBeginPlay() const;
+
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	UPROPERTY(BlueprintAssignable)
