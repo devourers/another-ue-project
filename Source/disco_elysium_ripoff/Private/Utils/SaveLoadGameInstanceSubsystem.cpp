@@ -26,6 +26,10 @@ void USaveLoadGameInstanceSubsystem::WriteSaveGame(FString SlotName){
 			FInteractableSaveData InteractableSaveData;
 			InteractableSaveData.InteractableTransform = Actor->GetActorTransform();
 			InteractableSaveData.InteractableSubClass = Actor->StaticClass()->GetName();
+			IInteractable* IActor = Cast<IInteractable>(Actor);
+			if (IActor && IActor->GetLogicComponent()->GetDialogue()) {
+				InteractableSaveData.DialogueSaveData = IActor->GetLogicComponent()->GetDialogue()->SaveDialogue();
+			}
 			UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor  Class %s"), *(InteractableSaveData.InteractableSubClass)); //TODO
 
 
@@ -96,14 +100,18 @@ void USaveLoadGameInstanceSubsystem::FinishSaveLoading() const{
 			if (LastLoadedSave->InteractableSaveData.Contains(FName(actor->GetName()))) {
 				UE_LOG(SaveLoadGameInstanceSubsystem, Log, TEXT("Actor present %s"), *actor->GetName());
 				FInteractableSaveData* FoundData = LastLoadedSave->InteractableSaveData.Find(FName(actor->GetName()));
-				FMemoryReader MemReader(FoundData->ByteData);
+				//FMemoryReader MemReader(FoundData->ByteData);
 
-				FObjectAndNameAsStringProxyArchive Ar(MemReader, true);
-				Ar.ArIsSaveGame = true;
+				//FObjectAndNameAsStringProxyArchive Ar(MemReader, true);
+				//Ar.ArIsSaveGame = true;
 				// Convert binary array back into actor's variables
-				actor->Serialize(Ar);
+				//actor->Serialize(Ar);
 
-				//IRogueGameplayInterface::Execute_OnActorLoaded(Actor);
+				IInteractable* IActor = Cast<IInteractable>(actor);
+				if (IActor && IActor->GetLogicComponent()->GetDialogue()) {
+					IActor->GetLogicComponent()->GetDialogue()->LoadDialogue(FoundData->DialogueSaveData);
+				}
+
 			}
 			else {
 				bool actor_destroyed = actor->Destroy();

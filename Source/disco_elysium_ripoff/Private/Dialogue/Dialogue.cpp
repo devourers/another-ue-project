@@ -94,6 +94,19 @@ const FDialogueResult& UDialogue::GetResult() const{
 	return Result;
 }
 
+FDialogueSaveData UDialogue::SaveDialogue() const
+{
+	FDialogueSaveData res;
+	res.CurrentStartingEntry = CurrentStartingEntry;
+	res.UsedResponses = {}; //TODO
+	return res;
+}
+
+void UDialogue::LoadDialogue(const FDialogueSaveData& SaveData){
+	CurrentStartingEntry = SaveData.CurrentStartingEntry;
+	UsedResponses = SaveData.UsedResponses;
+}
+
 bool UDialogue::IsValid() const{
 	return is_valid;
 }

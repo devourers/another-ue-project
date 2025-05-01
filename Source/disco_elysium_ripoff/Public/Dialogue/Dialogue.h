@@ -16,6 +16,7 @@ DECLARE_LOG_CATEGORY_EXTERN(DialogueAdvancment, Log, All);
 
 struct FDialogueEntry;
 struct FDialogueResponse;
+struct FDialogueSaveData;
 
 USTRUCT()
 struct DISCO_ELYSIUM_RIPOFF_API FDialogueResult {
@@ -103,6 +104,17 @@ public:
 	TArray<int> responses;
 };
 
+USTRUCT()
+struct FDialogueSaveData {
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+	TArray<int> UsedResponses;
+	UPROPERTY()
+	int CurrentStartingEntry;
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueStarted, class UDialogueEntryWrapper*, StartingEntry);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueAdvanced, class UDialogueEntryWrapper*, NextEntry);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogueEnded, int, LastEntryValue);
@@ -136,6 +148,12 @@ public:
 	
 	const FDialogueResult& GetResult() const;
 
+	UFUNCTION()
+	FDialogueSaveData SaveDialogue() const;
+
+	UFUNCTION()
+	void LoadDialogue(const FDialogueSaveData& SaveData);
+
 public: //delegates
 	UPROPERTY(BlueprintAssignable, Category = Event)
 	FDialogueStarted DialogueStarted;
@@ -149,9 +167,13 @@ public: //delegates
 	bool IsValid() const;
 
 private:
+	UPROPERTY()
 	bool is_initialised = false;
+
+	UPROPERTY()
 	bool is_valid = true;
 
+	UPROPERTY()
 	FName Title;
 
 	UPROPERTY(SaveGame)
@@ -166,15 +188,29 @@ private:
 	UPROPERTY()
 	TArray<UDialogueResponseWrapper*> ReponseWrappers;
 
+	UPROPERTY()
+	TArray<int> UsedResponses;
+
+	UPROPERTY()
 	TArray<FDialogueEntry> Entries;
+
+	UPROPERTY()
 	TArray<FDialogueResponse> Responses;
+
+	UPROPERTY()
 	FDialogueResult Result;
+
+	UPROPERTY()
 	FDialogueHistory History;
 
 private: //flags
+	UPROPERTY()
 	bool bCanBeReinitated;
+
+	UPROPERTY()
 	bool bWasInitiated = false;
 
 private: //json constants
+	UPROPERTY()
 	int ReEnterDialogueStartingEntry;
 };

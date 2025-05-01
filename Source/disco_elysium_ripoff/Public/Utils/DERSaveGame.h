@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include <Dialogue/Dialogue.h>
 #include "DERSaveGame.generated.h"
 
 
@@ -24,6 +25,9 @@ public:
 
 	UPROPERTY()
 	TArray<uint8> ByteData;
+
+	UPROPERTY()
+	FDialogueSaveData DialogueSaveData;
 };
 
 
